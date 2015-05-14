@@ -1,13 +1,11 @@
-using Entitas;
-
 namespace Entitas {
     public partial class Entity {
-        public ResourceComponent resource { get { return (ResourceComponent)GetComponent(GameComponentIds.Resource); } }
+        public ResourceComponent resource { get { return (ResourceComponent)GetComponent(ComponentIds.Resource); } }
 
-        public bool hasResource { get { return HasComponent(GameComponentIds.Resource); } }
+        public bool hasResource { get { return HasComponent(ComponentIds.Resource); } }
 
         public void AddResource(ResourceComponent component) {
-            AddComponent(GameComponentIds.Resource, component);
+            AddComponent(ComponentIds.Resource, component);
         }
 
         public void AddResource(string newName) {
@@ -19,31 +17,31 @@ namespace Entitas {
         public void ReplaceResource(string newName) {
             ResourceComponent component;
             if (hasResource) {
-                WillRemoveComponent(GameComponentIds.Resource);
+                WillRemoveComponent(ComponentIds.Resource);
                 component = resource;
             } else {
                 component = new ResourceComponent();
             }
             component.name = newName;
-            ReplaceComponent(GameComponentIds.Resource, component);
+            ReplaceComponent(ComponentIds.Resource, component);
         }
 
         public void RemoveResource() {
-            RemoveComponent(GameComponentIds.Resource);
+            RemoveComponent(ComponentIds.Resource);
         }
     }
-}
 
-    public partial class GameMatcher {
+    public partial class Matcher {
         static AllOfMatcher _matcherResource;
 
         public static AllOfMatcher Resource {
             get {
                 if (_matcherResource == null) {
-                    _matcherResource = new GameMatcher(GameComponentIds.Resource);
+                    _matcherResource = new Matcher(ComponentIds.Resource);
                 }
 
                 return _matcherResource;
             }
         }
     }
+}

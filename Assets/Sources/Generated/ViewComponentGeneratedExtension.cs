@@ -1,13 +1,11 @@
-using Entitas;
-
 namespace Entitas {
     public partial class Entity {
-        public ViewComponent view { get { return (ViewComponent)GetComponent(GameComponentIds.View); } }
+        public ViewComponent view { get { return (ViewComponent)GetComponent(ComponentIds.View); } }
 
-        public bool hasView { get { return HasComponent(GameComponentIds.View); } }
+        public bool hasView { get { return HasComponent(ComponentIds.View); } }
 
         public void AddView(ViewComponent component) {
-            AddComponent(GameComponentIds.View, component);
+            AddComponent(ComponentIds.View, component);
         }
 
         public void AddView(UnityEngine.GameObject newGameObject) {
@@ -19,31 +17,31 @@ namespace Entitas {
         public void ReplaceView(UnityEngine.GameObject newGameObject) {
             ViewComponent component;
             if (hasView) {
-                WillRemoveComponent(GameComponentIds.View);
+                WillRemoveComponent(ComponentIds.View);
                 component = view;
             } else {
                 component = new ViewComponent();
             }
             component.gameObject = newGameObject;
-            ReplaceComponent(GameComponentIds.View, component);
+            ReplaceComponent(ComponentIds.View, component);
         }
 
         public void RemoveView() {
-            RemoveComponent(GameComponentIds.View);
+            RemoveComponent(ComponentIds.View);
         }
     }
-}
 
-    public partial class GameMatcher {
+    public partial class Matcher {
         static AllOfMatcher _matcherView;
 
         public static AllOfMatcher View {
             get {
                 if (_matcherView == null) {
-                    _matcherView = new GameMatcher(GameComponentIds.View);
+                    _matcherView = new Matcher(ComponentIds.View);
                 }
 
                 return _matcherView;
             }
         }
     }
+}

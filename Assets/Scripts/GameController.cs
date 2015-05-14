@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Entitas;
-using Entitas.Unity.VisualDebugging;
 using UnityEngine;
 
 public class GameController : MonoBehaviour {
@@ -11,8 +10,7 @@ public class GameController : MonoBehaviour {
     void Start() {
         Random.seed = 42;
 
-        var pool = createPool();
-        createSystems(pool);
+        createSystems(Pools.gamePool);
 
         foreach (var system in _startSystems) {
             system.Start();
@@ -25,24 +23,22 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    Pool createPool() {
-        #if (UNITY_EDITOR)
-        return new DebugPool(GameComponentIds.TotalComponents, "Game Pool");
-        #else
-        return new Pool(GameComponentIds.TotalComponents);
-        #endif
-    }
-
     void createSystems(Pool pool) {
         var systems = new [] {
             pool.CreateSystem<CreateGameBoardSystem>(),
+            pool.CreateSystem<CreateInitialGameBoardSystem>(),
             pool.CreateSystem<CreateGameBoardCacheSystem>(),
-
             pool.CreateSystem<FillGameBoardSystem>(),
 
             pool.CreateSystem<RemoveViewSystem>(),
             pool.CreateSystem<AddViewSystem>(),
-            pool.CreateSystem<RenderPositionSystem>()
+            pool.CreateSystem<RenderPositionSystem>(),
+
+            pool.CreateSystem<ProcessInputSystem>(),
+
+            pool.CreateSystem<DestroySystem>(),
+            pool.CreateSystem<ScoreSystem>(),
+            pool.CreateSystem<CleanupSystem>()
         };
 
         _startSystems = systems

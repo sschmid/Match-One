@@ -7,7 +7,7 @@ public class FillGameBoardSystem : IStartSystem, IReactiveSystem, ISetPool {
     GameBoardCacheComponent _gameBoardCache;
 
     public IMatcher GetTriggeringMatcher() {
-        return GameMatcher.GameBoardElement;
+        return Matcher.GameBoardElement;
     }
 
     public GroupEventType GetEventType() {
@@ -71,7 +71,7 @@ public class FillGameBoardSystem : IStartSystem, IReactiveSystem, ISetPool {
         for (int column = 0; column < _gameBoard.columns; column++) {
             var nextRowPos = getNextEmptyRowPosition(column, _gameBoard.rows, grid);
             while (nextRowPos != _gameBoard.rows) {
-                var e = _pool.CretaeRanomPiece(column, nextRowPos);
+                var e = _pool.CreateRandomPiece(column, nextRowPos);
                 grid[column, nextRowPos] = e;
                 nextRowPos = getNextEmptyRowPosition(column, _gameBoard.rows, grid);
             }

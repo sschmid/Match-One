@@ -12,11 +12,21 @@ public static class PoolExtensions {
         Res.Piece5
     };
 
-    public static Entity CretaeRanomPiece(this Pool pool, int x, int y) {
+    public static Entity CreateRandomPiece(this Pool pool, int x, int y) {
         var e = pool.CreateEntity();
         e.isGameBoardElement = true;
+        e.isPiece = true;
         e.AddPosition(x, y);
         e.AddResource(_pieces[Random.Range(0, _pieces.Length)]);
+        return e;
+    }
+
+    public static Entity CreateBlocker(this Pool pool, int x, int y) {
+        var e = pool.CreateEntity();
+        e.isGameBoardElement = true;
+        e.isBlocker = true;
+        e.AddPosition(x, y);
+        e.AddResource(Res.Blocker);
         return e;
     }
 }

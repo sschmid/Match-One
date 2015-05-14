@@ -1,13 +1,11 @@
-using Entitas;
-
 namespace Entitas {
     public partial class Entity {
-        public PositionComponent position { get { return (PositionComponent)GetComponent(GameComponentIds.Position); } }
+        public PositionComponent position { get { return (PositionComponent)GetComponent(ComponentIds.Position); } }
 
-        public bool hasPosition { get { return HasComponent(GameComponentIds.Position); } }
+        public bool hasPosition { get { return HasComponent(ComponentIds.Position); } }
 
         public void AddPosition(PositionComponent component) {
-            AddComponent(GameComponentIds.Position, component);
+            AddComponent(ComponentIds.Position, component);
         }
 
         public void AddPosition(int newX, int newY) {
@@ -20,32 +18,32 @@ namespace Entitas {
         public void ReplacePosition(int newX, int newY) {
             PositionComponent component;
             if (hasPosition) {
-                WillRemoveComponent(GameComponentIds.Position);
+                WillRemoveComponent(ComponentIds.Position);
                 component = position;
             } else {
                 component = new PositionComponent();
             }
             component.x = newX;
             component.y = newY;
-            ReplaceComponent(GameComponentIds.Position, component);
+            ReplaceComponent(ComponentIds.Position, component);
         }
 
         public void RemovePosition() {
-            RemoveComponent(GameComponentIds.Position);
+            RemoveComponent(ComponentIds.Position);
         }
     }
-}
 
-    public partial class GameMatcher {
+    public partial class Matcher {
         static AllOfMatcher _matcherPosition;
 
         public static AllOfMatcher Position {
             get {
                 if (_matcherPosition == null) {
-                    _matcherPosition = new GameMatcher(GameComponentIds.Position);
+                    _matcherPosition = new Matcher(ComponentIds.Position);
                 }
 
                 return _matcherPosition;
             }
         }
     }
+}

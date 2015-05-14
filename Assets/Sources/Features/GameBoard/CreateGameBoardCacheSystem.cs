@@ -7,7 +7,7 @@ public class CreateGameBoardCacheSystem : IStartSystem, IReactiveSystem, ISetPoo
     Group _gameBoardElements;
 
     public IMatcher GetTriggeringMatcher() {
-        return Matcher.AllOf(GameMatcher.GameBoardElement);
+        return Matcher.AllOf(Matcher.GameBoardElement);
     }
 
     public GroupEventType GetEventType() {
@@ -20,7 +20,7 @@ public class CreateGameBoardCacheSystem : IStartSystem, IReactiveSystem, ISetPoo
 
     public void Start() {
         _gameBoard = _pool.gameBoard;
-        _gameBoardElements = _pool.GetGroup(Matcher.AllOf(GameMatcher.GameBoardElement, GameMatcher.Position));
+        _gameBoardElements = _pool.GetGroup(Matcher.AllOf(Matcher.GameBoardElement, Matcher.Position));
         updateGrid();
     }
 

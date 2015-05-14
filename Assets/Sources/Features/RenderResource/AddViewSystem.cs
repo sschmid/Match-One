@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class AddViewSystem : IReactiveSystem {
     public IMatcher GetTriggeringMatcher() {
-        return GameMatcher.Resource;
+        return Matcher.Resource;
     }
 
     public GroupEventType GetEventType() {

@@ -1,7 +1,7 @@
 ﻿using Entitas;
 using Entitas.CodeGenerator;
 
-[Game, SingleEntity]
+[SingleEntity]
 public class GameBoardCacheComponent : IComponent {
     public Entity[,] grid;
 }

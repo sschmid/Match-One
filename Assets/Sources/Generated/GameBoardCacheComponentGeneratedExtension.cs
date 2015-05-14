@@ -1,13 +1,11 @@
-using Entitas;
-
 namespace Entitas {
     public partial class Entity {
-        public GameBoardCacheComponent gameBoardCache { get { return (GameBoardCacheComponent)GetComponent(GameComponentIds.GameBoardCache); } }
+        public GameBoardCacheComponent gameBoardCache { get { return (GameBoardCacheComponent)GetComponent(ComponentIds.GameBoardCache); } }
 
-        public bool hasGameBoardCache { get { return HasComponent(GameComponentIds.GameBoardCache); } }
+        public bool hasGameBoardCache { get { return HasComponent(ComponentIds.GameBoardCache); } }
 
         public void AddGameBoardCache(GameBoardCacheComponent component) {
-            AddComponent(GameComponentIds.GameBoardCache, component);
+            AddComponent(ComponentIds.GameBoardCache, component);
         }
 
         public void AddGameBoardCache(Entitas.Entity[,] newGrid) {
@@ -19,22 +17,22 @@ namespace Entitas {
         public void ReplaceGameBoardCache(Entitas.Entity[,] newGrid) {
             GameBoardCacheComponent component;
             if (hasGameBoardCache) {
-                WillRemoveComponent(GameComponentIds.GameBoardCache);
+                WillRemoveComponent(ComponentIds.GameBoardCache);
                 component = gameBoardCache;
             } else {
                 component = new GameBoardCacheComponent();
             }
             component.grid = newGrid;
-            ReplaceComponent(GameComponentIds.GameBoardCache, component);
+            ReplaceComponent(ComponentIds.GameBoardCache, component);
         }
 
         public void RemoveGameBoardCache() {
-            RemoveComponent(GameComponentIds.GameBoardCache);
+            RemoveComponent(ComponentIds.GameBoardCache);
         }
     }
 
     public partial class Pool {
-        public Entity gameBoardCacheEntity { get { return GetGroup(GameMatcher.GameBoardCache).GetSingleEntity(); } }
+        public Entity gameBoardCacheEntity { get { return GetGroup(Matcher.GameBoardCache).GetSingleEntity(); } }
 
         public GameBoardCacheComponent gameBoardCache { get { return gameBoardCacheEntity.gameBoardCache; } }
 
@@ -42,7 +40,7 @@ namespace Entitas {
 
         public Entity SetGameBoardCache(GameBoardCacheComponent component) {
             if (hasGameBoardCache) {
-                throw new SingleEntityException(GameMatcher.GameBoardCache);
+                throw new SingleEntityException(Matcher.GameBoardCache);
             }
             var entity = CreateEntity();
             entity.AddGameBoardCache(component);
@@ -51,7 +49,7 @@ namespace Entitas {
 
         public Entity SetGameBoardCache(Entitas.Entity[,] newGrid) {
             if (hasGameBoardCache) {
-                throw new SingleEntityException(GameMatcher.GameBoardCache);
+                throw new SingleEntityException(Matcher.GameBoardCache);
             }
             var entity = CreateEntity();
             entity.AddGameBoardCache(newGrid);
@@ -73,18 +71,18 @@ namespace Entitas {
             DestroyEntity(gameBoardCacheEntity);
         }
     }
-}
 
-    public partial class GameMatcher {
+    public partial class Matcher {
         static AllOfMatcher _matcherGameBoardCache;
 
         public static AllOfMatcher GameBoardCache {
             get {
                 if (_matcherGameBoardCache == null) {
-                    _matcherGameBoardCache = new GameMatcher(GameComponentIds.GameBoardCache);
+                    _matcherGameBoardCache = new Matcher(ComponentIds.GameBoardCache);
                 }
 
                 return _matcherGameBoardCache;
             }
         }
     }
+}

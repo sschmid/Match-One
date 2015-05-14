@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RemoveViewSystem : IReactiveSystem, ISetPool {
     public IMatcher GetTriggeringMatcher() {
-        return GameMatcher.Resource;
+        return Matcher.Resource;
     }
 
     public GroupEventType GetEventType() {
@@ -11,7 +11,7 @@ public class RemoveViewSystem : IReactiveSystem, ISetPool {
     }
 
     public void SetPool(Pool pool) {
-        pool.GetGroup(GameMatcher.View).OnEntityWillBeRemoved += onEntityWillBeRemoved;
+        pool.GetGroup(Matcher.View).OnEntityWillBeRemoved += onEntityWillBeRemoved;
     }
 
     void onEntityWillBeRemoved(Group group, Entity entity) {

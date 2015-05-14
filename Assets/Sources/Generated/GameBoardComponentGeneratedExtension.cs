@@ -1,13 +1,11 @@
-using Entitas;
-
 namespace Entitas {
     public partial class Entity {
-        public GameBoardComponent gameBoard { get { return (GameBoardComponent)GetComponent(GameComponentIds.GameBoard); } }
+        public GameBoardComponent gameBoard { get { return (GameBoardComponent)GetComponent(ComponentIds.GameBoard); } }
 
-        public bool hasGameBoard { get { return HasComponent(GameComponentIds.GameBoard); } }
+        public bool hasGameBoard { get { return HasComponent(ComponentIds.GameBoard); } }
 
         public void AddGameBoard(GameBoardComponent component) {
-            AddComponent(GameComponentIds.GameBoard, component);
+            AddComponent(ComponentIds.GameBoard, component);
         }
 
         public void AddGameBoard(int newColumns, int newRows) {
@@ -20,23 +18,23 @@ namespace Entitas {
         public void ReplaceGameBoard(int newColumns, int newRows) {
             GameBoardComponent component;
             if (hasGameBoard) {
-                WillRemoveComponent(GameComponentIds.GameBoard);
+                WillRemoveComponent(ComponentIds.GameBoard);
                 component = gameBoard;
             } else {
                 component = new GameBoardComponent();
             }
             component.columns = newColumns;
             component.rows = newRows;
-            ReplaceComponent(GameComponentIds.GameBoard, component);
+            ReplaceComponent(ComponentIds.GameBoard, component);
         }
 
         public void RemoveGameBoard() {
-            RemoveComponent(GameComponentIds.GameBoard);
+            RemoveComponent(ComponentIds.GameBoard);
         }
     }
 
     public partial class Pool {
-        public Entity gameBoardEntity { get { return GetGroup(GameMatcher.GameBoard).GetSingleEntity(); } }
+        public Entity gameBoardEntity { get { return GetGroup(Matcher.GameBoard).GetSingleEntity(); } }
 
         public GameBoardComponent gameBoard { get { return gameBoardEntity.gameBoard; } }
 
@@ -44,7 +42,7 @@ namespace Entitas {
 
         public Entity SetGameBoard(GameBoardComponent component) {
             if (hasGameBoard) {
-                throw new SingleEntityException(GameMatcher.GameBoard);
+                throw new SingleEntityException(Matcher.GameBoard);
             }
             var entity = CreateEntity();
             entity.AddGameBoard(component);
@@ -53,7 +51,7 @@ namespace Entitas {
 
         public Entity SetGameBoard(int newColumns, int newRows) {
             if (hasGameBoard) {
-                throw new SingleEntityException(GameMatcher.GameBoard);
+                throw new SingleEntityException(Matcher.GameBoard);
             }
             var entity = CreateEntity();
             entity.AddGameBoard(newColumns, newRows);
@@ -75,18 +73,18 @@ namespace Entitas {
             DestroyEntity(gameBoardEntity);
         }
     }
-}
 
-    public partial class GameMatcher {
+    public partial class Matcher {
         static AllOfMatcher _matcherGameBoard;
 
         public static AllOfMatcher GameBoard {
             get {
                 if (_matcherGameBoard == null) {
-                    _matcherGameBoard = new GameMatcher(GameComponentIds.GameBoard);
+                    _matcherGameBoard = new Matcher(ComponentIds.GameBoard);
                 }
 
                 return _matcherGameBoard;
             }
         }
     }
+}

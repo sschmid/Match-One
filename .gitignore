@@ -7,3 +7,5 @@ Match One-csharp.sln
 Match One.sln
 Library/AtlasCache
 ShaderCache.db
+shadercompiler*
+Library/ShaderCache
