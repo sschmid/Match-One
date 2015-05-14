@@ -19,6 +19,9 @@ public class RemoveViewSystem : IReactiveSystem, ISetPool {
     }
 
     public void Execute(Entity[] entities) {
+
+        UnityEngine.Debug.Log("RemoveViewSystem");
+
         foreach (var e in entities) {
             if (e.hasView) {
                 e.RemoveView();

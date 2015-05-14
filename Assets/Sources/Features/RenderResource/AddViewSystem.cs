@@ -13,6 +13,9 @@ public class AddViewSystem : IReactiveSystem {
     readonly Transform _viewContainer = new GameObject("Views").transform;
 
     public void Execute(Entity[] entities) {
+
+        UnityEngine.Debug.Log("AddViewSystem");
+
         foreach (var e in entities) {
             var res = Resources.Load<GameObject>(e.resource.name);
             var gameObject = Object.Instantiate(res);

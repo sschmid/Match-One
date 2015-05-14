@@ -1,23 +1,28 @@
-﻿using Entitas;
+﻿using System.Linq;
+using Entitas;
 using Entitas.Unity.VisualDebugging;
 using UnityEngine;
 
 public class GameController : MonoBehaviour {
 
-    IExecuteSystem[] _systems;
+    IStartSystem[] _startSystems;
+    IExecuteSystem[] _executeSystems;
 
     void Start() {
         Random.seed = 42;
+
         var pool = createPool();
-        _systems = createSystem(pool);
+        createSystems(pool);
 
+        foreach (var system in _startSystems) {
+            system.Start();
+        }
+    }
 
-
-        var e = pool.CreateEntity();
-        e.AddResource(Res.Piece0);
-
-
-
+    void Update() {
+        foreach (var system in _executeSystems) {
+            system.Execute();
+        }
     }
 
     Pool createPool() {
@@ -28,16 +33,24 @@ public class GameController : MonoBehaviour {
         #endif
     }
 
-    IExecuteSystem[] createSystem(Pool pool) {
-        return new [] {
-            pool.CreateExecuteSystem<RemoveViewSystem>(),
-            pool.CreateExecuteSystem<AddViewSystem>()
-        };
-    }
+    void createSystems(Pool pool) {
+        var systems = new [] {
+            pool.CreateSystem<CreateGameBoardSystem>(),
+            pool.CreateSystem<CreateGameBoardCacheSystem>(),
 
-    void Update() {
-        foreach (var system in _systems) {
-            system.Execute();
-        }
+            pool.CreateSystem<FillGameBoardSystem>(),
+
+            pool.CreateSystem<RemoveViewSystem>(),
+            pool.CreateSystem<AddViewSystem>(),
+            pool.CreateSystem<RenderPositionSystem>()
+        };
+
+        _startSystems = systems
+            .Select(system => {
+                var reactiveSystem = system as ReactiveSystem;
+                return reactiveSystem != null ? reactiveSystem.subsystem : system;})
+            .OfType<IStartSystem>().ToArray();
+
+        _executeSystems = systems.OfType<IExecuteSystem>().ToArray();
     }
 }
