@@ -26,7 +26,6 @@ public class GameController : MonoBehaviour {
     void createSystems(Pool pool) {
         var systems = new [] {
             pool.CreateSystem<CreateGameBoardSystem>(),
-            pool.CreateSystem<CreateInitialGameBoardSystem>(),
             pool.CreateSystem<CreateGameBoardCacheSystem>(),
             pool.CreateSystem<FillGameBoardSystem>(),
 

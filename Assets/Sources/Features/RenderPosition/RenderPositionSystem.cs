@@ -1,5 +1,6 @@
 ﻿using Entitas;
 using UnityEngine;
+using DG.Tweening;
 
 public class RenderPositionSystem : IReactiveSystem {
     public IMatcher GetTriggeringMatcher() {
@@ -16,7 +17,7 @@ public class RenderPositionSystem : IReactiveSystem {
 
         foreach (var e in entities) {
             var pos = e.position;
-            e.view.gameObject.transform.position = new Vector3(pos.x, pos.y, 0f);
+            e.view.gameObject.transform.DOMove(new Vector3(pos.x, pos.y, 0f), 0.3f);
         }
     }
 }
