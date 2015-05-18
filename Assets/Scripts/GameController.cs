@@ -1,50 +1,35 @@
-﻿using System.Linq;
-using Entitas;
+﻿using Entitas;
 using UnityEngine;
 
 public class GameController : MonoBehaviour {
 
-    IStartSystem[] _startSystems;
-    IExecuteSystem[] _executeSystems;
+    Systems _systems;
 
     void Start() {
         Random.seed = 42;
 
-        createSystems(Pools.gamePool);
-
-        foreach (var system in _startSystems) {
-            system.Start();
-        }
+        _systems = createSystems(Pools.gamePool);
+        _systems.Start();
     }
 
     void Update() {
-        foreach (var system in _executeSystems) {
-            system.Execute();
-        }
+        _systems.Execute();
     }
 
-    void createSystems(Pool pool) {
-        var systems = new [] {
-            pool.CreateSystem<CreateGameBoardSystem>(),
-            pool.CreateSystem<CreateGameBoardCacheSystem>(),
-            pool.CreateSystem<FillGameBoardSystem>(),
+    Systems createSystems(Pool pool) {
+        var systems = new Systems();
+        systems.Add(pool.CreateSystem<CreateGameBoardSystem>());
+        systems.Add(pool.CreateSystem<CreateGameBoardCacheSystem>());
+        systems.Add(pool.CreateSystem<FillGameBoardSystem>());
 
-            pool.CreateSystem<RemoveViewSystem>(),
-            pool.CreateSystem<AddViewSystem>(),
-            pool.CreateSystem<RenderPositionSystem>(),
+        systems.Add(pool.CreateSystem<RemoveViewSystem>());
+        systems.Add(pool.CreateSystem<AddViewSystem>());
+        systems.Add(pool.CreateSystem<RenderPositionSystem>());
 
-            pool.CreateSystem<ProcessInputSystem>(),
+        systems.Add(pool.CreateSystem<ProcessInputSystem>());
+        systems.Add(pool.CreateSystem<DestroySystem>());
 
-            pool.CreateSystem<DestroySystem>(),
-            pool.CreateSystem<ScoreSystem>()
-        };
-
-        _startSystems = systems
-            .Select(system => {
-                var reactiveSystem = system as ReactiveSystem;
-                return reactiveSystem != null ? reactiveSystem.subsystem : system;})
-            .OfType<IStartSystem>().ToArray();
-
-        _executeSystems = systems.OfType<IExecuteSystem>().ToArray();
+        systems.Add(pool.CreateSystem<ScoreSystem>());
+        return systems;
     }
 }
