@@ -2,11 +2,9 @@
 
 public class InputController : MonoBehaviour {
 
-    public LayerMask layerMask;
-
     void Update() {
         if (Input.GetMouseButtonDown(0)) {
-            var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 100, layerMask);
+            var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 100);
             if (hit.collider != null) {
                 var pos = hit.collider.transform.position;
                 var e = Pools.gamePool.CreateEntity();

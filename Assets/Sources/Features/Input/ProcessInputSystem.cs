@@ -26,7 +26,9 @@ public class ProcessInputSystem : IStartSystem, IReactiveSystem, ISetPool {
 
         var input = entities.SingleEntity().input;
         var e = _gameBoardCache.grid[input.x, input.y];
-        e.isDestroy = true;
+        if (e.isInteractive) {
+            e.isDestroy = true;
+        }
     }
 }
 

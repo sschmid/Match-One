@@ -18,6 +18,7 @@ public static class PoolExtensions {
         e.isPiece = true;
         e.AddPosition(x, y);
         e.AddResource(_pieces[Random.Range(0, _pieces.Length)]);
+        e.isInteractive = true;
         return e;
     }
 
