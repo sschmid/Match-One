@@ -36,8 +36,7 @@ public class GameController : MonoBehaviour {
             pool.CreateSystem<ProcessInputSystem>(),
 
             pool.CreateSystem<DestroySystem>(),
-            pool.CreateSystem<ScoreSystem>(),
-            pool.CreateSystem<CleanupSystem>()
+            pool.CreateSystem<ScoreSystem>()
         };
 
         _startSystems = systems

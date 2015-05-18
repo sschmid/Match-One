@@ -24,11 +24,14 @@ public class ProcessInputSystem : IStartSystem, IReactiveSystem, ISetPool {
 
         UnityEngine.Debug.Log("ProcessInputSystem");
 
-        var input = entities.SingleEntity().input;
+        var inputEntity = entities.SingleEntity();
+        var input = inputEntity.input;
         var e = _gameBoardCache.grid[input.x, input.y];
         if (e.isInteractive) {
             e.isDestroy = true;
         }
+
+        _pool.DestroyEntity(inputEntity);
     }
 }
 
