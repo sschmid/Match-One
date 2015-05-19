@@ -4,17 +4,17 @@ namespace Entitas {
 
         public bool hasGameBoardCache { get { return HasComponent(ComponentIds.GameBoardCache); } }
 
-        public void AddGameBoardCache(GameBoardCacheComponent component) {
-            AddComponent(ComponentIds.GameBoardCache, component);
+        public Entity AddGameBoardCache(GameBoardCacheComponent component) {
+            return AddComponent(ComponentIds.GameBoardCache, component);
         }
 
-        public void AddGameBoardCache(Entitas.Entity[,] newGrid) {
+        public Entity AddGameBoardCache(Entitas.Entity[,] newGrid) {
             var component = new GameBoardCacheComponent();
             component.grid = newGrid;
-            AddGameBoardCache(component);
+            return AddGameBoardCache(component);
         }
 
-        public void ReplaceGameBoardCache(Entitas.Entity[,] newGrid) {
+        public Entity ReplaceGameBoardCache(Entitas.Entity[,] newGrid) {
             GameBoardCacheComponent component;
             if (hasGameBoardCache) {
                 WillRemoveComponent(ComponentIds.GameBoardCache);
@@ -23,11 +23,11 @@ namespace Entitas {
                 component = new GameBoardCacheComponent();
             }
             component.grid = newGrid;
-            ReplaceComponent(ComponentIds.GameBoardCache, component);
+            return ReplaceComponent(ComponentIds.GameBoardCache, component);
         }
 
-        public void RemoveGameBoardCache() {
-            RemoveComponent(ComponentIds.GameBoardCache);
+        public Entity RemoveGameBoardCache() {
+            return RemoveComponent(ComponentIds.GameBoardCache);
         }
     }
 

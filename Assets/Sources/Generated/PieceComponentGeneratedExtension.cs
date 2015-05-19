@@ -14,6 +14,11 @@ namespace Entitas {
                 }
             }
         }
+
+        public Entity IsPiece(bool value) {
+            isPiece = value;
+            return this;
+        }
     }
 
     public partial class Matcher {

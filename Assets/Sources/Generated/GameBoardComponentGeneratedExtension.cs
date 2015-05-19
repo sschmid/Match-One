@@ -4,18 +4,18 @@ namespace Entitas {
 
         public bool hasGameBoard { get { return HasComponent(ComponentIds.GameBoard); } }
 
-        public void AddGameBoard(GameBoardComponent component) {
-            AddComponent(ComponentIds.GameBoard, component);
+        public Entity AddGameBoard(GameBoardComponent component) {
+            return AddComponent(ComponentIds.GameBoard, component);
         }
 
-        public void AddGameBoard(int newColumns, int newRows) {
+        public Entity AddGameBoard(int newColumns, int newRows) {
             var component = new GameBoardComponent();
             component.columns = newColumns;
             component.rows = newRows;
-            AddGameBoard(component);
+            return AddGameBoard(component);
         }
 
-        public void ReplaceGameBoard(int newColumns, int newRows) {
+        public Entity ReplaceGameBoard(int newColumns, int newRows) {
             GameBoardComponent component;
             if (hasGameBoard) {
                 WillRemoveComponent(ComponentIds.GameBoard);
@@ -25,11 +25,11 @@ namespace Entitas {
             }
             component.columns = newColumns;
             component.rows = newRows;
-            ReplaceComponent(ComponentIds.GameBoard, component);
+            return ReplaceComponent(ComponentIds.GameBoard, component);
         }
 
-        public void RemoveGameBoard() {
-            RemoveComponent(ComponentIds.GameBoard);
+        public Entity RemoveGameBoard() {
+            return RemoveComponent(ComponentIds.GameBoard);
         }
     }
 

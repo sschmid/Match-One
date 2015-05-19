@@ -4,18 +4,18 @@ namespace Entitas {
 
         public bool hasInput { get { return HasComponent(ComponentIds.Input); } }
 
-        public void AddInput(InputComponent component) {
-            AddComponent(ComponentIds.Input, component);
+        public Entity AddInput(InputComponent component) {
+            return AddComponent(ComponentIds.Input, component);
         }
 
-        public void AddInput(int newX, int newY) {
+        public Entity AddInput(int newX, int newY) {
             var component = new InputComponent();
             component.x = newX;
             component.y = newY;
-            AddInput(component);
+            return AddInput(component);
         }
 
-        public void ReplaceInput(int newX, int newY) {
+        public Entity ReplaceInput(int newX, int newY) {
             InputComponent component;
             if (hasInput) {
                 WillRemoveComponent(ComponentIds.Input);
@@ -25,11 +25,11 @@ namespace Entitas {
             }
             component.x = newX;
             component.y = newY;
-            ReplaceComponent(ComponentIds.Input, component);
+            return ReplaceComponent(ComponentIds.Input, component);
         }
 
-        public void RemoveInput() {
-            RemoveComponent(ComponentIds.Input);
+        public Entity RemoveInput() {
+            return RemoveComponent(ComponentIds.Input);
         }
     }
 

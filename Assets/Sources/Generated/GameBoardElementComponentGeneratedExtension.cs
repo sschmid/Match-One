@@ -14,6 +14,11 @@ namespace Entitas {
                 }
             }
         }
+
+        public Entity IsGameBoardElement(bool value) {
+            isGameBoardElement = value;
+            return this;
+        }
     }
 
     public partial class Matcher {

@@ -14,6 +14,11 @@ namespace Entitas {
                 }
             }
         }
+
+        public Entity IsInteractive(bool value) {
+            isInteractive = value;
+            return this;
+        }
     }
 
     public partial class Matcher {

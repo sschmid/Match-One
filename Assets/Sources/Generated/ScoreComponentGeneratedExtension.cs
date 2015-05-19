@@ -4,17 +4,17 @@ namespace Entitas {
 
         public bool hasScore { get { return HasComponent(ComponentIds.Score); } }
 
-        public void AddScore(ScoreComponent component) {
-            AddComponent(ComponentIds.Score, component);
+        public Entity AddScore(ScoreComponent component) {
+            return AddComponent(ComponentIds.Score, component);
         }
 
-        public void AddScore(int newScore) {
+        public Entity AddScore(int newScore) {
             var component = new ScoreComponent();
             component.score = newScore;
-            AddScore(component);
+            return AddScore(component);
         }
 
-        public void ReplaceScore(int newScore) {
+        public Entity ReplaceScore(int newScore) {
             ScoreComponent component;
             if (hasScore) {
                 WillRemoveComponent(ComponentIds.Score);
@@ -23,11 +23,11 @@ namespace Entitas {
                 component = new ScoreComponent();
             }
             component.score = newScore;
-            ReplaceComponent(ComponentIds.Score, component);
+            return ReplaceComponent(ComponentIds.Score, component);
         }
 
-        public void RemoveScore() {
-            RemoveComponent(ComponentIds.Score);
+        public Entity RemoveScore() {
+            return RemoveComponent(ComponentIds.Score);
         }
     }
 

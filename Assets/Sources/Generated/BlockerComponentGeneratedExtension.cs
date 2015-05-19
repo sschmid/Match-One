@@ -14,6 +14,11 @@ namespace Entitas {
                 }
             }
         }
+
+        public Entity IsBlocker(bool value) {
+            isBlocker = value;
+            return this;
+        }
     }
 
     public partial class Matcher {

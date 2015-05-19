@@ -4,17 +4,17 @@ namespace Entitas {
 
         public bool hasView { get { return HasComponent(ComponentIds.View); } }
 
-        public void AddView(ViewComponent component) {
-            AddComponent(ComponentIds.View, component);
+        public Entity AddView(ViewComponent component) {
+            return AddComponent(ComponentIds.View, component);
         }
 
-        public void AddView(UnityEngine.GameObject newGameObject) {
+        public Entity AddView(UnityEngine.GameObject newGameObject) {
             var component = new ViewComponent();
             component.gameObject = newGameObject;
-            AddView(component);
+            return AddView(component);
         }
 
-        public void ReplaceView(UnityEngine.GameObject newGameObject) {
+        public Entity ReplaceView(UnityEngine.GameObject newGameObject) {
             ViewComponent component;
             if (hasView) {
                 WillRemoveComponent(ComponentIds.View);
@@ -23,11 +23,11 @@ namespace Entitas {
                 component = new ViewComponent();
             }
             component.gameObject = newGameObject;
-            ReplaceComponent(ComponentIds.View, component);
+            return ReplaceComponent(ComponentIds.View, component);
         }
 
-        public void RemoveView() {
-            RemoveComponent(ComponentIds.View);
+        public Entity RemoveView() {
+            return RemoveComponent(ComponentIds.View);
         }
     }
 

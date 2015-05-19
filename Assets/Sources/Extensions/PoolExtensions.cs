@@ -13,22 +13,20 @@ public static class PoolExtensions {
     };
 
     public static Entity CreateRandomPiece(this Pool pool, int x, int y) {
-        var e = pool.CreateEntity();
-        e.isGameBoardElement = true;
-        e.isPiece = true;
-        e.AddPosition(x, y);
-        e.AddResource(_pieces[Random.Range(0, _pieces.Length)]);
-        e.isInteractive = true;
-        return e;
+        return pool.CreateEntity()
+            .IsGameBoardElement(true)
+            .IsPiece(true)
+            .AddPosition(x, y)
+            .AddResource(_pieces[Random.Range(0, _pieces.Length)])
+            .IsInteractive(true);
     }
 
     public static Entity CreateBlocker(this Pool pool, int x, int y) {
-        var e = pool.CreateEntity();
-        e.isGameBoardElement = true;
-        e.isBlocker = true;
-        e.AddPosition(x, y);
-        e.AddResource(Res.Blocker);
-        return e;
+        return pool.CreateEntity()
+            .IsGameBoardElement(true)
+            .IsBlocker(true)
+            .AddPosition(x, y)
+            .AddResource(Res.Blocker);
     }
 }
 

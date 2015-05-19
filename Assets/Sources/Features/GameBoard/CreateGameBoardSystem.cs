@@ -22,7 +22,6 @@ public class CreateGameBoardSystem : IStartSystem, ISetPool {
                 }
             }
         }
-
     }
 }
 

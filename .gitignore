@@ -1,13 +1,21 @@
-CurrentLayout.dwlt
+# OS X
+.DS_Store
+
+# Unity general
 Assembly-CSharp-Editor-vs.csproj
 Assembly-CSharp-Editor.csproj
 Assembly-CSharp-vs.csproj
 Assembly-CSharp.csproj
-Match One-csharp.sln
-Match One.sln
+
+CurrentLayout.dwlt
+CurrentMaximizeLayout.dwlt
 Library/AtlasCache
+Library/ShaderCache
 ShaderCache.db
 shadercompiler*
-Library/ShaderCache
 CrashedAssetImports.txt
-CurrentMaximizeLayout.dwlt
+
+
+# Unity project specific
+Match One-csharp.sln
+Match One.sln
