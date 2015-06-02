@@ -41,7 +41,7 @@ public class FillGameBoardSystem : IStartSystem, IReactiveSystem, ISetPool {
         for (int column = 0; column < _gameBoard.columns; column++) {
             for (int row = 1; row < _gameBoard.rows; row++) {
                 var e = grid[column, row];
-                if (e != null) {
+                if (e != null && e.isMovable) {
                     moveDown(e, column, row, grid);
                 }
             }

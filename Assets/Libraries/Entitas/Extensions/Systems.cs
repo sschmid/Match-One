@@ -2,25 +2,44 @@
 using System.Collections.Generic;
 
 namespace Entitas {
-    public class Systems {
+    public class Systems : IStartSystem, IExecuteSystem {
 
-        readonly List<IStartSystem> _startSystems;
-        readonly List<IExecuteSystem> _executeSystems;
+        public ISystem[] systems { 
+            get {
+                if (_systemsCache == null) {
+                    _systemsCache = _systems.ToArray();
+                }
+
+                return _systemsCache;
+            }
+        }
+
+        public int startSystemsCount { get { return _startSystems.Count; } }
+        public int executeSystemsCount { get { return _executeSystems.Count; } }
+
+        protected readonly List<ISystem> _systems;
+        protected ISystem[] _systemsCache;
+        protected readonly List<IStartSystem> _startSystems;
+        protected readonly List<IExecuteSystem> _executeSystems;
 
         public Systems() {
+            _systems = new List<ISystem>();
             _startSystems = new List<IStartSystem>();
             _executeSystems = new List<IExecuteSystem>();
         }
 
-        public void Add<T>() {
-            Add(typeof(T));
+        public virtual Systems Add<T>() {
+            return Add(typeof(T));
         }
 
-        public void Add(Type systemType) {
-            Add((ISystem)Activator.CreateInstance(systemType));
+        public virtual Systems Add(Type systemType) {
+            return Add((ISystem)Activator.CreateInstance(systemType));
         }
 
-        public void Add(ISystem system) {
+        public virtual Systems Add(ISystem system) {
+            _systems.Add(system);
+            _systemsCache = null;
+
             var reactiveSystem = system as ReactiveSystem;
             var startSystem = reactiveSystem != null
                 ? reactiveSystem.subsystem as IStartSystem
@@ -34,17 +53,19 @@ namespace Entitas {
             if (executeSystem != null) {
                 _executeSystems.Add(executeSystem);
             }
+
+            return this;
         }
 
-        public void Start() {
-            foreach (var system in _startSystems) {
-                system.Start();
+        public virtual void Start() {
+            for (int i = 0, _startSystemsCount = _startSystems.Count; i < _startSystemsCount; i++) {
+                _startSystems[i].Start();
             }
         }
 
-        public void Execute() {
-            foreach (var system in _executeSystems) {
-                system.Execute();
+        public virtual void Execute() {
+            for (int i = 0, _executeSystemsCount = _executeSystems.Count; i < _executeSystemsCount; i++) {
+                _executeSystems[i].Execute();
             }
         }
     }

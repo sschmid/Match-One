@@ -1,9 +1,5 @@
-﻿using System;
+﻿using Entitas;
 
-namespace AssemblyCSharp {
-    public class MovableComponent {
-        public MovableComponent() {
-        }
-    }
+public class MovableComponent : IComponent {
 }
 

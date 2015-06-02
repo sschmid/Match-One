@@ -1,34 +1,32 @@
 using System.Collections.Generic;
 
 public static class ComponentIds {
-    public const int Blocker = 0;
-    public const int Destroy = 1;
-    public const int GameBoardCache = 2;
-    public const int GameBoard = 3;
-    public const int GameBoardElement = 4;
-    public const int Input = 5;
-    public const int Interactive = 6;
-    public const int Piece = 7;
-    public const int Position = 8;
-    public const int Resource = 9;
-    public const int Score = 10;
-    public const int View = 11;
+    public const int Destroy = 0;
+    public const int GameBoardCache = 1;
+    public const int GameBoard = 2;
+    public const int GameBoardElement = 3;
+    public const int Input = 4;
+    public const int Interactive = 5;
+    public const int Movable = 6;
+    public const int Position = 7;
+    public const int Resource = 8;
+    public const int Score = 9;
+    public const int View = 10;
 
-    public const int TotalComponents = 12;
+    public const int TotalComponents = 11;
 
     static readonly Dictionary<int, string> components = new Dictionary<int, string> {
-        { 0, "Blocker" },
-        { 1, "Destroy" },
-        { 2, "GameBoardCache" },
-        { 3, "GameBoard" },
-        { 4, "GameBoardElement" },
-        { 5, "Input" },
-        { 6, "Interactive" },
-        { 7, "Piece" },
-        { 8, "Position" },
-        { 9, "Resource" },
-        { 10, "Score" },
-        { 11, "View" }
+        { 0, "Destroy" },
+        { 1, "GameBoardCache" },
+        { 2, "GameBoard" },
+        { 3, "GameBoardElement" },
+        { 4, "Input" },
+        { 5, "Interactive" },
+        { 6, "Movable" },
+        { 7, "Position" },
+        { 8, "Resource" },
+        { 9, "Score" },
+        { 10, "View" }
     };
 
     public static string IdToString(int componentId) {
