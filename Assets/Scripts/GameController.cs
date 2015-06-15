@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour {
         #else
         return new Systems()
         #endif
-            .Add(pool.CreateSystem<CreateGameBoardSystem>())
+            .Add(pool.CreateSystem<GameBoardSystem>())
             .Add(pool.CreateSystem<CreateGameBoardCacheSystem>())
             .Add(pool.CreateSystem<FallSystem>())
             .Add(pool.CreateSystem<FillSystem>())
