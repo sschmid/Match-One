@@ -17,7 +17,7 @@ public class DestroySystem : IReactiveSystem, ISetPool {
 
     public void Execute(Entity[] entities) {
 
-        UnityEngine.Debug.Log("DestroySystem");
+        UnityEngine.Debug.Log("Destroy");
 
         foreach (var e in entities) {
             _pool.DestroyEntity(e);

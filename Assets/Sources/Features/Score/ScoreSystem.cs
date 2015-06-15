@@ -20,6 +20,9 @@ public class ScoreSystem : IStartSystem, IReactiveSystem, ISetPool {
     }
 
     public void Execute(Entity[] entities) {
+
+        UnityEngine.Debug.Log("Score");
+
         _pool.ReplaceScore(_pool.score.score + entities.Length);
     }
 }

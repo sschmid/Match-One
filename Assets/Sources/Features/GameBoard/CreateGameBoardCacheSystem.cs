@@ -3,11 +3,10 @@
 public class CreateGameBoardCacheSystem : IStartSystem, IReactiveSystem, ISetPool {
 
     Pool _pool;
-    GameBoardComponent _gameBoard;
     Group _gameBoardElements;
 
     public IMatcher GetTriggeringMatcher() {
-        return Matcher.AllOf(Matcher.GameBoardElement);
+        return Matcher.AllOf(Matcher.GameBoardElement, Matcher.Position);
     }
 
     public GroupEventType GetEventType() {
@@ -16,11 +15,10 @@ public class CreateGameBoardCacheSystem : IStartSystem, IReactiveSystem, ISetPoo
 
     public void SetPool(Pool pool) {
         _pool = pool;
+        _gameBoardElements = _pool.GetGroup(Matcher.AllOf(Matcher.GameBoardElement, Matcher.Position));
     }
 
     public void Start() {
-        _gameBoard = _pool.gameBoard;
-        _gameBoardElements = _pool.GetGroup(Matcher.AllOf(Matcher.GameBoardElement, Matcher.Position));
         updateGrid();
     }
 
@@ -30,9 +28,10 @@ public class CreateGameBoardCacheSystem : IStartSystem, IReactiveSystem, ISetPoo
 
     void updateGrid() {
 
-        UnityEngine.Debug.Log("CreateGameBoardCacheSystem");
+        UnityEngine.Debug.Log("Create GameBoard Cache");
 
-        var grid = new Entity[_gameBoard.columns, _gameBoard.rows];
+        var gameBoard = _pool.gameBoard;
+        var grid = new Entity[gameBoard.columns, gameBoard.rows];
         foreach (var e in _gameBoardElements.GetEntities()) {
             var pos = e.position;
             grid[pos.x, pos.y] = e;

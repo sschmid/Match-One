@@ -13,7 +13,7 @@ public class RenderPositionSystem : IReactiveSystem {
 
     public void Execute(Entity[] entities) {
 
-        UnityEngine.Debug.Log("RenderPositionSystem");
+        Debug.Log("Render Position");
 
         foreach (var e in entities) {
             var pos = e.position;

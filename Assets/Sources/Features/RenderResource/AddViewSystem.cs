@@ -14,7 +14,7 @@ public class AddViewSystem : IReactiveSystem {
 
     public void Execute(Entity[] entities) {
 
-        UnityEngine.Debug.Log("AddViewSystem");
+        Debug.Log("Add View");
 
         foreach (var e in entities) {
             var res = Resources.Load<GameObject>(e.resource.name);

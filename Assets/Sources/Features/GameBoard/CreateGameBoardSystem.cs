@@ -10,7 +10,7 @@ public class CreateGameBoardSystem : IStartSystem, ISetPool {
 
     public void Start() {
 
-        UnityEngine.Debug.Log("CreateGameBoardSystem");
+        Debug.Log("Create GameBoard");
 
         var gameBoard = _pool.SetGameBoard(8, 9).gameBoard;
         for (int row = 0; row < gameBoard.rows; row++) {

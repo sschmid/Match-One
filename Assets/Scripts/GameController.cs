@@ -25,15 +25,16 @@ public class GameController : MonoBehaviour {
         #endif
             .Add(pool.CreateSystem<CreateGameBoardSystem>())
             .Add(pool.CreateSystem<CreateGameBoardCacheSystem>())
-            .Add(pool.CreateSystem<FillGameBoardSystem>())
+            .Add(pool.CreateSystem<FallSystem>())
+            .Add(pool.CreateSystem<FillSystem>())
+
+            .Add(pool.CreateSystem<ProcessInputSystem>())
 
             .Add(pool.CreateSystem<RemoveViewSystem>())
             .Add(pool.CreateSystem<AddViewSystem>())
             .Add(pool.CreateSystem<RenderPositionSystem>())
 
-            .Add(pool.CreateSystem<ProcessInputSystem>())
             .Add(pool.CreateSystem<DestroySystem>())
-
             .Add(pool.CreateSystem<ScoreSystem>());
     }
 }
