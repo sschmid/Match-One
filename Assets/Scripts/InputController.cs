@@ -5,6 +5,10 @@ public class InputController : MonoBehaviour {
     public bool burstMode;
 
     void Update() {
+        if (Input.GetKeyDown("b")) {
+            burstMode = !burstMode;
+        }
+
         var input = false;
         if (burstMode) {
             input = Input.GetMouseButton(0);
