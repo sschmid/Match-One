@@ -11,9 +11,11 @@ namespace Entitas.Unity.VisualDebugging {
         public double totalExecutionDuration { get { return _totalExecutionDuration; } }
         public double minExecutionDuration { get { return _minExecutionDuration; } }
         public double maxExecutionDuration { get { return _maxExecutionDuration; } }
-        public double averageExecutionDuration { 
+        public double averageExecutionDuration {
             get { return _durationsCount == 0 ? 0 : _totalExecutionDuration / _durationsCount; }
         }
+
+        public bool isActive;
 
         string _systemName;
         double _totalExecutionDuration = -1;
@@ -23,6 +25,7 @@ namespace Entitas.Unity.VisualDebugging {
 
         public SystemInfo(string systemName) {
             _systemName = systemName;
+            isActive = true;
         }
 
         public void AddExecutionDuration(double executionDuration) {
@@ -56,10 +59,14 @@ namespace Entitas.Unity.VisualDebugging {
     }
 
     public class DebugSystems : Systems {
+        public int startSystemsCount { get { return _startSystems.Count; } }
+        public int executeSystemsCount { get { return _executeSystems.Count; } }
+        public int totalSystemsCount { get { return _systems.Count; } }
+
         public string name { get { return _name; } }
         public GameObject container { get { return _container.gameObject; } }
         public double totalDuration { get { return _totalDuration; } }
-        public SystemInfo[] systemInfos { 
+        public SystemInfo[] systemInfos {
             get { return _systemInfos.Values
                     .Where(systemInfo => systemInfo.averageExecutionDuration >= threshold)
                     .ToArray(); }
@@ -70,6 +77,7 @@ namespace Entitas.Unity.VisualDebugging {
         public float threshold;
         public AvgResetInterval avgResetInterval = AvgResetInterval.Never;
 
+        readonly List<ISystem> _systems;
         readonly string _name;
         readonly Transform _container;
         double _totalDuration;
@@ -78,11 +86,17 @@ namespace Entitas.Unity.VisualDebugging {
 
         public DebugSystems(string name = "Debug Systems") {
             _name = name;
+            _systems = new List<ISystem>();
             _container = new GameObject().transform;
             _container.gameObject.AddComponent<SystemsDebugBehaviour>().Init(this);
             _systemInfos = new Dictionary<Type, SystemInfo>();
             _stopwatch = new Stopwatch();
             updateName();
+        }
+
+        public override Systems Add(ISystem system) {
+            _systems.Add(system);
+            return base.Add(system);
         }
 
         public void Reset() {
@@ -95,11 +109,14 @@ namespace Entitas.Unity.VisualDebugging {
             _totalDuration = 0;
             for (int i = 0, _startSystemsCount = _startSystems.Count; i < _startSystemsCount; i++) {
                 var system = _startSystems[i];
-                var duration = monitorSystemStartDuration(system);
-                _totalDuration += duration;
-                updateSystemInfo(system, duration);
+                var systemInfo = getSystemInfo(system);
+                if (systemInfo.isActive) {
+                    var duration = monitorSystemStartDuration(system);
+                    _totalDuration += duration;
+                    systemInfo.AddExecutionDuration(duration);
+                }
             }
-            
+
             updateName();
         }
 
@@ -116,9 +133,12 @@ namespace Entitas.Unity.VisualDebugging {
             }
             for (int i = 0, exeSystemsCount = _executeSystems.Count; i < exeSystemsCount; i++) {
                 var system = _executeSystems[i];
-                var duration = monitorSystemExecutionDuration(system);
-                _totalDuration += duration;
-                updateSystemInfo(system, duration);
+                var systemInfo = getSystemInfo(system);
+                if (systemInfo.isActive) {
+                    var duration = monitorSystemExecutionDuration(system);
+                    _totalDuration += duration;
+                    systemInfo.AddExecutionDuration(duration);
+                }
             }
 
             updateName();
@@ -140,17 +160,12 @@ namespace Entitas.Unity.VisualDebugging {
             return _stopwatch.Elapsed.TotalMilliseconds;
         }
 
-        void updateSystemInfo(ISystem system, double executionDuration) {
+        SystemInfo getSystemInfo(ISystem system) {
             var reactiveSystem = system as ReactiveSystem;
             var systemType = reactiveSystem != null
                                 ? reactiveSystem.subsystem.GetType()
                                 : system.GetType();
 
-            var systemInfo = getSystemInfo(systemType);
-            systemInfo.AddExecutionDuration(executionDuration);
-        }
-
-        SystemInfo getSystemInfo(Type systemType) {
             SystemInfo systemInfo;
             if (!_systemInfos.TryGetValue(systemType, out systemInfo)) {
                 const string systemSuffix = "System";
@@ -168,7 +183,7 @@ namespace Entitas.Unity.VisualDebugging {
         void updateName() {
             if (_container != null) {
                 _container.name = string.Format("{0} ({1} start, {2} exe, {3:0.###} ms)",
-                    _name, startSystemsCount, executeSystemsCount, _totalDuration);
+                    _name, _startSystems.Count, _executeSystems.Count, _totalDuration);
             }
         }
     }
