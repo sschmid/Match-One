@@ -9,7 +9,7 @@ public class GameController : MonoBehaviour {
     void Start() {
         Random.seed = 42;
 
-        _systems = createSystems(Pools.gamePool);
+        _systems = createSystems(Pools.pool);
         _systems.Start();
     }
 
@@ -23,18 +23,18 @@ public class GameController : MonoBehaviour {
         #else
         return new Systems()
         #endif
-            .Add(pool.CreateSystem<GameBoardSystem>())
-            .Add(pool.CreateSystem<CreateGameBoardCacheSystem>())
-            .Add(pool.CreateSystem<FallSystem>())
-            .Add(pool.CreateSystem<FillSystem>())
+            .Add(pool.CreateGameBoardSystem())
+            .Add(pool.CreateCreateGameBoardCacheSystem())
+            .Add(pool.CreateFallSystem())
+            .Add(pool.CreateFillSystem())
 
-            .Add(pool.CreateSystem<ProcessInputSystem>())
+            .Add(pool.CreateProcessInputSystem())
 
-            .Add(pool.CreateSystem<RemoveViewSystem>())
-            .Add(pool.CreateSystem<AddViewSystem>())
-            .Add(pool.CreateSystem<RenderPositionSystem>())
+            .Add(pool.CreateRemoveViewSystem())
+            .Add(pool.CreateAddViewSystem())
+            .Add(pool.CreateRenderPositionSystem())
 
-            .Add(pool.CreateSystem<DestroySystem>())
-            .Add(pool.CreateSystem<ScoreSystem>());
+            .Add(pool.CreateDestroySystem())
+            .Add(pool.CreateScoreSystem());
     }
 }

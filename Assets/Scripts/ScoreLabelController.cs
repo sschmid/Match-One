@@ -8,7 +8,7 @@ public class ScoreLabelController : MonoBehaviour {
     void Start() {
         _label = GetComponent<Text>();
 
-        var pool = Pools.gamePool;
+        var pool = Pools.pool;
         pool.GetGroup(Matcher.Score).OnEntityAdded += (group, entity) => updateScore(entity.score.score);
         updateScore(pool.score.score);
     }

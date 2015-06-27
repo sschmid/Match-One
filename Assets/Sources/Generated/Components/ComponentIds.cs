@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 public static class ComponentIds {
     public const int Destroy = 0;
     public const int GameBoardCache = 1;
@@ -15,18 +13,18 @@ public static class ComponentIds {
 
     public const int TotalComponents = 11;
 
-    static readonly Dictionary<int, string> components = new Dictionary<int, string> {
-        { 0, "Destroy" },
-        { 1, "GameBoardCache" },
-        { 2, "GameBoard" },
-        { 3, "GameBoardElement" },
-        { 4, "Input" },
-        { 5, "Interactive" },
-        { 6, "Movable" },
-        { 7, "Position" },
-        { 8, "Resource" },
-        { 9, "Score" },
-        { 10, "View" }
+    static readonly string[] components = {
+        "Destroy",
+        "GameBoardCache",
+        "GameBoard",
+        "GameBoardElement",
+        "Input",
+        "Interactive",
+        "Movable",
+        "Position",
+        "Resource",
+        "Score",
+        "View"
     };
 
     public static string IdToString(int componentId) {
