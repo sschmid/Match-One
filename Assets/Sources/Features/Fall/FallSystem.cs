@@ -1,16 +1,12 @@
-﻿using Entitas;
+using Entitas;
 
 public class FallSystem : IReactiveSystem, ISetPool {
 
     Pool _pool;
 
-    public IMatcher GetTriggeringMatcher() {
-        return Matcher.AllOf(Matcher.GameBoardElement);
-    }
+    public IMatcher trigger { get { return Matcher.AllOf(Matcher.GameBoardElement); } }
 
-    public GroupEventType GetEventType() {
-        return  GroupEventType.OnEntityRemoved;
-    }
+    public GroupEventType eventType { get { return  GroupEventType.OnEntityRemoved; } }
 
     public void SetPool(Pool pool) {
         _pool = pool;

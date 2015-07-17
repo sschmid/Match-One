@@ -1,13 +1,9 @@
-﻿using Entitas;
+using Entitas;
 
 public class ScoreSystem : IStartSystem, IReactiveSystem, ISetPool {
-    public IMatcher GetTriggeringMatcher() {
-        return Matcher.GameBoardElement;
-    }
+    public IMatcher trigger { get { return Matcher.GameBoardElement; } }
 
-    public GroupEventType GetEventType() {
-        return GroupEventType.OnEntityRemoved;
-    }
+    public GroupEventType eventType { get { return GroupEventType.OnEntityRemoved; } }
 
     Pool _pool;
 

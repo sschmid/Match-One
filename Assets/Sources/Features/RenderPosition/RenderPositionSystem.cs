@@ -1,15 +1,11 @@
-﻿using Entitas;
+using Entitas;
 using UnityEngine;
 using DG.Tweening;
 
 public class RenderPositionSystem : IReactiveSystem {
-    public IMatcher GetTriggeringMatcher() {
-        return Matcher.AllOf(Matcher.Position, Matcher.View);
-    }
+    public IMatcher trigger { get { return Matcher.AllOf(Matcher.Position, Matcher.View); } }
 
-    public GroupEventType GetEventType() {
-        return GroupEventType.OnEntityAdded;
-    }
+    public GroupEventType eventType { get { return GroupEventType.OnEntityAdded; } }
 
     public void Execute(Entity[] entities) {
 

@@ -1,15 +1,11 @@
-﻿using Entitas;
+using Entitas;
 using UnityEngine;
 using DG.Tweening;
 
 public class RemoveViewSystem : IReactiveSystem, ISetPool {
-    public IMatcher GetTriggeringMatcher() {
-        return Matcher.Resource;
-    }
+    public IMatcher trigger { get { return Matcher.Resource; } }
 
-    public GroupEventType GetEventType() {
-        return GroupEventType.OnEntityRemoved;
-    }
+    public GroupEventType eventType { get { return GroupEventType.OnEntityRemoved; } }
 
     public void SetPool(Pool pool) {
         pool.GetGroup(Matcher.View).OnEntityWillBeRemoved += onEntityWillBeRemoved;

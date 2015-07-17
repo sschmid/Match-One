@@ -1,17 +1,13 @@
-﻿using Entitas;
+using Entitas;
 using UnityEngine;
 
 public class GameBoardSystem : IStartSystem, IReactiveSystem, ISetPool {
     Pool _pool;
     Group _gameBoardElements;
 
-    public IMatcher GetTriggeringMatcher() {
-        return Matcher.GameBoard;
-    }
+    public IMatcher trigger { get { return Matcher.GameBoard; } }
 
-    public GroupEventType GetEventType() {
-        return GroupEventType.OnEntityAdded;
-    }
+    public GroupEventType eventType { get { return GroupEventType.OnEntityAdded; } }
 
     public void SetPool(Pool pool) {
         _pool = pool;

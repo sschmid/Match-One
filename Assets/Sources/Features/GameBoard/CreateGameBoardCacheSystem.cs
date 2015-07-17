@@ -1,17 +1,13 @@
-﻿using Entitas;
+using Entitas;
 
 public class CreateGameBoardCacheSystem : IStartSystem, IReactiveSystem, ISetPool {
 
     Pool _pool;
     Group _gameBoardElements;
 
-    public IMatcher GetTriggeringMatcher() {
-        return Matcher.AllOf(Matcher.GameBoardElement, Matcher.Position);
-    }
+    public IMatcher trigger { get { return Matcher.AllOf(Matcher.GameBoardElement, Matcher.Position); } }
 
-    public GroupEventType GetEventType() {
-        return GroupEventType.OnEntityAddedOrRemoved;
-    }
+    public GroupEventType eventType { get { return GroupEventType.OnEntityAddedOrRemoved; } }
 
     public void SetPool(Pool pool) {
         _pool = pool;

@@ -1,14 +1,10 @@
-﻿using Entitas;
+using Entitas;
 using UnityEngine;
 
 public class AddViewSystem : IReactiveSystem {
-    public IMatcher GetTriggeringMatcher() {
-        return Matcher.Resource;
-    }
+    public IMatcher trigger { get { return Matcher.Resource; } }
 
-    public GroupEventType GetEventType() {
-        return GroupEventType.OnEntityAdded;
-    }
+    public GroupEventType eventType { get { return GroupEventType.OnEntityAdded; } }
 
     readonly Transform _viewContainer = new GameObject("Views").transform;
 

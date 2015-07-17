@@ -1,13 +1,9 @@
-﻿using Entitas;
+using Entitas;
 
 public class ProcessInputSystem : IReactiveSystem, ISetPool {
-    public IMatcher GetTriggeringMatcher() {
-        return Matcher.Input;
-    }
+    public IMatcher trigger { get { return Matcher.Input; } }
 
-    public GroupEventType GetEventType() {
-        return GroupEventType.OnEntityAdded;
-    }
+    public GroupEventType eventType { get { return GroupEventType.OnEntityAdded; } }
 
     Pool _pool;
 

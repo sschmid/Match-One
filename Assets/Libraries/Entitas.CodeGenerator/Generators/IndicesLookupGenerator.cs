@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Entitas.CodeGenerator {
-    public class IndicesLookupGenerator : IComponentCodeGenerator {
+    public class IndicesLookupGenerator : IComponentCodeGenerator, IPoolCodeGenerator {
 
         public CodeGenFile[] Generate(Type[] components) {
             var sortedComponents = components.OrderBy(type => type.ToString()).ToArray();
@@ -12,6 +12,22 @@ namespace Entitas.CodeGenerator {
                     files.Add(new CodeGenFile {
                         fileName = lookup.Key,
                         fileContent = generateIndicesLookup(lookup.Key, lookup.Value.ToArray())
+                    });
+                    return files;
+                }).ToArray();
+        }
+
+        public CodeGenFile[] Generate(string[] poolNames) {
+            var noTypes = new Type[0];
+            if (poolNames.Length == 0) {
+                poolNames = new [] { string.Empty };
+            }
+            return poolNames
+                .Aggregate(new List<CodeGenFile>(), (files, poolName) => {
+                    var lookupTag = poolName + CodeGenerator.defaultIndicesLookupTag;
+                    files.Add(new CodeGenFile {
+                        fileName = lookupTag,
+                        fileContent = generateIndicesLookup(lookupTag, noTypes)
                     });
                     return files;
                 }).ToArray();
@@ -101,7 +117,7 @@ namespace Entitas {
         }
 
         public override string ToString() {
-            return ComponentIds.IdToString(indices[0]);
+            return " + CodeGenerator.defaultIndicesLookupTag + @".IdToString(indices[0]);
         }
     }
 }";
@@ -114,7 +130,7 @@ public partial class {0}Matcher : AllOfMatcher {{
     }}
 
     public override string ToString() {{
-        return {0}ComponentIds.IdToString(indices[0]);
+        return {0}" + CodeGenerator.defaultIndicesLookupTag + @".IdToString(indices[0]);
     }}
 }}", tag);
         }
