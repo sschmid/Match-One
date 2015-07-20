@@ -1,21 +1,26 @@
-# OS X
+# Windows
+Thumbs.db
+
+# Mac
 .DS_Store
 
-# Unity general
-Assembly-CSharp-Editor-vs.csproj
-Assembly-CSharp-Editor.csproj
-Assembly-CSharp-vs.csproj
-Assembly-CSharp.csproj
+# Unity
+Library
+Temp
+*.unitypackage
+*-CSharp-vs.csproj
+*-CSharp.csproj
+*-CSharp-Editor.csproj
+*-CSharp-Editor-vs.csproj
 
-CurrentLayout.dwlt
-CurrentMaximizeLayout.dwlt
-Library/AtlasCache
-Library/ShaderCache
-ShaderCache.db
-shadercompiler*
-CrashedAssetImports.txt
+# Xamarin
+obj
+*.userprefs
+test-results
 
-
-# Unity project specific
+# Custom
 Match One-csharp.sln
 Match One.sln
+
+bin
+!bin/Entitas.zip
