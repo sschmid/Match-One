@@ -1,13 +1,14 @@
+using System.Collections.Generic;
+using DG.Tweening;
 using Entitas;
 using UnityEngine;
-using DG.Tweening;
 
 public class RenderPositionSystem : IReactiveSystem {
     public IMatcher trigger { get { return Matcher.AllOf(Matcher.Position, Matcher.View); } }
 
     public GroupEventType eventType { get { return GroupEventType.OnEntityAdded; } }
 
-    public void Execute(Entity[] entities) {
+    public void Execute(List<Entity> entities) {
 
         Debug.Log("Render Position");
 

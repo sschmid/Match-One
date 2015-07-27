@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Entitas;
 
 public class CreateGameBoardCacheSystem : IStartSystem, IReactiveSystem, ISetPool {
@@ -18,7 +19,7 @@ public class CreateGameBoardCacheSystem : IStartSystem, IReactiveSystem, ISetPoo
         updateGrid();
     }
 
-    public void Execute(Entity[] entities) {
+    public void Execute(List<Entity> entities) {
         updateGrid();
     }
 

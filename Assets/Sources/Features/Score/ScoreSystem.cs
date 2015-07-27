@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Entitas;
 
 public class ScoreSystem : IStartSystem, IReactiveSystem, ISetPool {
@@ -15,11 +16,11 @@ public class ScoreSystem : IStartSystem, IReactiveSystem, ISetPool {
         _pool.SetScore(0);
     }
 
-    public void Execute(Entity[] entities) {
+    public void Execute(List<Entity> entities) {
 
         UnityEngine.Debug.Log("Score");
 
-        _pool.ReplaceScore(_pool.score.score + entities.Length);
+        _pool.ReplaceScore(_pool.score.score + entities.Count);
     }
 }
 

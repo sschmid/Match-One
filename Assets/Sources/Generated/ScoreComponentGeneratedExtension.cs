@@ -1,33 +1,39 @@
+using System.Collections.Generic;
+
 namespace Entitas {
     public partial class Entity {
         public ScoreComponent score { get { return (ScoreComponent)GetComponent(ComponentIds.Score); } }
 
         public bool hasScore { get { return HasComponent(ComponentIds.Score); } }
 
-        public Entity AddScore(ScoreComponent component) {
-            return AddComponent(ComponentIds.Score, component);
+        static readonly Stack<ScoreComponent> _scoreComponentPool = new Stack<ScoreComponent>();
+
+        public static void ClearScoreComponentPool() {
+            _scoreComponentPool.Clear();
         }
 
         public Entity AddScore(int newScore) {
-            var component = new ScoreComponent();
+            var component = _scoreComponentPool.Count > 0 ? _scoreComponentPool.Pop() : new ScoreComponent();
             component.score = newScore;
-            return AddScore(component);
+            return AddComponent(ComponentIds.Score, component);
         }
 
         public Entity ReplaceScore(int newScore) {
-            ScoreComponent component;
-            if (hasScore) {
-                WillRemoveComponent(ComponentIds.Score);
-                component = score;
-            } else {
-                component = new ScoreComponent();
-            }
+            var previousComponent = score;
+            var component = _scoreComponentPool.Count > 0 ? _scoreComponentPool.Pop() : new ScoreComponent();
             component.score = newScore;
-            return ReplaceComponent(ComponentIds.Score, component);
+            ReplaceComponent(ComponentIds.Score, component);
+            if (previousComponent != null) {
+                _scoreComponentPool.Push(previousComponent);
+            }
+            return this;
         }
 
         public Entity RemoveScore() {
-            return RemoveComponent(ComponentIds.Score);
+            var component = score;
+            RemoveComponent(ComponentIds.Score);
+            _scoreComponentPool.Push(component);
+            return this;
         }
     }
 
@@ -37,15 +43,6 @@ namespace Entitas {
         public ScoreComponent score { get { return scoreEntity.score; } }
 
         public bool hasScore { get { return scoreEntity != null; } }
-
-        public Entity SetScore(ScoreComponent component) {
-            if (hasScore) {
-                throw new SingleEntityException(Matcher.Score);
-            }
-            var entity = CreateEntity();
-            entity.AddScore(component);
-            return entity;
-        }
 
         public Entity SetScore(int newScore) {
             if (hasScore) {

@@ -1,33 +1,39 @@
+using System.Collections.Generic;
+
 namespace Entitas {
     public partial class Entity {
         public ViewComponent view { get { return (ViewComponent)GetComponent(ComponentIds.View); } }
 
         public bool hasView { get { return HasComponent(ComponentIds.View); } }
 
-        public Entity AddView(ViewComponent component) {
-            return AddComponent(ComponentIds.View, component);
+        static readonly Stack<ViewComponent> _viewComponentPool = new Stack<ViewComponent>();
+
+        public static void ClearViewComponentPool() {
+            _viewComponentPool.Clear();
         }
 
         public Entity AddView(UnityEngine.GameObject newGameObject) {
-            var component = new ViewComponent();
+            var component = _viewComponentPool.Count > 0 ? _viewComponentPool.Pop() : new ViewComponent();
             component.gameObject = newGameObject;
-            return AddView(component);
+            return AddComponent(ComponentIds.View, component);
         }
 
         public Entity ReplaceView(UnityEngine.GameObject newGameObject) {
-            ViewComponent component;
-            if (hasView) {
-                WillRemoveComponent(ComponentIds.View);
-                component = view;
-            } else {
-                component = new ViewComponent();
-            }
+            var previousComponent = view;
+            var component = _viewComponentPool.Count > 0 ? _viewComponentPool.Pop() : new ViewComponent();
             component.gameObject = newGameObject;
-            return ReplaceComponent(ComponentIds.View, component);
+            ReplaceComponent(ComponentIds.View, component);
+            if (previousComponent != null) {
+                _viewComponentPool.Push(previousComponent);
+            }
+            return this;
         }
 
         public Entity RemoveView() {
-            return RemoveComponent(ComponentIds.View);
+            var component = view;
+            RemoveComponent(ComponentIds.View);
+            _viewComponentPool.Push(component);
+            return this;
         }
     }
 

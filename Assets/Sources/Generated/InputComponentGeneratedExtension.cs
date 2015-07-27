@@ -1,35 +1,41 @@
+using System.Collections.Generic;
+
 namespace Entitas {
     public partial class Entity {
         public InputComponent input { get { return (InputComponent)GetComponent(ComponentIds.Input); } }
 
         public bool hasInput { get { return HasComponent(ComponentIds.Input); } }
 
-        public Entity AddInput(InputComponent component) {
-            return AddComponent(ComponentIds.Input, component);
+        static readonly Stack<InputComponent> _inputComponentPool = new Stack<InputComponent>();
+
+        public static void ClearInputComponentPool() {
+            _inputComponentPool.Clear();
         }
 
         public Entity AddInput(int newX, int newY) {
-            var component = new InputComponent();
+            var component = _inputComponentPool.Count > 0 ? _inputComponentPool.Pop() : new InputComponent();
             component.x = newX;
             component.y = newY;
-            return AddInput(component);
+            return AddComponent(ComponentIds.Input, component);
         }
 
         public Entity ReplaceInput(int newX, int newY) {
-            InputComponent component;
-            if (hasInput) {
-                WillRemoveComponent(ComponentIds.Input);
-                component = input;
-            } else {
-                component = new InputComponent();
-            }
+            var previousComponent = input;
+            var component = _inputComponentPool.Count > 0 ? _inputComponentPool.Pop() : new InputComponent();
             component.x = newX;
             component.y = newY;
-            return ReplaceComponent(ComponentIds.Input, component);
+            ReplaceComponent(ComponentIds.Input, component);
+            if (previousComponent != null) {
+                _inputComponentPool.Push(previousComponent);
+            }
+            return this;
         }
 
         public Entity RemoveInput() {
-            return RemoveComponent(ComponentIds.Input);
+            var component = input;
+            RemoveComponent(ComponentIds.Input);
+            _inputComponentPool.Push(component);
+            return this;
         }
     }
 

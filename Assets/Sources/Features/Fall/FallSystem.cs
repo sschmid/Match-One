@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Entitas;
 
 public class FallSystem : IReactiveSystem, ISetPool {
@@ -12,7 +13,7 @@ public class FallSystem : IReactiveSystem, ISetPool {
         _pool = pool;
     }
 
-    public void Execute(Entity[] entities) {
+    public void Execute(List<Entity> entities) {
 
         UnityEngine.Debug.Log("Fall");
 

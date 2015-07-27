@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
 
@@ -30,7 +31,7 @@ public class GameBoardSystem : IStartSystem, IReactiveSystem, ISetPool {
         }
     }
 
-    public void Execute(Entity[] entities) {
+    public void Execute(List<Entity> entities) {
 
         Debug.Log("Update GameBoard");
 

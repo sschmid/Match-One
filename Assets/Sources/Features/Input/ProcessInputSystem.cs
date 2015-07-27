@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Entitas;
 
 public class ProcessInputSystem : IReactiveSystem, ISetPool {
@@ -11,7 +12,7 @@ public class ProcessInputSystem : IReactiveSystem, ISetPool {
         _pool = pool;
     }
 
-    public void Execute(Entity[] entities) {
+    public void Execute(List<Entity> entities) {
 
         UnityEngine.Debug.Log("Process Input");
 

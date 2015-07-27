@@ -1,6 +1,7 @@
+using System.Collections.Generic;
+using DG.Tweening;
 using Entitas;
 using UnityEngine;
-using DG.Tweening;
 
 public class RemoveViewSystem : IReactiveSystem, ISetPool {
     public IMatcher trigger { get { return Matcher.Resource; } }
@@ -8,11 +9,12 @@ public class RemoveViewSystem : IReactiveSystem, ISetPool {
     public GroupEventType eventType { get { return GroupEventType.OnEntityRemoved; } }
 
     public void SetPool(Pool pool) {
-        pool.GetGroup(Matcher.View).OnEntityWillBeRemoved += onEntityWillBeRemoved;
+        pool.GetGroup(Matcher.View).OnEntityRemoved += onEntityRemoved;
     }
 
-    void onEntityWillBeRemoved(Group group, Entity entity) {
-        var gameObject = entity.view.gameObject;
+    void onEntityRemoved(Group group, Entity entity, int index, IComponent component) {
+        var viewComponent = (ViewComponent)component;
+        var gameObject = viewComponent.gameObject;
         var spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         var color = spriteRenderer.color;
         color.a = 0f;
@@ -22,7 +24,7 @@ public class RemoveViewSystem : IReactiveSystem, ISetPool {
             .OnComplete(() => Object.Destroy(gameObject));
     }
 
-    public void Execute(Entity[] entities) {
+    public void Execute(List<Entity> entities) {
 
         UnityEngine.Debug.Log("RemoveViewSystem");
 

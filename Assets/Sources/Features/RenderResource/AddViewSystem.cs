@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class AddViewSystem : IReactiveSystem {
 
     readonly Transform _viewContainer = new GameObject("Views").transform;
 
-    public void Execute(Entity[] entities) {
+    public void Execute(List<Entity> entities) {
 
         Debug.Log("Add View");
 

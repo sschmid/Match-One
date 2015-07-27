@@ -1,35 +1,41 @@
+using System.Collections.Generic;
+
 namespace Entitas {
     public partial class Entity {
         public GameBoardComponent gameBoard { get { return (GameBoardComponent)GetComponent(ComponentIds.GameBoard); } }
 
         public bool hasGameBoard { get { return HasComponent(ComponentIds.GameBoard); } }
 
-        public Entity AddGameBoard(GameBoardComponent component) {
-            return AddComponent(ComponentIds.GameBoard, component);
+        static readonly Stack<GameBoardComponent> _gameBoardComponentPool = new Stack<GameBoardComponent>();
+
+        public static void ClearGameBoardComponentPool() {
+            _gameBoardComponentPool.Clear();
         }
 
         public Entity AddGameBoard(int newColumns, int newRows) {
-            var component = new GameBoardComponent();
+            var component = _gameBoardComponentPool.Count > 0 ? _gameBoardComponentPool.Pop() : new GameBoardComponent();
             component.columns = newColumns;
             component.rows = newRows;
-            return AddGameBoard(component);
+            return AddComponent(ComponentIds.GameBoard, component);
         }
 
         public Entity ReplaceGameBoard(int newColumns, int newRows) {
-            GameBoardComponent component;
-            if (hasGameBoard) {
-                WillRemoveComponent(ComponentIds.GameBoard);
-                component = gameBoard;
-            } else {
-                component = new GameBoardComponent();
-            }
+            var previousComponent = gameBoard;
+            var component = _gameBoardComponentPool.Count > 0 ? _gameBoardComponentPool.Pop() : new GameBoardComponent();
             component.columns = newColumns;
             component.rows = newRows;
-            return ReplaceComponent(ComponentIds.GameBoard, component);
+            ReplaceComponent(ComponentIds.GameBoard, component);
+            if (previousComponent != null) {
+                _gameBoardComponentPool.Push(previousComponent);
+            }
+            return this;
         }
 
         public Entity RemoveGameBoard() {
-            return RemoveComponent(ComponentIds.GameBoard);
+            var component = gameBoard;
+            RemoveComponent(ComponentIds.GameBoard);
+            _gameBoardComponentPool.Push(component);
+            return this;
         }
     }
 
@@ -39,15 +45,6 @@ namespace Entitas {
         public GameBoardComponent gameBoard { get { return gameBoardEntity.gameBoard; } }
 
         public bool hasGameBoard { get { return gameBoardEntity != null; } }
-
-        public Entity SetGameBoard(GameBoardComponent component) {
-            if (hasGameBoard) {
-                throw new SingleEntityException(Matcher.GameBoard);
-            }
-            var entity = CreateEntity();
-            entity.AddGameBoard(component);
-            return entity;
-        }
 
         public Entity SetGameBoard(int newColumns, int newRows) {
             if (hasGameBoard) {
