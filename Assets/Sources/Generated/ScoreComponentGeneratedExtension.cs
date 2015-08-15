@@ -12,16 +12,16 @@ namespace Entitas {
             _scoreComponentPool.Clear();
         }
 
-        public Entity AddScore(int newScore) {
+        public Entity AddScore(int newValue) {
             var component = _scoreComponentPool.Count > 0 ? _scoreComponentPool.Pop() : new ScoreComponent();
-            component.score = newScore;
+            component.value = newValue;
             return AddComponent(ComponentIds.Score, component);
         }
 
-        public Entity ReplaceScore(int newScore) {
-            var previousComponent = score;
+        public Entity ReplaceScore(int newValue) {
+            var previousComponent = hasScore ? score : null;
             var component = _scoreComponentPool.Count > 0 ? _scoreComponentPool.Pop() : new ScoreComponent();
-            component.score = newScore;
+            component.value = newValue;
             ReplaceComponent(ComponentIds.Score, component);
             if (previousComponent != null) {
                 _scoreComponentPool.Push(previousComponent);
@@ -44,21 +44,21 @@ namespace Entitas {
 
         public bool hasScore { get { return scoreEntity != null; } }
 
-        public Entity SetScore(int newScore) {
+        public Entity SetScore(int newValue) {
             if (hasScore) {
                 throw new SingleEntityException(Matcher.Score);
             }
             var entity = CreateEntity();
-            entity.AddScore(newScore);
+            entity.AddScore(newValue);
             return entity;
         }
 
-        public Entity ReplaceScore(int newScore) {
+        public Entity ReplaceScore(int newValue) {
             var entity = scoreEntity;
             if (entity == null) {
-                entity = SetScore(newScore);
+                entity = SetScore(newValue);
             } else {
-                entity.ReplaceScore(newScore);
+                entity.ReplaceScore(newValue);
             }
 
             return entity;

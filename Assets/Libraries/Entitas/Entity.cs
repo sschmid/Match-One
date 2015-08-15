@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Entitas {
     public partial class Entity {
@@ -14,15 +15,21 @@ namespace Entitas {
 
         internal int _creationIndex;
         internal readonly IComponent[] _components;
+        internal bool _isEnabled = true;
 
         IComponent[] _componentsCache;
         int[] _componentIndicesCache;
+        string _toStringCache;
 
         public Entity(int totalComponents) {
             _components = new IComponent[totalComponents];
         }
 
         public Entity AddComponent(int index, IComponent component) {
+            if (!_isEnabled) {
+                throw new EntityIsNotEnabledException("Cannot add component!");
+            }
+
             if (HasComponent(index)) {
                 var errorMsg = "Cannot add component at index " + index + " to " + this;
                 throw new EntityAlreadyHasComponentException(errorMsg, index);
@@ -31,6 +38,7 @@ namespace Entitas {
             _components[index] = component;
             _componentsCache = null;
             _componentIndicesCache = null;
+            _toStringCache = null;
             if (OnComponentAdded != null) {
                 OnComponentAdded(this, index, component);
             }
@@ -39,6 +47,10 @@ namespace Entitas {
         }
 
         public Entity RemoveComponent(int index) {
+            if (!_isEnabled) {
+                throw new EntityIsNotEnabledException("Cannot remove component!");
+            }
+
             if (!HasComponent(index)) {
                 var errorMsg = "Cannot remove component at index " + index + " from " + this;
                 throw new EntityDoesNotHaveComponentException(errorMsg, index);
@@ -50,6 +62,10 @@ namespace Entitas {
         }
 
         public Entity ReplaceComponent(int index, IComponent component) {
+            if (!_isEnabled) {
+                throw new EntityIsNotEnabledException("Cannot replace component!");
+            }
+
             if (HasComponent(index)) {
                 replaceComponent(index, component);
             } else if (component != null) {
@@ -70,6 +86,7 @@ namespace Entitas {
                 _componentsCache = null;
                 if (replacement == null) {
                     _componentIndicesCache = null;
+                    _toStringCache = null;
                     if (OnComponentRemoved != null) {
                         OnComponentRemoved(this, index, previousComponent);
                     }
@@ -116,7 +133,7 @@ namespace Entitas {
 
         public IComponent[] GetComponents() {
             if (_componentsCache == null) {
-                var components = new List<IComponent>();
+                var components = new List<IComponent>(20);
                 for (int i = 0, componentsLength = _components.Length; i < componentsLength; i++) {
                     var component = _components[i];
                     if (component != null) {
@@ -132,7 +149,7 @@ namespace Entitas {
 
         public int[] GetComponentIndices() {
             if (_componentIndicesCache == null) {
-                var indices = new List<int>();
+                var indices = new List<int>(20);
                 for (int i = 0, componentsLength = _components.Length; i < componentsLength; i++) {
                     if (_components[i] != null) {
                         indices.Add(i);
@@ -153,18 +170,27 @@ namespace Entitas {
         }
 
         public override string ToString() {
-            const string seperator = ", ";
-            var componentsStr = string.Empty;
-            var components = GetComponents();
-            for (int i = 0, componentsLength = components.Length; i < componentsLength; i++) {
-                componentsStr += components[i] + seperator;
+            if (_toStringCache == null) {
+                var sb = new StringBuilder()
+                    .Append("Entity_")
+                    .Append(_creationIndex)
+                    .Append("(");
+
+                const string seperator = ", ";
+                var components = GetComponents();
+                var lastSeperator = components.Length - 1 ;
+                for (int i = 0, componentsLength = components.Length; i < componentsLength; i++) {
+                    sb.Append(components[i]);
+                    if (i < lastSeperator) {
+                        sb.Append(seperator);
+                    }
+                }
+
+                sb.Append(")");
+                _toStringCache = sb.ToString();
             }
 
-            if (componentsStr != string.Empty) {
-                componentsStr = componentsStr.Substring(0, componentsStr.Length - seperator.Length);
-            }
-
-            return string.Format("Entity_{0}({1})", _creationIndex, componentsStr);
+            return _toStringCache;
         }
     }
 
@@ -177,6 +203,12 @@ namespace Entitas {
     public class EntityDoesNotHaveComponentException : Exception {
         public EntityDoesNotHaveComponentException(string message, int index) :
             base(message + "\nEntity does not have a component at index " + index) {
+        }
+    }
+
+    public class EntityIsNotEnabledException : Exception {
+        public EntityIsNotEnabledException(string message) :
+            base(message + "\nEntity is not enabled!") {
         }
     }
 

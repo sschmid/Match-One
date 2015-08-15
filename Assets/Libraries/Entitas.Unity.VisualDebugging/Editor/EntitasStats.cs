@@ -9,10 +9,7 @@ using UnityEngine;
 namespace Entitas.Unity.VisualDebugging {
     public static class EntitasStats {
 
-        public const string keyComponents = "Components";
-        public const string keySystems = "Systems";
-
-        [MenuItem("Entitas/Stats")]
+        [MenuItem("Entitas/Log Stats")]
         public static void LogStats() {
             foreach (var stat in GetStats()) {
                 Debug.Log(stat.Key + ": " + stat.Value);
@@ -25,35 +22,37 @@ namespace Entitas.Unity.VisualDebugging {
             var pools = getPools(components);
 
             var stats = new Dictionary<string, int> {
-                { keyComponents, components.Length },
-                { keySystems, types.Count(implementsSystem) }
+                { "Total Components", components.Length },
+                { "Systems", types.Count(implementsSystem) }
             };
 
             foreach (var pool in pools) {
-                stats.Add(pool.Key, pool.Value);
+                stats.Add("Components in " + pool.Key, pool.Value);
             }
 
             return stats;
         }
 
-        static Dictionary<string, int> getPools(Type[] components) {
-            return components.Aggregate(new Dictionary<string, int>(), (lookups, type) => {
-                var lookupTag = type.PoolName();
-                if (lookupTag == string.Empty) {
-                    lookupTag = "DefaultPool";
-                }
-                if (!lookups.ContainsKey(lookupTag)) {
-                    lookups.Add(lookupTag, 0);
-                }
-
-                lookups[lookupTag] += 1;
-                return lookups;
-            });
-        }
-
         static bool implementsComponent(Type type) {
             return type.GetInterfaces().Contains(typeof(IComponent))
                 && type != typeof(IComponent);
+        }
+
+        static Dictionary<string, int> getPools(Type[] components) {
+            return components.Aggregate(new Dictionary<string, int>(), (lookups, type) => {
+                var lookupTags = type.PoolNames();
+                if (lookupTags.Length == 0) {
+                    lookupTags = new [] { "Pool" };
+                }
+                foreach (var lookupTag in lookupTags) {
+                    if (!lookups.ContainsKey(lookupTag)) {
+                        lookups.Add(lookupTag, 0);
+                    }
+
+                    lookups[lookupTag] += 1;
+                }
+                return lookups;
+            });
         }
 
         static bool implementsSystem(Type type) {

@@ -15,10 +15,10 @@ public static class PoolExtensions {
     public static Entity CreateRandomPiece(this Pool pool, int x, int y) {
         return pool.CreateEntity()
             .IsGameBoardElement(true)
-            .IsMovable(true)
             .AddPosition(x, y)
-            .AddResource(_pieces[Random.Range(0, _pieces.Length)])
-            .IsInteractive(true);
+            .IsMovable(true)
+            .IsInteractive(true)
+            .AddResource(_pieces[Random.Range(0, _pieces.Length)]);
     }
 
     public static Entity CreateBlocker(this Pool pool, int x, int y) {

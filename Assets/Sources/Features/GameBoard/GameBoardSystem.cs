@@ -3,12 +3,12 @@ using Entitas;
 using UnityEngine;
 
 public class GameBoardSystem : IStartSystem, IReactiveSystem, ISetPool {
-    Pool _pool;
-    Group _gameBoardElements;
-
     public IMatcher trigger { get { return Matcher.GameBoard; } }
 
     public GroupEventType eventType { get { return GroupEventType.OnEntityAdded; } }
+
+    Pool _pool;
+    Group _gameBoardElements;
 
     public void SetPool(Pool pool) {
         _pool = pool;

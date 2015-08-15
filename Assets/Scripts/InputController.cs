@@ -9,12 +9,10 @@ public class InputController : MonoBehaviour {
             burstMode = !burstMode;
         }
 
-        var input = false;
-        if (burstMode) {
-            input = Input.GetMouseButton(0);
-        } else {
-            input = Input.GetMouseButtonDown(0);
-        }
+        var input = burstMode
+                    ? Input.GetMouseButton(0)
+                    : Input.GetMouseButtonDown(0);
+
         if (input) {
             var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 100);
             if (hit.collider != null) {

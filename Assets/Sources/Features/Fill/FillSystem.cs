@@ -2,12 +2,11 @@ using System.Collections.Generic;
 using Entitas;
 
 public class FillSystem : IReactiveSystem, ISetPool {
+    public IMatcher trigger { get { return Matcher.AllOf(Matcher.GameBoardElement, Matcher.Destroy); } }
+
+    public GroupEventType eventType { get { return GroupEventType.OnEntityAdded; } }
 
     Pool _pool;
-
-    public IMatcher trigger { get { return Matcher.AllOf(Matcher.GameBoardElement); } }
-
-    public GroupEventType eventType { get { return GroupEventType.OnEntityRemoved; } }
 
     public void SetPool(Pool pool) {
         _pool = pool;
@@ -23,7 +22,6 @@ public class FillSystem : IReactiveSystem, ISetPool {
             var nextRowPos = grid.GetNextEmptyRow(column, gameBoard.rows);
             while (nextRowPos != gameBoard.rows) {
                 var e = _pool.CreateRandomPiece(column, nextRowPos);
-                grid[column, nextRowPos] = e;
                 nextRowPos = grid.GetNextEmptyRow(column, gameBoard.rows);
             }
         }

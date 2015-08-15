@@ -19,7 +19,7 @@ namespace Entitas {
         }
 
         public Entity ReplaceGameBoardCache(Entitas.Entity[,] newGrid) {
-            var previousComponent = gameBoardCache;
+            var previousComponent = hasGameBoardCache ? gameBoardCache : null;
             var component = _gameBoardCacheComponentPool.Count > 0 ? _gameBoardCacheComponentPool.Pop() : new GameBoardCacheComponent();
             component.grid = newGrid;
             ReplaceComponent(ComponentIds.GameBoardCache, component);

@@ -26,7 +26,7 @@ namespace Entitas.CodeGenerator {
         }
 
         static string generateComponentExtension(Type type) {
-            return type.PoolName() == string.Empty
+            return type.PoolNames().Length == 0
                         ? addDefaultPoolCode(type)
                         : addCustomPoolCode(type);
         }
@@ -150,7 +150,7 @@ $assign
         static string addReplaceMethods(Type type) {
             return isSingletonComponent(type) ? string.Empty : buildString(type, @"
         public Entity Replace$Name($typedArgs) {
-            var previousComponent = $name;
+            var previousComponent = has$Name ? $name : null;
             var component = _$nameComponentPool.Count > 0 ? _$nameComponentPool.Pop() : new $Type();
 $assign
             ReplaceComponent($Ids.$Name, component);
@@ -268,7 +268,7 @@ $assign
         */
 
         static string addMatcher(Type type) {
-            return buildString(type, @"
+            const string matcherFormat = @"
     public partial class $TagMatcher {
         static AllOfMatcher _matcher$Name;
 
@@ -282,7 +282,17 @@ $assign
             }
         }
     }
-");
+";
+            var poolNames = type.PoolNames();
+            if (poolNames.Length == 0) {
+                return buildString(type, matcherFormat);
+            }
+
+            var matchers = poolNames.Aggregate(string.Empty, (acc, poolName) => {
+                return acc + buildString(type, matcherFormat.Replace("$Tag", poolName));
+            });
+
+            return buildString(type, matchers);
         }
 
         /*
@@ -306,8 +316,10 @@ $assign
             var a0_type = type;
             var a1_name = type.RemoveComponentSuffix();
             var a2_lowercaseName = a1_name.LowercaseFirst();
-            var a3_tag = type.PoolName();
-            var a4_ids = type.IndicesLookupTag();
+            var poolNames = type.PoolNames();
+            var a3_tag = poolNames.Length == 0 ? string.Empty : poolNames[0];
+            var lookupTags = type.IndicesLookupTags();
+            var a4_ids = lookupTags.Length == 0 ? string.Empty : lookupTags[0];
             var memberNameInfos = getFieldInfos(type);
             var a5_fieldNamesWithType = fieldNamesWithType(memberNameInfos);
             var a6_fieldAssigns = fieldAssignments(memberNameInfos);

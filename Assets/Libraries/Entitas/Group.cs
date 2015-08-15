@@ -6,9 +6,11 @@ namespace Entitas {
         public event GroupChanged OnEntityAdded;
         public event GroupUpdated OnEntityUpdated;
         public event GroupChanged OnEntityRemoved;
+        public event EntityDestroyed OnEntityWillBeDestroyed;
 
         public delegate void GroupChanged(Group group, Entity entity, int index, IComponent component);
         public delegate void GroupUpdated(Group group, Entity entity, int index, IComponent previousComponent, IComponent newComponent);
+        public delegate void EntityDestroyed(Group group, Entity entity);
 
         public int Count { get { return _entities.Count; } }
         public IMatcher matcher { get { return _matcher; } }
@@ -17,6 +19,7 @@ namespace Entitas {
         readonly HashSet<Entity> _entities = new HashSet<Entity>(EntityEqualityComparer.comparer);
         Entity[] _entitiesCache;
         Entity _singleEntityCache;
+        string _toStringCache;
 
         public Group(IMatcher matcher) {
             _matcher = matcher;
@@ -49,6 +52,17 @@ namespace Entitas {
                 if (OnEntityUpdated != null) {
                     OnEntityUpdated(this, entity, index, previousComponent, newComponent);
                 }
+            }
+        }
+
+        public void EntityWillBeDestroyed(Entity entity) {
+            if (_entities.Contains(entity)) {
+                if (OnEntityWillBeDestroyed != null) {
+                    OnEntityWillBeDestroyed(this, entity);
+                }
+                _entities.Remove(entity);
+                _entitiesCache = null;
+                _singleEntityCache = null;
             }
         }
 
@@ -123,13 +137,16 @@ namespace Entitas {
         }
 
         public override string ToString() {
-            return string.Format("Group(" + _matcher + ")");
+            if (_toStringCache == null) {
+                _toStringCache = "Group(" + _matcher + ")";
+            }
+            return _toStringCache;
         }
     }
 
     public class SingleEntityException : Exception {
         public SingleEntityException(IMatcher matcher) :
-            base("Multiple entites exist matching " + matcher) {
+            base("Multiple entities exist matching " + matcher) {
         }
     }
 }

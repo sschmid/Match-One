@@ -20,7 +20,7 @@ namespace Entitas {
         }
 
         public Entity ReplaceGameBoard(int newColumns, int newRows) {
-            var previousComponent = gameBoard;
+            var previousComponent = hasGameBoard ? gameBoard : null;
             var component = _gameBoardComponentPool.Count > 0 ? _gameBoardComponentPool.Pop() : new GameBoardComponent();
             component.columns = newColumns;
             component.rows = newRows;

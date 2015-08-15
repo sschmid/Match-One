@@ -20,7 +20,7 @@ namespace Entitas {
         }
 
         public Entity ReplaceInput(int newX, int newY) {
-            var previousComponent = input;
+            var previousComponent = hasInput ? input : null;
             var component = _inputComponentPool.Count > 0 ? _inputComponentPool.Pop() : new InputComponent();
             component.x = newX;
             component.y = newY;

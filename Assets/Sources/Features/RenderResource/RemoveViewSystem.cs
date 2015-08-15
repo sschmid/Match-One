@@ -3,10 +3,18 @@ using DG.Tweening;
 using Entitas;
 using UnityEngine;
 
-public class RemoveViewSystem : IReactiveSystem, ISetPool {
-    public IMatcher trigger { get { return Matcher.Resource; } }
+public class RemoveViewSystem : IMultiReactiveSystem, ISetPool, IEnsureComponents {
+    public IMatcher[] triggers { get { return new [] {
+            Matcher.Resource,
+            Matcher.AllOf(Matcher.Resource, Matcher.Destroy)
+        }; } }
 
-    public GroupEventType eventType { get { return GroupEventType.OnEntityRemoved; } }
+    public GroupEventType[] eventTypes { get { return new [] {
+            GroupEventType.OnEntityRemoved,
+            GroupEventType.OnEntityAdded
+        }; } }
+
+    public IMatcher ensureComponents { get { return Matcher.View; } }
 
     public void SetPool(Pool pool) {
         pool.GetGroup(Matcher.View).OnEntityRemoved += onEntityRemoved;
@@ -29,9 +37,7 @@ public class RemoveViewSystem : IReactiveSystem, ISetPool {
         UnityEngine.Debug.Log("RemoveViewSystem");
 
         foreach (var e in entities) {
-            if (e.hasView) {
-                e.RemoveView();
-            }
+            e.RemoveView();
         }
     }
 }

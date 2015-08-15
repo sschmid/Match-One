@@ -2,12 +2,11 @@ using System.Collections.Generic;
 using Entitas;
 
 public class FallSystem : IReactiveSystem, ISetPool {
+    public IMatcher trigger { get { return Matcher.AllOf(Matcher.GameBoardElement, Matcher.Destroy); } }
+
+    public GroupEventType eventType { get { return  GroupEventType.OnEntityAdded; } }
 
     Pool _pool;
-
-    public IMatcher trigger { get { return Matcher.AllOf(Matcher.GameBoardElement); } }
-
-    public GroupEventType eventType { get { return  GroupEventType.OnEntityRemoved; } }
 
     public void SetPool(Pool pool) {
         _pool = pool;
@@ -32,8 +31,6 @@ public class FallSystem : IReactiveSystem, ISetPool {
     void moveDown(Entity e, int column, int row, Entity[,] grid) {
         var nextRowPos = grid.GetNextEmptyRow(column, row);
         if (nextRowPos != row) {
-            grid[column, nextRowPos] = e;
-            grid[column, row] = null;
             e.ReplacePosition(column, nextRowPos);
         }
     }

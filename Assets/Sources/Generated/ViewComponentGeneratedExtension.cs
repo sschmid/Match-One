@@ -19,7 +19,7 @@ namespace Entitas {
         }
 
         public Entity ReplaceView(UnityEngine.GameObject newGameObject) {
-            var previousComponent = view;
+            var previousComponent = hasView ? view : null;
             var component = _viewComponentPool.Count > 0 ? _viewComponentPool.Pop() : new ViewComponent();
             component.gameObject = newGameObject;
             ReplaceComponent(ComponentIds.View, component);
