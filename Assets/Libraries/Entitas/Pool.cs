@@ -14,15 +14,22 @@ namespace Entitas {
 
         public int totalComponents { get { return _totalComponents; } }
         public int Count { get { return _entities.Count; } }
-        public int pooledEntitiesCount { get { return _entityPool.Count; } }
+        public int reusableEntitiesCount { get { return _reusableEntities.Count; } }
 
         protected readonly HashSet<Entity> _entities = new HashSet<Entity>(EntityEqualityComparer.comparer);
         protected readonly Dictionary<IMatcher, Group> _groups = new Dictionary<IMatcher, Group>();
         protected readonly List<Group>[] _groupsForIndex;
-        readonly Stack<Entity> _entityPool = new Stack<Entity>();
+        readonly Stack<Entity> _reusableEntities = new Stack<Entity>();
+        readonly HashSet<Entity> _retainedEntities = new HashSet<Entity>();
+
         readonly int _totalComponents;
         int _creationIndex;
         Entity[] _entitiesCache;
+
+        // Cache delegates to avoid gc allocations
+        Entity.EntityChanged _cachedUpdateGroupsComponentAddedOrRemoved;
+        Entity.ComponentReplaced _cachedUpdateGroupsComponentReplaced;
+        Entity.EntityReleased _cachedOnEntityReleased;
 
         public Pool(int totalComponents) : this(totalComponents, 0) {
         }
@@ -31,18 +38,24 @@ namespace Entitas {
             _totalComponents = totalComponents;
             _creationIndex = startCreationIndex;
             _groupsForIndex = new List<Group>[totalComponents];
-            _entityPool = new Stack<Entity>();
+
+            // Cache delegates to avoid gc allocations
+            _cachedUpdateGroupsComponentAddedOrRemoved = updateGroupsComponentAddedOrRemoved;
+            _cachedUpdateGroupsComponentReplaced = updateGroupsComponentReplaced;
+            _cachedOnEntityReleased = onEntityReleased;
         }
 
         public virtual Entity CreateEntity() {
-            var entity = _entityPool.Count > 0 ? _entityPool.Pop() : new Entity(_totalComponents);
+            var entity = _reusableEntities.Count > 0 ? _reusableEntities.Pop() : new Entity(_totalComponents);
             entity._isEnabled = true;
             entity._creationIndex = _creationIndex++;
+            entity.Retain();
             _entities.Add(entity);
             _entitiesCache = null;
-            entity.OnComponentAdded += updateGroupsComponentAddedOrRemoved;
-            entity.OnComponentReplaced += updateGroupsComponentReplaced;
-            entity.OnComponentRemoved += updateGroupsComponentAddedOrRemoved;
+            entity.OnComponentAdded += _cachedUpdateGroupsComponentAddedOrRemoved;
+            entity.OnComponentRemoved += _cachedUpdateGroupsComponentAddedOrRemoved;
+            entity.OnComponentReplaced += _cachedUpdateGroupsComponentReplaced;
+            entity.OnEntityReleased += _cachedOnEntityReleased;
 
             if (OnEntityCreated != null) {
                 OnEntityCreated(this, entity);
@@ -59,22 +72,23 @@ namespace Entitas {
             }
             _entitiesCache = null;
 
-            updateGroupsEntityWillBeDestroyed(entity);
             if (OnEntityWillBeDestroyed != null) {
                 OnEntityWillBeDestroyed(this, entity);
             }
 
-            entity.OnComponentAdded -= updateGroupsComponentAddedOrRemoved;
-            entity.OnComponentReplaced -= updateGroupsComponentReplaced;
-            entity.OnComponentRemoved -= updateGroupsComponentAddedOrRemoved;
-            entity.RemoveAllComponents();
-
-            entity._isEnabled = false;
-            _entityPool.Push(entity);
+            entity.destroy();
 
             if (OnEntityDestroyed != null) {
                 OnEntityDestroyed(this, entity);
             }
+
+            if (entity._refCount == 1) {
+                entity.OnEntityReleased -= _cachedOnEntityReleased;
+                _reusableEntities.Push(entity);
+            } else {
+                _retainedEntities.Add(entity);
+            }
+            entity.Release();
         }
 
         public virtual void DestroyAllEntities() {
@@ -103,7 +117,7 @@ namespace Entitas {
                 group = new Group(matcher);
                 var entities = GetEntities();
                 for (int i = 0, entitiesLength = entities.Length; i < entitiesLength; i++) {
-                    group.HandleEntity(entities[i]);
+                    group.HandleEntitySilently(entities[i]);
                 }
                 _groups.Add(matcher, group);
 
@@ -141,16 +155,10 @@ namespace Entitas {
             }
         }
 
-        void updateGroupsEntityWillBeDestroyed(Entity entity) {
-            for (int i = 0, groupsForIndexLength = _groupsForIndex.Length; i < groupsForIndexLength; i++) {
-                var groups = _groupsForIndex[i];
-                if (groups != null) {
-                    for (int j = 0, groupsCount = groups.Count; j < groupsCount; j++) {
-                        var group = groups[j];
-                        group.EntityWillBeDestroyed(entity);
-                    }
-                }
-            }
+        protected void onEntityReleased(Entity entity) {
+            entity.OnEntityReleased -= _cachedOnEntityReleased;
+            _retainedEntities.Remove(entity);
+            _reusableEntities.Push(entity);
         }
     }
 

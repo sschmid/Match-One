@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using Entitas;
+using UnityEngine;
 
 public class ProcessInputSystem : IReactiveSystem, ISetPool {
-    public IMatcher trigger { get { return Matcher.Input; } }
-
-    public GroupEventType eventType { get { return GroupEventType.OnEntityAdded; } }
+    public TriggerOnEvent trigger { get { return Matcher.Input.OnEntityAdded(); } }
 
     Pool _pool;
 
@@ -14,7 +13,7 @@ public class ProcessInputSystem : IReactiveSystem, ISetPool {
 
     public void Execute(List<Entity> entities) {
 
-        UnityEngine.Debug.Log("Process Input");
+        Debug.Log("Process Input");
 
         var inputEntity = entities.SingleEntity();
         var input = inputEntity.input;

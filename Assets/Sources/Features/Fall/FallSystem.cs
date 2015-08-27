@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using Entitas;
+using UnityEngine;
 
 public class FallSystem : IReactiveSystem, ISetPool {
-    public IMatcher trigger { get { return Matcher.AllOf(Matcher.GameBoardElement, Matcher.Destroy); } }
-
-    public GroupEventType eventType { get { return  GroupEventType.OnEntityAdded; } }
+    public TriggerOnEvent trigger { get { return Matcher.GameBoardElement.OnEntityRemoved(); } }
 
     Pool _pool;
 
@@ -14,7 +13,7 @@ public class FallSystem : IReactiveSystem, ISetPool {
 
     public void Execute(List<Entity> entities) {
 
-        UnityEngine.Debug.Log("Fall");
+        Debug.Log("Fall");
 
         var gameBoard = _pool.gameBoard;
         var grid = _pool.gameBoardCache.grid;

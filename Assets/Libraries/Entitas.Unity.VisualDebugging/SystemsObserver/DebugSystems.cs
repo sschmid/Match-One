@@ -73,7 +73,7 @@ namespace Entitas.Unity.VisualDebugging {
     }
 
     public class DebugSystems : Systems {
-        public int startSystemsCount { get { return _startSystems.Count; } }
+        public int initializeSystemsCount { get { return _initializeSystems.Count; } }
         public int executeSystemsCount { get { return _executeSystems.Count; } }
         public int totalSystemsCount { get { return _systems.Count; } }
 
@@ -124,13 +124,13 @@ namespace Entitas.Unity.VisualDebugging {
             }
         }
 
-        public override void Start() {
+        public override void Initialize() {
             _totalDuration = 0;
-            for (int i = 0, _startSystemsCount = _startSystems.Count; i < _startSystemsCount; i++) {
-                var system = _startSystems[i];
+            for (int i = 0, _initializeSystemsCount = _initializeSystems.Count; i < _initializeSystemsCount; i++) {
+                var system = _initializeSystems[i];
                 var systemInfo = getSystemInfo(system);
                 if (systemInfo.isActive) {
-                    var duration = monitorSystemStartDuration(system);
+                    var duration = monitorSystemInitializeDuration(system);
                     _totalDuration += duration;
                     systemInfo.AddExecutionDuration(duration);
                 }
@@ -163,10 +163,10 @@ namespace Entitas.Unity.VisualDebugging {
             updateName();
         }
 
-        double monitorSystemStartDuration(IStartSystem system) {
+        double monitorSystemInitializeDuration(IInitializeSystem system) {
             _stopwatch.Reset();
             _stopwatch.Start();
-            system.Start();
+            system.Initialize();
             _stopwatch.Stop();
             return _stopwatch.Elapsed.TotalMilliseconds;
         }
@@ -196,8 +196,8 @@ namespace Entitas.Unity.VisualDebugging {
 
         void updateName() {
             if (_container != null) {
-                _container.name = string.Format("{0} ({1} start, {2} exe, {3:0.###} ms)",
-                    _name, _startSystems.Count, _executeSystems.Count, _totalDuration);
+                _container.name = string.Format("{0} ({1} init, {2} exe, {3:0.###} ms)",
+                    _name, _initializeSystems.Count, _executeSystems.Count, _totalDuration);
             }
         }
     }

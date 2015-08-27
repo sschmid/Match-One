@@ -4,9 +4,7 @@ using Entitas;
 using UnityEngine;
 
 public class RenderPositionSystem : IReactiveSystem {
-    public IMatcher trigger { get { return Matcher.AllOf(Matcher.Position, Matcher.View); } }
-
-    public GroupEventType eventType { get { return GroupEventType.OnEntityAdded; } }
+    public TriggerOnEvent trigger { get { return Matcher.AllOf(Matcher.Position, Matcher.View).OnEntityAdded(); } }
 
     public void Execute(List<Entity> entities) {
 

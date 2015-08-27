@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using Entitas;
+using UnityEngine;
 
 public class DestroySystem : IReactiveSystem, ISetPool {
-    public IMatcher trigger { get { return Matcher.Destroy; } }
-
-    public GroupEventType eventType { get { return GroupEventType.OnEntityAdded; } }
+    public TriggerOnEvent trigger { get { return Matcher.Destroy.OnEntityAdded(); } }
 
     Pool _pool;
 
@@ -14,7 +13,7 @@ public class DestroySystem : IReactiveSystem, ISetPool {
 
     public void Execute(List<Entity> entities) {
 
-        UnityEngine.Debug.Log("Destroy");
+        Debug.Log("Destroy");
 
         foreach (var e in entities) {
             _pool.DestroyEntity(e);

@@ -1,39 +1,28 @@
 using Entitas;
+using UnityEngine;
 
 public class CreateGameBoardCacheSystem : ISystem, ISetPool {
     Pool _pool;
-    Group _gameBoardElements;
-    Group _destroyedGameBoardElements;
 
     public void SetPool(Pool pool) {
         _pool = pool;
 
-        var gameBoard = pool.GetGroup(Matcher.GameBoard);
-        gameBoard.OnEntityAdded += onGameBoardAdded;
-        gameBoard.OnEntityUpdated += onGameBoardUpdated;
+        var gameBoard = _pool.GetGroup(Matcher.GameBoard);
+        gameBoard.OnEntityAdded += (group, entity, index, component) => createNewGameBoardCache((GameBoardComponent)component);
+        gameBoard.OnEntityUpdated += (group, entity, index, previousComponent, newComponent) => createNewGameBoardCache((GameBoardComponent)newComponent);
 
-        _gameBoardElements = pool.GetGroup(Matcher.AllOf(Matcher.GameBoardElement, Matcher.Position));
-        _gameBoardElements.OnEntityAdded += onGameBoardElementAdded;
-        _gameBoardElements.OnEntityUpdated += onGameBoardElementUpdated;
-
-        _destroyedGameBoardElements = pool.GetGroup(Matcher.AllOf(Matcher.GameBoardElement, Matcher.Position, Matcher.Destroy));
-        _destroyedGameBoardElements.OnEntityAdded += onGameBoardElementDestroyed;
-    }
-
-    void onGameBoardAdded(Group group, Entity entity, int index, IComponent component) {
-        createNewGameBoardCache((GameBoardComponent)component);
-    }
-
-    void onGameBoardUpdated(Group group, Entity entity, int index, IComponent previousComponent, IComponent newComponent) {
-        createNewGameBoardCache((GameBoardComponent)newComponent);
+        var gameBoardElements = pool.GetGroup(Matcher.AllOf(Matcher.GameBoardElement, Matcher.Position));
+        gameBoardElements.OnEntityAdded += onGameBoardElementAdded;
+        gameBoardElements.OnEntityUpdated += onGameBoardElementUpdated;
+        gameBoardElements.OnEntityRemoved += onGameBoardElementRemoved;
     }
 
     void createNewGameBoardCache(GameBoardComponent gameBoard) {
 
-        UnityEngine.Debug.Log("Create GameBoard Cache");
+        Debug.Log("Create GameBoard Cache");
 
         var grid = new Entity[gameBoard.columns, gameBoard.rows];
-        foreach (var e in _gameBoardElements.GetEntities()) {
+        foreach (var e in _pool.GetEntities(Matcher.AllOf(Matcher.GameBoardElement, Matcher.Position))) {
             var pos = e.position;
             grid[pos.x, pos.y] = e;
         }
@@ -56,9 +45,12 @@ public class CreateGameBoardCacheSystem : ISystem, ISetPool {
         _pool.ReplaceGameBoardCache(grid);
     }
 
-    void onGameBoardElementDestroyed(Group group, Entity entity, int index, IComponent component) {
+    void onGameBoardElementRemoved(Group group, Entity entity, int index, IComponent component) {
+        var pos = component as PositionComponent;
+        if (pos == null) {
+            pos = entity.position;
+        }
         var grid = _pool.gameBoardCache.grid;
-        var pos = entity.position;
         grid[pos.x, pos.y] = null;
         _pool.ReplaceGameBoardCache(grid);
     }

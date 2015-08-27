@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Entitas {
     public class ReactiveSystem : IExecuteSystem {
@@ -12,14 +11,14 @@ namespace Entitas {
         readonly List<Entity> _buffer;
 
         public ReactiveSystem(Pool pool, IReactiveSystem subSystem) :
-            this(pool, subSystem, new [] { subSystem.trigger }, new [] { subSystem.eventType }) {
+            this(pool, subSystem, new [] { subSystem.trigger }) {
         }
 
         public ReactiveSystem(Pool pool, IMultiReactiveSystem subSystem) :
-            this(pool, subSystem, subSystem.triggers, subSystem.eventTypes) {
+            this(pool, subSystem, subSystem.triggers) {
         }
 
-        ReactiveSystem(Pool pool, IReactiveExecuteSystem subSystem, IMatcher[] triggers, GroupEventType[] eventTypes) {
+        ReactiveSystem(Pool pool, IReactiveExecuteSystem subSystem, TriggerOnEvent[] triggers) {
             _subsystem = subSystem;
             var ensureComponents = subSystem as IEnsureComponents;
             if (ensureComponents != null) {
@@ -29,9 +28,14 @@ namespace Entitas {
             if (excludeComponents != null) {
                 _excludeComponents = excludeComponents.excludeComponents;
             }
-            var groups = new Group[triggers.Length];
-            for (int i = 0, triggersLength = triggers.Length; i < triggersLength; i++) {
-                groups[i] = pool.GetGroup(triggers[i]);
+
+            var triggersLength = triggers.Length;
+            var groups = new Group[triggersLength];
+            var eventTypes = new GroupEventType[triggersLength];
+            for (int i = 0; i < triggersLength; i++) {
+                var trigger = triggers[i];
+                groups[i] = pool.GetGroup(trigger.trigger);
+                eventTypes[i] = trigger.eventType;
             }
             _observer = new GroupObserver(groups, eventTypes);
             _buffer = new List<Entity>();
@@ -51,29 +55,34 @@ namespace Entitas {
                     if (_excludeComponents != null) {
                         foreach (var e in _observer.collectedEntities) {
                             if (_ensureComponents.Matches(e) && !_excludeComponents.Matches(e)) {
-                                _buffer.Add(e);
+                                _buffer.Add(e.Retain());
                             }
                         }
                     } else {
                         foreach (var e in _observer.collectedEntities) {
                             if (_ensureComponents.Matches(e)) {
-                                _buffer.Add(e);
+                                _buffer.Add(e.Retain());
                             }
                         }
                     }
                 } else if (_excludeComponents != null) {
                     foreach (var e in _observer.collectedEntities) {
                         if (!_excludeComponents.Matches(e)) {
-                            _buffer.Add(e);
+                            _buffer.Add(e.Retain());
                         }
                     }
                 } else {
-                    _buffer.AddRange(_observer.collectedEntities);
+                    foreach (var e in _observer.collectedEntities) {
+                        _buffer.Add(e.Retain());
+                    }
                 }
 
                 _observer.ClearCollectedEntities();
                 if (_buffer.Count != 0) {
                     _subsystem.Execute(_buffer);
+                    for (int i = 0, bufferCount = _buffer.Count; i < bufferCount; i++) {
+                        _buffer[i].Release();
+                    }
                     _buffer.Clear();
                 }
             }

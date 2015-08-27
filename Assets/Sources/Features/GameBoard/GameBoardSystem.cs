@@ -2,10 +2,8 @@ using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
 
-public class GameBoardSystem : IStartSystem, IReactiveSystem, ISetPool {
-    public IMatcher trigger { get { return Matcher.GameBoard; } }
-
-    public GroupEventType eventType { get { return GroupEventType.OnEntityAdded; } }
+public class GameBoardSystem : IInitializeSystem, IReactiveSystem, ISetPool {
+    public TriggerOnEvent trigger { get { return Matcher.GameBoard.OnEntityAdded(); } }
 
     Pool _pool;
     Group _gameBoardElements;
@@ -15,7 +13,7 @@ public class GameBoardSystem : IStartSystem, IReactiveSystem, ISetPool {
         _gameBoardElements = _pool.GetGroup(Matcher.AllOf(Matcher.GameBoardElement, Matcher.Position));
     }
 
-    public void Start() {
+    public void Initialize() {
 
         Debug.Log("Create GameBoard");
 

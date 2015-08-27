@@ -14,6 +14,7 @@ namespace Entitas {
         readonly HashSet<Entity> _collectedEntities;
         readonly Group[] _groups;
         readonly GroupEventType[] _eventTypes;
+        Group.GroupChanged _addEntityCache;
 
         public GroupObserver(Group group, GroupEventType eventType)
             : this(new [] { group }, new [] { eventType }) {
@@ -28,6 +29,7 @@ namespace Entitas {
             _collectedEntities = new HashSet<Entity>(EntityEqualityComparer.comparer);
             _groups = groups;
             _eventTypes = eventTypes;
+            _addEntityCache = addEntity;
             Activate();
         }
 
@@ -36,42 +38,38 @@ namespace Entitas {
                 var group = _groups[i];
                 var eventType = _eventTypes[i];
                 if (eventType == GroupEventType.OnEntityAdded) {
-                    group.OnEntityAdded -= addEntity;
-                    group.OnEntityAdded += addEntity;
+                    group.OnEntityAdded -= _addEntityCache;
+                    group.OnEntityAdded += _addEntityCache;
                 } else if (eventType == GroupEventType.OnEntityRemoved) {
-                    group.OnEntityRemoved -= addEntity;
-                    group.OnEntityRemoved += addEntity;
+                    group.OnEntityRemoved -= _addEntityCache;
+                    group.OnEntityRemoved += _addEntityCache;
                 } else if (eventType == GroupEventType.OnEntityAddedOrRemoved) {
-                    group.OnEntityAdded -= addEntity;
-                    group.OnEntityAdded += addEntity;
-                    group.OnEntityRemoved -= addEntity;
-                    group.OnEntityRemoved += addEntity;
+                    group.OnEntityAdded -= _addEntityCache;
+                    group.OnEntityAdded += _addEntityCache;
+                    group.OnEntityRemoved -= _addEntityCache;
+                    group.OnEntityRemoved += _addEntityCache;
                 }
-
-                group.OnEntityWillBeDestroyed -= removeEntity;
-                group.OnEntityWillBeDestroyed += removeEntity;
             }
         }
 
         public void Deactivate() {
             for (int i = 0, groupsLength = _groups.Length; i < groupsLength; i++) {
                 var group = _groups[i];
-                group.OnEntityAdded -= addEntity;
-                group.OnEntityRemoved -= addEntity;
-                _collectedEntities.Clear();
+                group.OnEntityAdded -= _addEntityCache;
+                group.OnEntityRemoved -= _addEntityCache;
             }
+            ClearCollectedEntities();
         }
 
         public void ClearCollectedEntities() {
+            foreach (var entity in _collectedEntities) {
+                entity.Release();
+            }
             _collectedEntities.Clear();
         }
 
         void addEntity(Group group, Entity entity, int index, IComponent component) {
-            _collectedEntities.Add(entity);
-        }
-
-        void removeEntity(Group group, Entity entity) {
-            _collectedEntities.Remove(entity);
+            _collectedEntities.Add(entity.Retain());
         }
     }
 

@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using Entitas;
+using UnityEngine;
 
-public class ScoreSystem : IStartSystem, IReactiveSystem, ISetPool {
-    public IMatcher trigger { get { return Matcher.AllOf(Matcher.GameBoardElement, Matcher.Destroy); } }
-
-    public GroupEventType eventType { get { return GroupEventType.OnEntityAdded; } }
+public class ScoreSystem : IInitializeSystem, IReactiveSystem, ISetPool {
+    public TriggerOnEvent trigger { get { return Matcher.GameBoardElement.OnEntityRemoved(); } }
 
     Pool _pool;
 
@@ -12,13 +11,13 @@ public class ScoreSystem : IStartSystem, IReactiveSystem, ISetPool {
         _pool = pool;
     }
 
-    public void Start() {
+    public void Initialize() {
         _pool.SetScore(0);
     }
 
     public void Execute(List<Entity> entities) {
 
-        UnityEngine.Debug.Log("Score");
+        Debug.Log("Score");
 
         _pool.ReplaceScore(_pool.score.value + entities.Count);
     }
