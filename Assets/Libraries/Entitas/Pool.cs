@@ -15,6 +15,7 @@ namespace Entitas {
         public int totalComponents { get { return _totalComponents; } }
         public int Count { get { return _entities.Count; } }
         public int reusableEntitiesCount { get { return _reusableEntities.Count; } }
+        public int retainedEntitiesCount { get { return _retainedEntities.Count; } }
 
         protected readonly HashSet<Entity> _entities = new HashSet<Entity>(EntityEqualityComparer.comparer);
         protected readonly Dictionary<IMatcher, Group> _groups = new Dictionary<IMatcher, Group>();
@@ -156,6 +157,9 @@ namespace Entitas {
         }
 
         protected void onEntityReleased(Entity entity) {
+            if(entity._isEnabled){
+                throw new EntityIsNotDestroyedException("Cannot release entity.");
+            }
             entity.OnEntityReleased -= _cachedOnEntityReleased;
             _retainedEntities.Remove(entity);
             _reusableEntities.Push(entity);
@@ -165,6 +169,12 @@ namespace Entitas {
     public class PoolDoesNotContainEntityException : Exception {
         public PoolDoesNotContainEntityException(Entity entity, string message) :
             base(message + "\nPool does not contain entity " + entity) {
+        }
+    }
+
+    public class EntityIsNotDestroyedException : Exception {
+        public EntityIsNotDestroyedException(string message) :
+            base(message + "\nEntity is not destroyed yet!") {
         }
     }
 }
