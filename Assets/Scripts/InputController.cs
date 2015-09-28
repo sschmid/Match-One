@@ -18,7 +18,7 @@ public class InputController : MonoBehaviour {
             if (hit.collider != null) {
                 var pos = hit.collider.transform.position;
                 Pools.pool.CreateEntity()
-                    .AddInput((int)pos.x, (int)pos.y);
+                    .AddInput(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y));
             }
         } 
     }

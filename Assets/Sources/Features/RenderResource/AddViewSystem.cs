@@ -26,8 +26,8 @@ public class AddViewSystem : IReactiveSystem {
                 e.AddView(gameObject);
 
                 if (e.hasPosition) {
-                    var pos = e.position;
-                    gameObject.transform.position = new Vector3(pos.x, pos.y + 1, 0f);
+					var pos = e.position;
+					gameObject.transform.position = new Vector3(pos.x, pos.y + 0.999f, 0f);
                 }
             }
         }
