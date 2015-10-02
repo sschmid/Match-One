@@ -70,12 +70,12 @@ namespace Entitas {
     }
 
     public partial class Matcher {
-        static AllOfMatcher _matcherGameBoardCache;
+        static IMatcher _matcherGameBoardCache;
 
-        public static AllOfMatcher GameBoardCache {
+        public static IMatcher GameBoardCache {
             get {
                 if (_matcherGameBoardCache == null) {
-                    _matcherGameBoardCache = new Matcher(ComponentIds.GameBoardCache);
+                    _matcherGameBoardCache = Matcher.AllOf(ComponentIds.GameBoardCache);
                 }
 
                 return _matcherGameBoardCache;

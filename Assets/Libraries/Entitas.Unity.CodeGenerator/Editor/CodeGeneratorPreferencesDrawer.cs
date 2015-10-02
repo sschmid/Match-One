@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Entitas.Unity;
 using Entitas.Unity.CodeGenerator;
@@ -11,20 +12,22 @@ namespace Entitas.Unity.CodeGenerator {
             EditorGUILayout.BeginVertical(GUI.skin.box);
             EditorGUILayout.LabelField("CodeGenerator", EditorStyles.boldLabel);
 
-            var codeGeneratorConfig = new CodeGeneratorConfig(config);
+            var codeGenerators = CodeGeneratorEditor.GetCodeGenerators();
+            var codeGeneratorNames = codeGenerators.Select(cg => cg.Name).ToArray();
+            var codeGeneratorConfig = new CodeGeneratorConfig(config, codeGeneratorNames);
             drawGeneratedFolderPath(codeGeneratorConfig);
             drawPools(codeGeneratorConfig);
-            drawCodeGenerators(codeGeneratorConfig);
+            drawCodeGenerators(codeGeneratorConfig, codeGenerators);
             drawGenerateButton();
 
             EditorGUILayout.EndVertical();
         }
 
-        void drawGeneratedFolderPath(CodeGeneratorConfig codeGeneratorConfig) {
+        static void drawGeneratedFolderPath(CodeGeneratorConfig codeGeneratorConfig) {
             codeGeneratorConfig.generatedFolderPath = EditorGUILayout.TextField("Generated Folder", codeGeneratorConfig.generatedFolderPath);
         }
 
-        void drawPools(CodeGeneratorConfig codeGeneratorConfig) {
+        static void drawPools(CodeGeneratorConfig codeGeneratorConfig) {
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Pools");
             
@@ -58,27 +61,28 @@ namespace Entitas.Unity.CodeGenerator {
             codeGeneratorConfig.pools = pools.ToArray();
         }
 
-        void drawCodeGenerators(CodeGeneratorConfig codeGeneratorConfig) {
+        static void drawCodeGenerators(CodeGeneratorConfig codeGeneratorConfig, Type[] codeGenerators) {
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Code Generators", EditorStyles.boldLabel);
 
-            var codeGenerators = CodeGeneratorEditor.GetCodeGenerators();
-            var disabledCodeGenerators = new HashSet<string>(codeGeneratorConfig.disabledCodeGenerators);
+            var enabledCodeGenerators = new HashSet<string>(codeGeneratorConfig.enabledCodeGenerators);
 
             foreach (var codeGenerator in codeGenerators) {
-                var isEnabled = !disabledCodeGenerators.Contains(codeGenerator.Name);
+                var isEnabled = enabledCodeGenerators.Contains(codeGenerator.Name);
                 isEnabled = EditorGUILayout.Toggle(codeGenerator.Name, isEnabled);
                 if (isEnabled) {
-                    disabledCodeGenerators.Remove(codeGenerator.Name);
+                    enabledCodeGenerators.Add(codeGenerator.Name);
                 } else {
-                    disabledCodeGenerators.Add(codeGenerator.Name);
+                    enabledCodeGenerators.Remove(codeGenerator.Name);
                 }
             }
 
-            codeGeneratorConfig.disabledCodeGenerators = disabledCodeGenerators.ToArray();
+            var sortedCodeGenerators = enabledCodeGenerators.ToArray();
+            Array.Sort(sortedCodeGenerators);
+            codeGeneratorConfig.enabledCodeGenerators = sortedCodeGenerators;
         }
 
-        void drawGenerateButton() {
+        static void drawGenerateButton() {
             EditorGUILayout.Space();
             if (GUILayout.Button("Generate")) {
                 CodeGeneratorEditor.Generate();

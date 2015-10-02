@@ -70,12 +70,12 @@ namespace Entitas {
     }
 
     public partial class Matcher {
-        static AllOfMatcher _matcherScore;
+        static IMatcher _matcherScore;
 
-        public static AllOfMatcher Score {
+        public static IMatcher Score {
             get {
                 if (_matcherScore == null) {
-                    _matcherScore = new Matcher(ComponentIds.Score);
+                    _matcherScore = Matcher.AllOf(ComponentIds.Score);
                 }
 
                 return _matcherScore;

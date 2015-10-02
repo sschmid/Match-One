@@ -10,7 +10,8 @@ using UnityEngine;
 namespace Entitas.Unity {
     public static class EntitasCheckForUpdates {
 
-        const string url = "https://api.github.com/repos/sschmid/Entitas-CSharp/releases/latest";
+        const string URL_GITHUB_API_LATEST_RELEASE = "https://api.github.com/repos/sschmid/Entitas-CSharp/releases/latest";
+        const string URL_GITHUB_RELEASES = "https://github.com/sschmid/Entitas-CSharp/releases";
 
         [MenuItem("Entitas/Check for updates...")]
         public static void CheckForUpdates() {
@@ -23,7 +24,7 @@ namespace Entitas.Unity {
 
         static string requestLatestRelease() {
             ServicePointManager.ServerCertificateValidationCallback += trustSource;
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(URL_GITHUB_API_LATEST_RELEASE);
             httpWebRequest.UserAgent = Environment.UserName + "sschmid/Entitas-CSharp/Entitas.Unity/CheckForUpdates";
             httpWebRequest.Timeout = 15000;
             var webResponse = httpWebRequest.GetResponse();
@@ -36,8 +37,8 @@ namespace Entitas.Unity {
         }
 
         static string parseVersion(string response) {
-            const string versionPattern = @"(?<=""tag_name"":"").*?(?="")";
-            return Regex.Match(response, versionPattern).Value;
+            const string VERSION_PATTERN = @"(?<=""tag_name"":"").*?(?="")";
+            return Regex.Match(response, VERSION_PATTERN).Value;
         }
 
         static string getLocalVersion() {
@@ -63,7 +64,7 @@ namespace Entitas.Unity {
                             "Show release",
                             "Cancel"
                         )) {
-                        Application.OpenURL("https://github.com/sschmid/Entitas-CSharp/releases");
+                        Application.OpenURL(URL_GITHUB_RELEASES);
                     }
                     break;
                 case 0:
@@ -80,7 +81,7 @@ namespace Entitas.Unity {
                             "Show release",
                             "Cancel"
                         )) {
-                        Application.OpenURL("https://github.com/sschmid/Entitas-CSharp/releases");
+                        Application.OpenURL(URL_GITHUB_RELEASES);
                     }
                     break;
             }

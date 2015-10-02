@@ -72,12 +72,12 @@ namespace Entitas {
     }
 
     public partial class Matcher {
-        static AllOfMatcher _matcherGameBoard;
+        static IMatcher _matcherGameBoard;
 
-        public static AllOfMatcher GameBoard {
+        public static IMatcher GameBoard {
             get {
                 if (_matcherGameBoard == null) {
-                    _matcherGameBoard = new Matcher(ComponentIds.GameBoard);
+                    _matcherGameBoard = Matcher.AllOf(ComponentIds.GameBoard);
                 }
 
                 return _matcherGameBoard;
