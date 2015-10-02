@@ -13,7 +13,6 @@ public class CreateGameBoardCacheSystem : ISystem, ISetPool {
 
         var gameBoardElements = pool.GetGroup(Matcher.AllOf(Matcher.GameBoardElement, Matcher.Position));
         gameBoardElements.OnEntityAdded += onGameBoardElementAdded;
-        gameBoardElements.OnEntityUpdated += onGameBoardElementUpdated;
         gameBoardElements.OnEntityRemoved += onGameBoardElementRemoved;
     }
 
@@ -33,15 +32,6 @@ public class CreateGameBoardCacheSystem : ISystem, ISetPool {
         var grid = _pool.gameBoardCache.grid;
         var pos = entity.position;
         grid[pos.x, pos.y] = entity;
-        _pool.ReplaceGameBoardCache(grid);
-    }
-
-    void onGameBoardElementUpdated(Group group, Entity entity, int index, IComponent previousComponent, IComponent newComponent) {
-        var prevPos = previousComponent as PositionComponent;
-        var newPos = (PositionComponent)newComponent;
-        var grid = _pool.gameBoardCache.grid;
-        grid[prevPos.x, prevPos.y] = null;
-        grid[newPos.x, newPos.y] = entity;
         _pool.ReplaceGameBoardCache(grid);
     }
 
