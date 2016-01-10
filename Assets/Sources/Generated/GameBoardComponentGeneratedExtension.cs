@@ -48,7 +48,8 @@ namespace Entitas {
 
         public Entity SetGameBoard(int newColumns, int newRows) {
             if (hasGameBoard) {
-                throw new SingleEntityException(Matcher.GameBoard);
+                throw new EntitasException("Could not set gameBoard!\n" + this + " already has an entity with GameBoardComponent!",
+                    "You should check if the pool already has a gameBoardEntity before setting it or use pool.ReplaceGameBoard().");
             }
             var entity = CreateEntity();
             entity.AddGameBoard(newColumns, newRows);
@@ -77,7 +78,9 @@ namespace Entitas {
         public static IMatcher GameBoard {
             get {
                 if (_matcherGameBoard == null) {
-                    _matcherGameBoard = Matcher.AllOf(ComponentIds.GameBoard);
+                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.GameBoard);
+                    matcher.componentNames = ComponentIds.componentNames;
+                    _matcherGameBoard = matcher;
                 }
 
                 return _matcherGameBoard;

@@ -46,7 +46,8 @@ namespace Entitas {
 
         public Entity SetScore(int newValue) {
             if (hasScore) {
-                throw new SingleEntityException(Matcher.Score);
+                throw new EntitasException("Could not set score!\n" + this + " already has an entity with ScoreComponent!",
+                    "You should check if the pool already has a scoreEntity before setting it or use pool.ReplaceScore().");
             }
             var entity = CreateEntity();
             entity.AddScore(newValue);
@@ -75,7 +76,9 @@ namespace Entitas {
         public static IMatcher Score {
             get {
                 if (_matcherScore == null) {
-                    _matcherScore = Matcher.AllOf(ComponentIds.Score);
+                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.Score);
+                    matcher.componentNames = ComponentIds.componentNames;
+                    _matcherScore = matcher;
                 }
 
                 return _matcherScore;

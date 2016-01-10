@@ -46,7 +46,8 @@ namespace Entitas {
 
         public Entity SetGameBoardCache(Entitas.Entity[,] newGrid) {
             if (hasGameBoardCache) {
-                throw new SingleEntityException(Matcher.GameBoardCache);
+                throw new EntitasException("Could not set gameBoardCache!\n" + this + " already has an entity with GameBoardCacheComponent!",
+                    "You should check if the pool already has a gameBoardCacheEntity before setting it or use pool.ReplaceGameBoardCache().");
             }
             var entity = CreateEntity();
             entity.AddGameBoardCache(newGrid);
@@ -75,7 +76,9 @@ namespace Entitas {
         public static IMatcher GameBoardCache {
             get {
                 if (_matcherGameBoardCache == null) {
-                    _matcherGameBoardCache = Matcher.AllOf(ComponentIds.GameBoardCache);
+                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.GameBoardCache);
+                    matcher.componentNames = ComponentIds.componentNames;
+                    _matcherGameBoardCache = matcher;
                 }
 
                 return _matcherGameBoardCache;
