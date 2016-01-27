@@ -83,13 +83,23 @@ namespace Entitas.Unity.VisualDebugging {
 
                 EditorGUILayout.Space();
                 EditorGUILayout.LabelField("Retained by (" + entity.retainCount + ")", EditorStyles.boldLabel);
+
+                #if !ENTITAS_FAST_AND_UNSAFE
+
                 EditorGUILayout.BeginVertical(GUI.skin.box);
                 {
-                    foreach (var owner in entity.owners) {
+                    foreach (var owner in entity.owners.ToArray()) {
+                        EditorGUILayout.BeginHorizontal();
                         EditorGUILayout.LabelField(owner.ToString());
+                        if (GUILayout.Button("Release", GUILayout.Width(88), GUILayout.Height(14))) {
+                            entity.Release(owner);
+                        }
+                        EditorGUILayout.EndHorizontal();
                     }
                 }
                 EditorGUILayout.EndVertical();
+
+                #endif
             }
             EditorGUILayout.EndVertical();
         }

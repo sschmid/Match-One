@@ -1,41 +1,28 @@
-using System.Collections.Generic;
-
 namespace Entitas {
     public partial class Entity {
         public GameBoardComponent gameBoard { get { return (GameBoardComponent)GetComponent(ComponentIds.GameBoard); } }
 
         public bool hasGameBoard { get { return HasComponent(ComponentIds.GameBoard); } }
 
-        static readonly Stack<GameBoardComponent> _gameBoardComponentPool = new Stack<GameBoardComponent>();
-
-        public static void ClearGameBoardComponentPool() {
-            _gameBoardComponentPool.Clear();
-        }
-
         public Entity AddGameBoard(int newColumns, int newRows) {
-            var component = _gameBoardComponentPool.Count > 0 ? _gameBoardComponentPool.Pop() : new GameBoardComponent();
+            var componentPool = GetComponentPool(ComponentIds.GameBoard);
+            var component = (GameBoardComponent)(componentPool.Count > 0 ? componentPool.Pop() : new GameBoardComponent());
             component.columns = newColumns;
             component.rows = newRows;
             return AddComponent(ComponentIds.GameBoard, component);
         }
 
         public Entity ReplaceGameBoard(int newColumns, int newRows) {
-            var previousComponent = hasGameBoard ? gameBoard : null;
-            var component = _gameBoardComponentPool.Count > 0 ? _gameBoardComponentPool.Pop() : new GameBoardComponent();
+            var componentPool = GetComponentPool(ComponentIds.GameBoard);
+            var component = (GameBoardComponent)(componentPool.Count > 0 ? componentPool.Pop() : new GameBoardComponent());
             component.columns = newColumns;
             component.rows = newRows;
             ReplaceComponent(ComponentIds.GameBoard, component);
-            if (previousComponent != null) {
-                _gameBoardComponentPool.Push(previousComponent);
-            }
             return this;
         }
 
         public Entity RemoveGameBoard() {
-            var component = gameBoard;
-            RemoveComponent(ComponentIds.GameBoard);
-            _gameBoardComponentPool.Push(component);
-            return this;
+            return RemoveComponent(ComponentIds.GameBoard);;
         }
     }
 

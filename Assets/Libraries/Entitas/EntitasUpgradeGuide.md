@@ -1,3 +1,11 @@
+# Entitas 0.27.0 upgrade guide
+
+If you're using Entitas with Unity, please open the Entitas preferences and make
+sure that all your desired code generators are activated.
+Due to some code generator renamings the ComponentLookupGenerator and
+the ComponentsGenerator are inactive. Activate them (if desired) and generate.
+
+
 # Entitas 0.26.0 upgrade guide
 Use the command line tool `MigrationAssistant.exe` to automatically fix compile errors.
 After that generate again.
@@ -14,7 +22,7 @@ $ mono MigrationAssistant.exe -l
 0.22.0 - Migrates IReactiveSystem to combine trigger and eventTypes to TriggerOnEvent
 0.26.0 - Deactivates code to prevent compile erros
 
-// Example from Math-One example project, where all the systems are located in the Features folder
+// Example from Math-One example project
 $ mono MigrationAssistant.exe 0.26.0 /Path/To/Project/Generated/
 ```
 

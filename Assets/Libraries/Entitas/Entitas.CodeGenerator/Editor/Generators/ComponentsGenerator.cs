@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 
 namespace Entitas.CodeGenerator {
-    public class ComponentExtensionsGenerator : IComponentCodeGenerator {
+    public class ComponentsGenerator : IComponentCodeGenerator {
 
         const string CLASS_SUFFIX = "GeneratedExtension";
 
@@ -32,8 +32,7 @@ namespace Entitas.CodeGenerator {
         }
 
         static string addDefaultPoolCode(Type type) {
-            var code = addComponentPoolUsings(type);
-            code += addNamespace();
+            var code = addNamespace();
             code += addEntityMethods(type);
             if (isSingleEntity(type)) {
                 code += addPoolMethods(type);
@@ -44,8 +43,7 @@ namespace Entitas.CodeGenerator {
         }
 
         static string addCustomPoolCode(Type type) {
-            var code = addComponentPoolUsings(type);
-            code += addUsings();
+            var code = addUsings();
             code += addNamespace();
             code += addEntityMethods(type);
             if (isSingleEntity(type)) {
@@ -54,12 +52,6 @@ namespace Entitas.CodeGenerator {
             code += closeNamespace();
             code += addMatcher(type);
             return code;
-        }
-
-        static string addComponentPoolUsings(Type type) {
-            return isSingletonComponent(type)
-                ? string.Empty
-                : "using System.Collections.Generic;\n\n";
         }
 
         static string addUsings() {
@@ -84,7 +76,6 @@ namespace Entitas.CodeGenerator {
             return addEntityClassHeader()
                     + addGetMethods(type)
                     + addHasMethods(type)
-                    + addComponentPoolMethods(type)
                     + addAddMethods(type)
                     + addReplaceMethods(type)
                     + addRemoveMethods(type)
@@ -104,10 +95,10 @@ namespace Entitas.CodeGenerator {
 
         static string addHasMethods(Type type) {
             var hasMethod = isSingletonComponent(type) ? @"
-        public bool is$Name {
+        public bool $prefix$Name {
             get { return HasComponent($Ids.$Name); }
             set {
-                if (value != is$Name) {
+                if (value != $prefix$Name) {
                     if (value) {
                         AddComponent($Ids.$Name, $nameComponent);
                     } else {
@@ -117,8 +108,8 @@ namespace Entitas.CodeGenerator {
             }
         }
 
-        public Entity Is$Name(bool value) {
-            is$Name = value;
+        public Entity $Prefix$Name(bool value) {
+            $prefix$Name = value;
             return this;
         }
 " : @"
@@ -127,20 +118,11 @@ namespace Entitas.CodeGenerator {
             return buildString(type, hasMethod);
         }
 
-        static string addComponentPoolMethods(Type type) {
-            return isSingletonComponent(type) ? string.Empty : buildString(type, @"
-        static readonly Stack<$Type> _$nameComponentPool = new Stack<$Type>();
-
-        public static void Clear$NameComponentPool() {
-            _$nameComponentPool.Clear();
-        }
-");
-        }
-
         static string addAddMethods(Type type) {
             return isSingletonComponent(type) ? string.Empty : buildString(type, @"
         public Entity Add$Name($typedArgs) {
-            var component = _$nameComponentPool.Count > 0 ? _$nameComponentPool.Pop() : new $Type();
+            var componentPool = GetComponentPool($Ids.$Name);
+            var component = ($Type)(componentPool.Count > 0 ? componentPool.Pop() : new $Type());
 $assign
             return AddComponent($Ids.$Name, component);
         }
@@ -150,13 +132,10 @@ $assign
         static string addReplaceMethods(Type type) {
             return isSingletonComponent(type) ? string.Empty : buildString(type, @"
         public Entity Replace$Name($typedArgs) {
-            var previousComponent = has$Name ? $name : null;
-            var component = _$nameComponentPool.Count > 0 ? _$nameComponentPool.Pop() : new $Type();
+            var componentPool = GetComponentPool($Ids.$Name);
+            var component = ($Type)(componentPool.Count > 0 ? componentPool.Pop() : new $Type());
 $assign
             ReplaceComponent($Ids.$Name, component);
-            if (previousComponent != null) {
-                _$nameComponentPool.Push(previousComponent);
-            }
             return this;
         }
 ");
@@ -165,10 +144,7 @@ $assign
         static string addRemoveMethods(Type type) {
             return isSingletonComponent(type) ? string.Empty : buildString(type, @"
         public Entity Remove$Name() {
-            var component = $name;
-            RemoveComponent($Ids.$Name);
-            _$nameComponentPool.Push(component);
-            return this;
+            return RemoveComponent($Ids.$Name);;
         }
 ");
         }
@@ -206,13 +182,13 @@ $assign
 
         static string addPoolHasMethods(Type type) {
             var hasMethod = isSingletonComponent(type) ? @"
-        public bool is$Name {
+        public bool $prefix$Name {
             get { return $nameEntity != null; }
             set {
                 var entity = $nameEntity;
                 if (value != (entity != null)) {
                     if (value) {
-                        CreateEntity().is$Name = true;
+                        CreateEntity().$prefix$Name = true;
                     } else {
                         DestroyEntity(entity);
                     }
@@ -321,15 +297,19 @@ $assign
             var a2_lowercaseName = a1_name.LowercaseFirst();
             var poolNames = type.PoolNames();
             var a3_tag = poolNames.Length == 0 ? string.Empty : poolNames[0];
-            var lookupTags = type.IndicesLookupTags();
+            var lookupTags = type.ComponentLookupTags();
             var a4_ids = lookupTags.Length == 0 ? string.Empty : lookupTags[0];
             var memberNameInfos = getFieldInfos(type);
             var a5_fieldNamesWithType = fieldNamesWithType(memberNameInfos);
             var a6_fieldAssigns = fieldAssignments(memberNameInfos);
             var a7_fieldNames = fieldNames(memberNameInfos);
+            var prefix = type.CustomPrefix();
+            var a8_prefix = prefix.UppercaseFirst();
+            var a9_lowercasePrefix = prefix.LowercaseFirst();
 
             return string.Format(format, a0_type, a1_name, a2_lowercaseName,
-                a3_tag, a4_ids, a5_fieldNamesWithType, a6_fieldAssigns, a7_fieldNames);
+                a3_tag, a4_ids, a5_fieldNamesWithType, a6_fieldAssigns, a7_fieldNames,
+                a8_prefix, a9_lowercasePrefix);
         }
 
         static MemberTypeNameInfo[] getFieldInfos(Type type) {
@@ -348,7 +328,9 @@ $assign
                         .Replace("$Ids", "{4}")
                         .Replace("$typedArgs", "{5}")
                         .Replace("$assign", "{6}")
-                        .Replace("$args", "{7}");
+                        .Replace("$args", "{7}")
+                        .Replace("$Prefix", "{8}")
+                        .Replace("$prefix", "{9}");
         }
 
         static string fieldNamesWithType(MemberTypeNameInfo[] infos) {

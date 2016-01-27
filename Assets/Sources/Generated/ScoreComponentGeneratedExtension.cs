@@ -1,39 +1,26 @@
-using System.Collections.Generic;
-
 namespace Entitas {
     public partial class Entity {
         public ScoreComponent score { get { return (ScoreComponent)GetComponent(ComponentIds.Score); } }
 
         public bool hasScore { get { return HasComponent(ComponentIds.Score); } }
 
-        static readonly Stack<ScoreComponent> _scoreComponentPool = new Stack<ScoreComponent>();
-
-        public static void ClearScoreComponentPool() {
-            _scoreComponentPool.Clear();
-        }
-
         public Entity AddScore(int newValue) {
-            var component = _scoreComponentPool.Count > 0 ? _scoreComponentPool.Pop() : new ScoreComponent();
+            var componentPool = GetComponentPool(ComponentIds.Score);
+            var component = (ScoreComponent)(componentPool.Count > 0 ? componentPool.Pop() : new ScoreComponent());
             component.value = newValue;
             return AddComponent(ComponentIds.Score, component);
         }
 
         public Entity ReplaceScore(int newValue) {
-            var previousComponent = hasScore ? score : null;
-            var component = _scoreComponentPool.Count > 0 ? _scoreComponentPool.Pop() : new ScoreComponent();
+            var componentPool = GetComponentPool(ComponentIds.Score);
+            var component = (ScoreComponent)(componentPool.Count > 0 ? componentPool.Pop() : new ScoreComponent());
             component.value = newValue;
             ReplaceComponent(ComponentIds.Score, component);
-            if (previousComponent != null) {
-                _scoreComponentPool.Push(previousComponent);
-            }
             return this;
         }
 
         public Entity RemoveScore() {
-            var component = score;
-            RemoveComponent(ComponentIds.Score);
-            _scoreComponentPool.Push(component);
-            return this;
+            return RemoveComponent(ComponentIds.Score);;
         }
     }
 

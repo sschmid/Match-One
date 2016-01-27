@@ -1,39 +1,26 @@
-using System.Collections.Generic;
-
 namespace Entitas {
     public partial class Entity {
         public GameBoardCacheComponent gameBoardCache { get { return (GameBoardCacheComponent)GetComponent(ComponentIds.GameBoardCache); } }
 
         public bool hasGameBoardCache { get { return HasComponent(ComponentIds.GameBoardCache); } }
 
-        static readonly Stack<GameBoardCacheComponent> _gameBoardCacheComponentPool = new Stack<GameBoardCacheComponent>();
-
-        public static void ClearGameBoardCacheComponentPool() {
-            _gameBoardCacheComponentPool.Clear();
-        }
-
         public Entity AddGameBoardCache(Entitas.Entity[,] newGrid) {
-            var component = _gameBoardCacheComponentPool.Count > 0 ? _gameBoardCacheComponentPool.Pop() : new GameBoardCacheComponent();
+            var componentPool = GetComponentPool(ComponentIds.GameBoardCache);
+            var component = (GameBoardCacheComponent)(componentPool.Count > 0 ? componentPool.Pop() : new GameBoardCacheComponent());
             component.grid = newGrid;
             return AddComponent(ComponentIds.GameBoardCache, component);
         }
 
         public Entity ReplaceGameBoardCache(Entitas.Entity[,] newGrid) {
-            var previousComponent = hasGameBoardCache ? gameBoardCache : null;
-            var component = _gameBoardCacheComponentPool.Count > 0 ? _gameBoardCacheComponentPool.Pop() : new GameBoardCacheComponent();
+            var componentPool = GetComponentPool(ComponentIds.GameBoardCache);
+            var component = (GameBoardCacheComponent)(componentPool.Count > 0 ? componentPool.Pop() : new GameBoardCacheComponent());
             component.grid = newGrid;
             ReplaceComponent(ComponentIds.GameBoardCache, component);
-            if (previousComponent != null) {
-                _gameBoardCacheComponentPool.Push(previousComponent);
-            }
             return this;
         }
 
         public Entity RemoveGameBoardCache() {
-            var component = gameBoardCache;
-            RemoveComponent(ComponentIds.GameBoardCache);
-            _gameBoardCacheComponentPool.Push(component);
-            return this;
+            return RemoveComponent(ComponentIds.GameBoardCache);;
         }
     }
 

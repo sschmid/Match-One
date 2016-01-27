@@ -7,31 +7,41 @@ using UnityEngine;
 namespace Entitas.Unity {
     public class EntitasPreferencesWindow : EditorWindow {
 
-        [MenuItem("Entitas/Open Preferences...", false, 0)]
+        [MenuItem("Entitas/Preferences...", false, 1)]
         public static void OpenPreferences() {
-            EditorWindow.GetWindow<EntitasPreferencesWindow>().Show();
+            EditorWindow.GetWindow<EntitasPreferencesWindow>("Entitas Prefs").Show();
         }
 
-        static Vector2 _scrollViewPosition;
+        EntitasPreferencesConfig _config;
+        IEntitasPreferencesDrawer[] _preferencesDrawers;
+        Vector2 _scrollViewPosition;
 
-        void OnGUI() {
-            var config = EntitasPreferences.LoadConfig();
-            var types = Assembly.GetAssembly(typeof(IEntitasPreferencesDrawer)).GetTypes();
-            var preferencesDrawers = types
+        void OnEnable() {
+            _config = EntitasPreferences.LoadConfig();
+            _preferencesDrawers = Assembly.GetAssembly(typeof(IEntitasPreferencesDrawer)).GetTypes()
                 .Where(type => type.GetInterfaces().Contains(typeof(IEntitasPreferencesDrawer)))
                 .OrderBy(type => type.FullName)
                 .Select(type => (IEntitasPreferencesDrawer)Activator.CreateInstance(type))
                 .ToArray();
 
+            foreach (var drawer in _preferencesDrawers) {
+                drawer.Initialize(_config);
+            }
+        }
+
+
+        void OnGUI() {
             _scrollViewPosition = EditorGUILayout.BeginScrollView(_scrollViewPosition);
-            foreach (var drawer in preferencesDrawers) {
-                drawer.Draw(config);
-                EditorGUILayout.Space();
+            {
+                foreach (var drawer in _preferencesDrawers) {
+                    drawer.Draw(_config);
+                    EditorGUILayout.Space();
+                }
             }
             EditorGUILayout.EndScrollView();
 
             if (GUI.changed) {
-                EntitasPreferences.SaveConfig(config);
+                EntitasPreferences.SaveConfig(_config);
             }
         }
     }
