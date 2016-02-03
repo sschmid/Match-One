@@ -29,14 +29,15 @@ Please follow the [Entitas upgrade guide](https://github.com/sschmid/Entitas-CSh
 - Added Entitas.Unity.Migration which provides an easy way to migrate source files
 - Added header image and current version label to Entitas Migration Window
 
-    [insert screenshot]
-
+![Entitas.Unity.Migration](https://cloud.githubusercontent.com/assets/233700/12795026/6acf24b4-cab8-11e5-90e3-98a103676d50.png)
 
 ##### Entitas.Unity.VisualDebugging
 - Added system search field to DebugSystemsInspector
 - UI tweaks and performance optimizations
 - Fixed logging wron system stats
 - Added header image and current version label to Entitas Preferences Window
+
+![Entitas.Unity.Visualdebugging-preferences](https://cloud.githubusercontent.com/assets/233700/12795069/a13e5b6e-cab8-11e5-937d-870790e2bfe1.png)
 
 ##### Other
 - Removed redundant files and gitignored Entitas in all Unity projects (#63)
