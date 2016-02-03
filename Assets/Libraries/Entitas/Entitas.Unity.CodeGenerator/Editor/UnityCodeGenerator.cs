@@ -4,15 +4,15 @@ using System.Reflection;
 using Entitas;
 using Entitas.CodeGenerator;
 using UnityEditor;
+using Entitas.CodeGenerator.TypeReflection;
 
 namespace Entitas.Unity.CodeGenerator {
-    public static class CodeGenerator {
+    public static class UnityCodeGenerator {
 
         [MenuItem("Entitas/Generate", false, 100)]
         public static void Generate() {
             assertCanGenerate();
 
-            var types = Assembly.GetAssembly(typeof(Entity)).GetTypes();
             var codeGenerators = GetCodeGenerators();
             var codeGeneratorNames = codeGenerators.Select(cg => cg.Name).ToArray();
             var config = new CodeGeneratorConfig(EntitasPreferences.LoadConfig(), codeGeneratorNames);
@@ -23,7 +23,8 @@ namespace Entitas.Unity.CodeGenerator {
                 .Select(type => (ICodeGenerator)Activator.CreateInstance(type))
                 .ToArray();
 
-            Entitas.CodeGenerator.CodeGenerator.Generate(types, config.pools, config.generatedFolderPath, enabledCodeGenerators);
+            var assembly = Assembly.GetAssembly(typeof(Entity));
+            TypeReflectionCodeGenerator.Generate(assembly, config.pools, config.generatedFolderPath, enabledCodeGenerators);
 
             AssetDatabase.Refresh();
         }
@@ -33,8 +34,7 @@ namespace Entitas.Unity.CodeGenerator {
                 .Where(type => type.GetInterfaces().Contains(typeof(ICodeGenerator))
                     && type != typeof(ICodeGenerator)
                     && type != typeof(IPoolCodeGenerator)
-                    && type != typeof(IComponentCodeGenerator)
-                    && type != typeof(ISystemCodeGenerator))
+                    && type != typeof(IComponentCodeGenerator))
                 .OrderBy(type => type.FullName)
                 .ToArray();
         }

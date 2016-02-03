@@ -1,3 +1,49 @@
+# 0.28.0
+
+##### Breaking changes
+Please follow the [Entitas upgrade guide](https://github.com/sschmid/Entitas-CSharp/blob/master/EntitasUpgradeGuide.md)
+
+##### Entitas
+- Added documentation (#55)
+- Added an object pool for components (#58)
+- Added pool.ClearComponentPool(index) and pool.ClearComponentPools()
+- Added ENTITAS_FAST_AND_UNSAFE compiler flag. When set it will speed up e.Retain() and e.Release() (#59)
+
+##### Entitas.CodeGenerator
+- Generated component extensions are now reusing components using a component object pool when destroying entities (#58)
+- Added tests for testing the logic of generated files
+- Decoupling code generation logic by adding Code Generator Intermediate Format (#62)
+- Added TypeReflectionProvider
+- Supporting components with namespace
+- Simplified linq expressions
+- Removed generated systems
+- The Code Generator is not depending on Entitas anymore
+
+##### Entitas.CodeGenerator.TypeReflection
+- Added Entitas.CodeGenerator.TypeReflection project
+
+##### Entitas.Unity
+- Added `keys` and `values` getter to Properties
+
+##### Entitas.Unity.Migration
+- Added Entitas.Unity.Migration which provides an easy way to migrate source files
+- Added header image and current version label to Entitas Migration Window
+
+    [insert screenshot]
+
+
+##### Entitas.Unity.VisualDebugging
+- Added system search field to DebugSystemsInspector
+- UI tweaks and performance optimizations
+- Fixed logging wron system stats
+- Added header image and current version label to Entitas Preferences Window
+
+##### Other
+- Removed redundant files and gitignored Entitas in all Unity projects (#63)
+- Removed Unity projects from Entitas.sln
+- Removed warnings
+
+
 # 0.27.0
 
 ##### Note
