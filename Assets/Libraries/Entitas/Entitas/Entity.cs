@@ -20,11 +20,15 @@ namespace Entitas {
         public delegate void EntityChanged(Entity entity, int index, IComponent component);
         public delegate void ComponentReplaced(Entity entity, int index, IComponent previousComponent, IComponent newComponent);
 
+        /// The total amount of components an entity can possibly have.
+        public int totalComponents { get { return _totalComponents; } }
+
         /// Each entity has its own unique creationIndex which will be set by the pool when you create the entity.
         public int creationIndex { get { return _creationIndex; } }
 
         /// componentPools is set by the pool which created the entity and is used to reuse removed components.
-        /// The componentPools are managed by the generated methods from the code generator.
+        /// Removed components will be pushed to the componentPool.
+        /// Use entity.CreateComponent(index, type) to get a new or reusable component from the componentPool.
         /// Use entity.GetComponentPool(index) to get a componentPool for a specific component index.
         public Stack<IComponent>[] componentPools { get { return _componentPools; } }
 
@@ -35,6 +39,7 @@ namespace Entitas {
         internal int _creationIndex;
         internal bool _isEnabled = true;
 
+        readonly int _totalComponents;
         readonly IComponent[] _components;
         readonly Stack<IComponent>[] _componentPools;
         readonly PoolMetaData _poolMetaData;
@@ -45,17 +50,22 @@ namespace Entitas {
 
         /// Use pool.CreateEntity() to create a new entity and pool.DestroyEntity() to destroy it.
         public Entity(int totalComponents, Stack<IComponent>[] componentPools, PoolMetaData poolMetaData = null) {
+            _totalComponents = totalComponents;
             _components = new IComponent[totalComponents];
             _componentPools = componentPools;
 
             if (poolMetaData != null) {
                 _poolMetaData = poolMetaData;
             } else {
+
+                // If pool.CreateEntity() was used to create the entity, we will never end up here.
+                // This is a fallback when entities are created manually.
+
                 var componentNames = new string[totalComponents];
                 for (int i = 0, componentNamesLength = componentNames.Length; i < componentNamesLength; i++) {
                     componentNames[i] = i.ToString();
                 }
-                _poolMetaData = new PoolMetaData("No Pool", componentNames);
+                _poolMetaData = new PoolMetaData("No Pool", componentNames, null);
             }
         }
 
@@ -232,7 +242,8 @@ namespace Entitas {
 
         /// Returns the componentPool for the specified component index.
         /// componentPools is set by the pool which created the entity and is used to reuse removed components.
-        /// The componentPools are managed by the generated methods from the code generator.
+        /// Removed components will be pushed to the componentPool.
+        /// Use entity.CreateComponent(index, type) to get a new or reusable component from the componentPool.
         public Stack<IComponent> GetComponentPool(int index) {
             var componentPool = _componentPools[index];
             if (componentPool == null) {
@@ -243,6 +254,12 @@ namespace Entitas {
             return componentPool;
         }
 
+        /// Returns a new or reusable component from the componentPool for the specified component index.
+        public IComponent CreateComponent(int index, Type type) {
+            var componentPool = GetComponentPool(index);
+            return (IComponent)(componentPool.Count > 0 ? componentPool.Pop() : Activator.CreateInstance(type));;
+        }
+
         internal void destroy() {
             RemoveAllComponents();
             OnComponentAdded = null;
@@ -251,12 +268,18 @@ namespace Entitas {
             _isEnabled = false;
         }
 
+        internal void removeAllOnEntityReleasedHandlers() {
+            OnEntityReleased = null;
+        }
+
+        /// Returns a cached string to describe the entity with the following format:
+        /// Entity_{creationIndex}(*{retainCount})({list of components})
         public override string ToString() {
             if (_toStringCache == null) {
                 var sb = new StringBuilder()
                     .Append("Entity_")
                     .Append(_creationIndex)
-                    .Append("(")
+                    .Append("(*")
                     .Append(retainCount)
                     .Append(")")
                     .Append("(");
@@ -281,19 +304,19 @@ namespace Entitas {
 
     public class EntityAlreadyHasComponentException : EntitasException {
         public EntityAlreadyHasComponentException(int index, string message, string hint) :
-        base(message + "\nEntity already has a component at index " + index + "!", hint) {
+            base(message + "\nEntity already has a component at index " + index + "!", hint) {
         }
     }
 
     public class EntityDoesNotHaveComponentException : EntitasException {
         public EntityDoesNotHaveComponentException(int index, string message, string hint) :
-        base(message + "\nEntity does not have a component at index " + index + "!", hint) {
+            base(message + "\nEntity does not have a component at index " + index + "!", hint) {
         }
     }
 
     public class EntityIsNotEnabledException : EntitasException {
         public EntityIsNotEnabledException(string message) :
-        base(message + "\nEntity is not enabled!", "The entity has already been destroyed. You cannot modify destroyed entities.") {
+            base(message + "\nEntity is not enabled!", "The entity has already been destroyed. You cannot modify destroyed entities.") {
         }
     }
 
@@ -312,7 +335,7 @@ namespace Entitas {
 
     public partial class Entity {
 
-        /// Occurs when an entity gets released and is not retained by any object anymore.
+        /// Occurs when an entity gets released and is not retained anymore.
         public event EntityReleased OnEntityReleased;
 
         public delegate void EntityReleased(Entity entity);
@@ -382,15 +405,15 @@ namespace Entitas {
 
     public class EntityIsAlreadyRetainedByOwnerException : EntitasException {
         public EntityIsAlreadyRetainedByOwnerException(Entity entity, object owner) :
-        base("'" + owner + "' cannot retain " + entity + "!\nEntity is already retained by this object!",
-            "The entity must be released by this object first.") {
+            base("'" + owner + "' cannot retain " + entity + "!\nEntity is already retained by this object!",
+                "The entity must be released by this object first.") {
         }
     }
 
     public class EntityIsNotRetainedByOwnerException : EntitasException {
         public EntityIsNotRetainedByOwnerException(Entity entity, object owner) :
-        base("'" + owner + "' cannot release " + entity + "!\nEntity is not retained by this object!",
-            "An entity can only be released from objects that retain it.") {
+            base("'" + owner + "' cannot release " + entity + "!\nEntity is not retained by this object!",
+                "An entity can only be released from objects that retain it.") {
         }
     }
 

@@ -1,11 +1,6 @@
 ﻿using System.IO;
 
 namespace Entitas.Unity {
-    public interface IEntitasPreferencesDrawer {
-        void Initialize(EntitasPreferencesConfig config);
-        void Draw(EntitasPreferencesConfig config);
-    }
-
     public static class EntitasPreferences {
 
         const string CONFIG_PATH = "Entitas.properties";

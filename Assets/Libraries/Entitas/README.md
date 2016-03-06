@@ -12,6 +12,9 @@
     <a href="https://twitter.com/intent/follow?original_referer=https%3A%2F%2Fgithub.com%2Fsschmid%2FEntitas-CSharp&screen_name=s_schmid&tw_p=followbutton">
         <img src="https://img.shields.io/badge/twitter-follow%20%40s__schmid-blue.svg" alt="Twitter Follow Me"></a>
 
+    <a href="https://twitter.com/intent/follow?original_referer=https%3A%2F%2Fgithub.com%2Fsschmid%2FEntitas-CSharp&screen_name=entitas_csharp&tw_p=followbutton">
+        <img src="https://img.shields.io/badge/twitter-follow%20%40entitas__csharp-blue.svg" alt="Twitter Follow Me"></a>
+
     <a href="https://travis-ci.org/sschmid/Entitas-CSharp">
         <img src="https://travis-ci.org/sschmid/Entitas-CSharp.svg?branch=master" alt="Build Status"></a>
 
@@ -20,10 +23,10 @@
 </p>
 
 
-The Entity Component System for C# and Unity
-============================================
+Entitas - The Entity Component System Framework for C# and Unity
+================================================================
 
-Entitas is a super fast Entity Component System (ECS) specifically made for C# and Unity. Internal caching and blazing fast component access makes it second to none. Several design decisions have been made to work optimal in a garbage collected environment and to go easy on the garbage collector. Entitas comes with an optional code generator which radically reduces the amount of code you have to write and [makes your code read like well written prose.][clean-coders]
+Entitas is a super fast Entity Component System Framework (ECS) specifically made for C# and Unity. Internal caching and blazing fast component access makes it second to none. Several design decisions have been made to work optimal in a garbage collected environment and to go easy on the garbage collector. Entitas comes with an optional code generator which radically reduces the amount of code you have to write and [makes your code read like well written prose.][clean-coders]
 
 <p align="left">
     <a href="https://dev.windows.com">
@@ -142,7 +145,7 @@ Contributing to Entitas
 
 The project is hosted on [GitHub][github-entitas] where you can [report issues][issues], fork the project and [submit pull requests][pulls].
 
-Entitas.sln contains all projects and tests in one solution. All Unity projects are not committed to the repository and can be generated with Unity. Open Entitas.Unity, Entitas.Unity.CodeGenerator and Entitas.Unity.VisualDebugging in Unity and generate all projects by clicking Assets -> Sync MonoDevelop Project.
+Entitas.sln contains all projects and tests in one solution. Run build.sh to copy all required Entitas source files to all Unity projects.
 
 To run the tests, navigate to the project root folder and execute runTests.sh.
 
@@ -164,19 +167,23 @@ Big shout out to [@mzaks][github-mzaks], [@cloudjubei][github-cloudjubei] and [@
 Maintainer(s)
 =============
 
-- [@sschmid][github-sschmid] | Twitter: [@s_schmid][twitter-sschmid]
+- [@sschmid][github-sschmid] | [@s_schmid][twitter-sschmid] | [@entitas_csharp][twitter-entitas_csharp]
 
 
 Different language?
 ===================
 
-Entitas is also available in
+Entitas is available in
+- [C#](https://github.com/sschmid/Entitas-CSharp)
 - [Swift](https://github.com/mzaks/Entitas-Swift)
 - [Objective-C](https://github.com/wooga/entitas)
 - [Go](https://github.com/wooga/go-entitas)
-- [Clojure](https://github.com/mhaemmerle/entitas-clj)
+- [F#](https://github.com/darkoverlordofdata/Bosco.ECS)
+- [TypeScript](https://github.com/darkoverlordofdata/entitas-ts)
+- [Java](https://github.com/Rubentxu/entitas-java)
 - [Haskell](https://github.com/mhaemmerle/entitas-haskell)
 - [Erlang](https://github.com/mhaemmerle/entitas_erl)
+- [Clojure](https://github.com/mhaemmerle/entitas-clj)
 
 
 [clean-coders]: https://cleancoders.com "Clean Coders"
@@ -199,6 +206,7 @@ Entitas is also available in
 [pulls]: https://github.com/sschmid/Entitas-CSharp/pulls "Pull Requests"
 
 [twitter-sschmid]: https://twitter.com/s_schmid "s_schmid on Twitter"
+[twitter-entitas_csharp]: https://twitter.com/entitas_csharp "entitas_csharp on Twitter"
 
 [github-sschmid]: https://github.com/sschmid "@sschmid"
 [github-mzaks]: https://github.com/mzaks "@mzaks"
