@@ -1,7 +1,17 @@
+# 0.29.1
+
+##### Entitas.CodeGenerator
+- Added missing support for components with properties
+- Updated ComponentsGenerator to use entity.CreateComponent()
+
+##### Entitas.Unity.CodeGenerator
+- Added missing support for components with properties
+
+
 # 0.29.0
 
 ##### Obsolete
-- Marked old PoolMetaData constructor obsolete (will be updated when generating)
+Marked old PoolMetaData constructor obsolete. If you encounter compile errors please apply Migration 0.26.0, open C# project and generate again.
 
 ##### General
 - Unified Entitas sub projects into a single project
@@ -37,6 +47,7 @@
 
 ##### Entitas.Unity.CodeGenerator
 - Compile errors won't block code generation anymore
+- Printing total generated file count when generating
 
 ##### Entitas.Unity.VisualDebugging
 - Destroying EntityBahviour when entity got released
@@ -50,7 +61,6 @@
 - Simplified EntityInspector and made methods static
 - Unfolded components info is now shared between entities within same pool
 - Added shortcuts to Entitas Preferences and Generate
-- Printing total generated file count when generating
 - Improved TypeDrawers
 - Stepper UI tweaks
 

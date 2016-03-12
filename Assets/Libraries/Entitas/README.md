@@ -32,7 +32,7 @@ Entitas is a super fast Entity Component System Framework (ECS) specifically mad
     <a href="https://dev.windows.com">
         <img src="https://raw.githubusercontent.com/sschmid/Entitas-CSharp/develop/Readme/Images/csharp.png" alt="CSharp" height="64"></a>
     <a href="http://unity3d.com">
-        <img src="https://raw.githubusercontent.com/sschmid/Entitas-CSharp/develop/Readme/Images/WorksWithUnity.png" alt="Unity3d" height="64"></a>
+        <img src="https://raw.githubusercontent.com/sschmid/Entitas-CSharp/develop/Readme/Images/MadeForUnity.png" alt="Unity3d" height="64"></a>
     <a href="http://unity3d.com/unite/archive/2015">
         <img src="https://raw.githubusercontent.com/sschmid/Entitas-CSharp/develop/Readme/Images/UniteEurope2015.png" alt="Unite Europe 2015" height="64"></a>
     <a href="http://unity3d.com/unite/archive/2015">
@@ -127,15 +127,8 @@ Download Entitas
 Each release is published with zip files attached containing all source files you need.
 
 [**Entitas-CSharp.zip**][entitas-csharp-zip]
-- Entitas
-- Entitas.CodeGenerator
 
 [**Entitas-Unity.zip**][entitas-unity-zip]
-- Entitas
-- Entitas.CodeGenerator
-- Entitas.Unity
-- Entitas.Unity.CodeGenerator
-- Entitas.Unity.VisualDebugging
 
 [Show releases][releases]
 
@@ -176,6 +169,7 @@ Different language?
 Entitas is available in
 - [C#](https://github.com/sschmid/Entitas-CSharp)
 - [Swift](https://github.com/mzaks/Entitas-Swift)
+- [C++](https://github.com/JuDelCo/Entitas-Cpp)
 - [Objective-C](https://github.com/wooga/entitas)
 - [Go](https://github.com/wooga/go-entitas)
 - [F#](https://github.com/darkoverlordofdata/Bosco.ECS)
