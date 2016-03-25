@@ -1,5 +1,4 @@
 ﻿using Entitas;
-using Entitas.Unity.VisualDebugging;
 using UnityEngine;
 
 public class GameController : MonoBehaviour {
