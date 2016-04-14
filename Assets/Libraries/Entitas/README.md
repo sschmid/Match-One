@@ -2,10 +2,20 @@
     <img src="https://raw.githubusercontent.com/sschmid/Entitas-CSharp/develop/Readme/Images/Entitas-Header.png" alt="Entitas">
 </p>
 
+---
+
 <p align="center">
+
+    <a>Entitas turned 2 years old! :heart::heart::heart:<br />Share the love and use #madeWithEntitas in your Tweets to share what you've created with Entitas.<br /><br />If you love Entitas as much as we do<br />consider pressing this button ---></a>
+
     <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=Y9HGYPFMLG2W4">
         <img src="https://raw.githubusercontent.com/sschmid/Entitas-CSharp/develop/Readme/Images/Donate-PayPal.gif" alt="Thank you!"></a>
 
+</p>
+
+---
+
+<p align="center">
     <a href="https://gitter.im/sschmid/Entitas-CSharp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge">
         <img src="https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg" alt="Join the chat at https://gitter.im/sschmid/Entitas-CSharp"></a>
 
@@ -138,7 +148,7 @@ Contributing to Entitas
 
 The project is hosted on [GitHub][github-entitas] where you can [report issues][issues], fork the project and [submit pull requests][pulls].
 
-Entitas.sln contains all projects and tests in one solution. Run build.sh to copy all required Entitas source files to all Unity projects.
+Entitas.sln contains all projects and tests in one solution. Run Build/build.sh to copy all required Entitas source files to all Unity projects.
 
 To run the tests, navigate to the project root folder and execute runTests.sh.
 

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Entitas;
 using Entitas.CodeGenerator;
+using Entitas.Unity.Serialization.Blueprints;
 using UnityEditor;
 using UnityEngine;
 
@@ -25,10 +26,13 @@ namespace Entitas.Unity.CodeGenerator {
                 .Select(type => (ICodeGenerator)Activator.CreateInstance(type))
                 .ToArray();
 
-            var assembly = Assembly.GetAssembly(typeof(Entity));
-            var generatedFiles = TypeReflectionCodeGenerator.Generate(assembly, config.pools, config.generatedFolderPath, enabledCodeGenerators);
+            var blueprintNames = Resources.FindObjectsOfTypeAll<BinaryBlueprint>()
+                .Select(b => b.Deserialize().name)
+                .ToArray();
 
-            AssetDatabase.Refresh();
+            var assembly = Assembly.GetAssembly(typeof(Entity));
+            var generatedFiles = TypeReflectionCodeGenerator.Generate(assembly, config.pools,
+                blueprintNames, config.generatedFolderPath, enabledCodeGenerators);
 
             foreach (var file in generatedFiles) {
                 Debug.Log(file.generatorName + ": " + file.fileName);
@@ -36,6 +40,8 @@ namespace Entitas.Unity.CodeGenerator {
 
             var totalGeneratedFiles = generatedFiles.Select(file => file.fileName).Distinct().Count();
             Debug.Log("Generated " + totalGeneratedFiles + " files.");
+
+            AssetDatabase.Refresh();
         }
 
         public static Type[] GetCodeGenerators() {

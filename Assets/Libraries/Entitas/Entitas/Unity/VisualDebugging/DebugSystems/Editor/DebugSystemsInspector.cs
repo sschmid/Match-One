@@ -6,6 +6,17 @@ using UnityEngine;
 namespace Entitas.Unity.VisualDebugging {
     [CustomEditor(typeof(DebugSystemsBehaviour))]
     public class DebugSystemsInspector : Editor {
+
+        enum SortMethod {
+            OrderOfOccurrence,
+
+            Name,
+            NameDescending,
+
+            ExecutionTime,
+            ExecutionTimeDescending
+        }
+
         SystemsMonitor _systemsMonitor;
         Queue<float> _systemMonitorData;
         const int SYSTEM_MONITOR_DATA_LENGTH = 60;
@@ -16,7 +27,7 @@ namespace Entitas.Unity.VisualDebugging {
         static string _systemNameSearchTerm = string.Empty;
         
         float _threshold;
-        bool _sortSystemInfos;
+        SortMethod _systemSortMethod;
 
         public override void OnInspectorGUI() {
             var debugSystemsBehaviour = (DebugSystemsBehaviour)target;
@@ -94,7 +105,7 @@ namespace Entitas.Unity.VisualDebugging {
                 EntitasEditorLayout.EndHorizontal();
 
                 _threshold = EditorGUILayout.Slider("Threshold Ø ms", _threshold, 0f, 33f);
-                _sortSystemInfos = EditorGUILayout.Toggle("Sort by execution duration", _sortSystemInfos);
+                _systemSortMethod = (SortMethod)EditorGUILayout.EnumPopup("Sort by ", _systemSortMethod);
                 _hideEmptySystems = EditorGUILayout.Toggle("Hide empty systems", _hideEmptySystems);
                 EditorGUILayout.Space();
 
@@ -144,11 +155,7 @@ namespace Entitas.Unity.VisualDebugging {
                 .Where(systemInfo => systemInfo.averageExecutionDuration >= _threshold)
                 .ToArray();
 
-            if (_sortSystemInfos) {
-                systemInfos = systemInfos
-                    .OrderByDescending(systemInfo => systemInfo.averageExecutionDuration)
-                    .ToArray();
-            }
+            systemInfos = getSortedSystemInfos(systemInfos, _systemSortMethod);
 
             var systemsDrawn = 0;
             foreach (var systemInfo in systemInfos) {
@@ -176,11 +183,11 @@ namespace Entitas.Unity.VisualDebugging {
                             }
                         }
 
-                        var avg = string.Format("Ø {0:0.000}", systemInfo.averageExecutionDuration).PadRight(9);
-                        var min = string.Format("min {0:0.000}", systemInfo.minExecutionDuration).PadRight(11);
-                        var max = string.Format("max {0:0.000}", systemInfo.maxExecutionDuration);
+                        var avg = string.Format("Ø {0:00.000}", systemInfo.averageExecutionDuration).PadRight(12);
+                        var min = string.Format("▼ {0:00.000}", systemInfo.minExecutionDuration).PadRight(12);
+                        var max = string.Format("▲ {0:00.000}", systemInfo.maxExecutionDuration);
 
-                        EditorGUILayout.LabelField(systemInfo.systemName, avg + "\t" + min + "\t" + max, getSystemStyle(systemInfo));
+                        EditorGUILayout.LabelField(systemInfo.systemName, avg + min + max, getSystemStyle(systemInfo));
                     }
                     EntitasEditorLayout.EndHorizontal();
 
@@ -197,6 +204,32 @@ namespace Entitas.Unity.VisualDebugging {
             }
 
             return systemsDrawn;
+        }
+
+        static SystemInfo[] getSortedSystemInfos(SystemInfo[] systemInfos, SortMethod sortMethod) {
+            if (sortMethod == SortMethod.Name) {
+                return systemInfos
+                    .OrderBy(systemInfo => systemInfo.systemName)
+                    .ToArray();
+            }
+            if (sortMethod == SortMethod.NameDescending) {
+                return systemInfos
+                    .OrderByDescending(systemInfo => systemInfo.systemName)
+                    .ToArray();
+            }
+
+            if (sortMethod == SortMethod.ExecutionTime) {
+                return systemInfos
+                    .OrderBy(systemInfo => systemInfo.averageExecutionDuration)
+                    .ToArray();
+            }
+            if (sortMethod == SortMethod.ExecutionTimeDescending) {
+                return systemInfos
+                    .OrderByDescending(systemInfo => systemInfo.averageExecutionDuration)
+                    .ToArray();
+            }
+
+            return systemInfos;
         }
 
         static bool shouldShowSystems(DebugSystems systems, bool initOnly) {
