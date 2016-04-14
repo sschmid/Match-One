@@ -1,7 +1,10 @@
 ﻿using Entitas;
 using UnityEngine;
+using Entitas.Unity.Serialization.Blueprints;
 
 public class GameController : MonoBehaviour {
+
+    public Blueprints blueprints;
 
     Systems _systems;
 
@@ -24,9 +27,9 @@ public class GameController : MonoBehaviour {
 
             // Update
             .Add(pool.CreateSystem<CreateGameBoardCacheSystem>())
-            .Add(pool.CreateSystem<GameBoardSystem>())
+            .Add(pool.CreateSystem(new GameBoardSystem(blueprints)))
             .Add(pool.CreateSystem<FallSystem>())
-            .Add(pool.CreateSystem<FillSystem>())
+            .Add(pool.CreateSystem(new FillSystem(blueprints)))
             .Add(pool.CreateSystem<ScoreSystem>())
 
             // Render

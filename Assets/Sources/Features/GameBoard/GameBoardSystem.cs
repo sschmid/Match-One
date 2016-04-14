@@ -1,12 +1,18 @@
 using System.Collections.Generic;
 using Entitas;
+using Entitas.Unity.Serialization.Blueprints;
 using UnityEngine;
 
 public class GameBoardSystem : IInitializeSystem, IReactiveSystem, ISetPool {
     public TriggerOnEvent trigger { get { return Matcher.GameBoard.OnEntityAdded(); } }
 
+    Blueprints _blueprints;
     Pool _pool;
     Group _gameBoardElements;
+
+    public GameBoardSystem(Blueprints blueprints) {
+        _blueprints = blueprints;
+    }
 
     public void SetPool(Pool pool) {
         _pool = pool;
@@ -17,13 +23,13 @@ public class GameBoardSystem : IInitializeSystem, IReactiveSystem, ISetPool {
 
         Debug.Log("Create GameBoard");
 
-        var gameBoard = _pool.SetGameBoard(8, 9).gameBoard;
+        var gameBoard = _pool.SetGameBoard(9, 9).gameBoard;
         for (int row = 0; row < gameBoard.rows; row++) {
             for (int column = 0; column < gameBoard.columns; column++) {
                 if (Random.value > 0.91f) {
-                    _pool.CreateBlocker(column, row);
+                    _blueprints.ApplyBlocker(_pool.CreateEntity(), column, row);
                 } else {
-                    _pool.CreateRandomPiece(column, row);
+                    _blueprints.ApplyPiece(_pool.CreateEntity(), column, row);
                 }
             }
         }
