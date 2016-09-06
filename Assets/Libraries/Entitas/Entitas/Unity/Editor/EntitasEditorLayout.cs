@@ -2,7 +2,10 @@
 using UnityEngine;
 
 namespace Entitas.Unity {
+
     public static class EntitasEditorLayout {
+
+        const int DEFAULT_FOLDOUT_MARGIN = 11;
 
         public static void ShowWindow<T>(string title) where T : EditorWindow {
             var window = EditorWindow.GetWindow<T>(true, title);
@@ -11,15 +14,25 @@ namespace Entitas.Unity {
         }
 
         public static Texture2D LoadTexture(string label) {
-            var guid = AssetDatabase.FindAssets(label)[0];
-            if (guid != null) {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
-                return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            var assets = AssetDatabase.FindAssets(label);
+            if (assets.Length > 0) {
+                var guid = assets[0];
+                if (guid != null) {
+                    var path = AssetDatabase.GUIDToAssetPath(guid);
+                    return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                }
             }
+
             return null;
         }
 
         public static float DrawHeaderTexture(EditorWindow window, Texture2D texture) {
+
+            // For unknown reasons OnGUI is called twice and and so is this method.
+            // var rect = GUILayoutUtility.GetRect(EditorGUILayout.GetControlRect().width, height);
+            // will return wrong width and height (1, 1) every other call
+            // workaround: hardcode scrollBarWidth
+
             const int scollBarWidth = 15;
             var ratio = texture.width / texture.height;
             var width = window.position.width - 8 - scollBarWidth;
@@ -27,6 +40,18 @@ namespace Entitas.Unity {
             GUI.DrawTexture(new Rect(4, 2, width, height), texture, ScaleMode.ScaleToFit);
 
             return height;
+        }
+
+        public static bool Foldout(bool foldout, string content, int leftMargin = DEFAULT_FOLDOUT_MARGIN) {
+            return Foldout(foldout, content, EditorStyles.foldout, leftMargin);
+        }
+
+        public static bool Foldout(bool foldout, string content, GUIStyle style, int leftMargin = DEFAULT_FOLDOUT_MARGIN) {
+            BeginHorizontal();
+            GUILayout.Space(leftMargin);
+            foldout = EditorGUILayout.Foldout(foldout, content, style);
+            EndHorizontal();
+            return foldout;
         }
 
         public static Rect BeginVertical() {

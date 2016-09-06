@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Entitas;
 using Entitas.Serialization;
-using Entitas.Unity;
-using Entitas.Unity.VisualDebugging;
+using Entitas.Serialization.Configuration;
 using UnityEditor;
 using UnityEngine;
 
 namespace Entitas.Unity.VisualDebugging {
+
     public static class EntityDrawer {
 
         static Dictionary<Pool, bool[]> _poolToUnfoldedComponents;
@@ -19,6 +18,8 @@ namespace Entitas.Unity.VisualDebugging {
 
         static IDefaultInstanceCreator[] _defaultInstanceCreators;
         static ITypeDrawer[] _typeDrawers;
+        static IComponentDrawer[] _componentDrawers;
+
         static string _componentNameSearchTerm = string.Empty;
 
         static bool _isInitialized;
@@ -38,6 +39,11 @@ namespace Entitas.Unity.VisualDebugging {
                 _typeDrawers = types
                     .Where(type => type.ImplementsInterface<ITypeDrawer>())
                     .Select(type => (ITypeDrawer)Activator.CreateInstance(type))
+                    .ToArray();
+
+                _componentDrawers = types
+                    .Where(type => type.ImplementsInterface<IComponentDrawer>())
+                    .Select(type => (IComponentDrawer)Activator.CreateInstance(type))
                     .ToArray();
             }
 
@@ -60,6 +66,33 @@ namespace Entitas.Unity.VisualDebugging {
             }
             GUI.backgroundColor = bgColor;
 
+            DrawComponents(pool, entity);
+
+            EditorGUILayout.Space();
+
+            EditorGUILayout.LabelField("Retained by (" + entity.retainCount + ")", EditorStyles.boldLabel);
+
+            #if !ENTITAS_FAST_AND_UNSAFE
+
+            EntitasEditorLayout.BeginVerticalBox();
+            {
+                foreach (var owner in entity.owners.ToArray()) {
+                    EntitasEditorLayout.BeginHorizontal();
+                    {
+                        EditorGUILayout.LabelField(owner.ToString());
+                        if (GUILayout.Button("Release", GUILayout.Width(88), GUILayout.Height(14))) {
+                            entity.Release(owner);
+                        }
+                        EntitasEditorLayout.EndHorizontal();
+                    }
+                }
+            }
+            EntitasEditorLayout.EndVertical();
+
+            #endif
+        }
+
+        public static void DrawComponents(Pool pool, Entity entity) {
             bool[] unfoldedComponents;
             if (!_poolToUnfoldedComponents.TryGetValue(pool, out unfoldedComponents)) {
                 unfoldedComponents = new bool[pool.totalComponents];
@@ -119,29 +152,6 @@ namespace Entitas.Unity.VisualDebugging {
                 for (int i = 0; i < components.Length; i++) {
                     DrawComponent(unfoldedComponents, entity, indices[i], components[i]);
                 }
-
-                EditorGUILayout.Space();
-
-                EditorGUILayout.LabelField("Retained by (" + entity.retainCount + ")", EditorStyles.boldLabel);
-
-                #if !ENTITAS_FAST_AND_UNSAFE
-
-                EntitasEditorLayout.BeginVerticalBox();
-                {
-                    foreach (var owner in entity.owners.ToArray()) {
-                        EntitasEditorLayout.BeginHorizontal();
-                        {
-                            EditorGUILayout.LabelField(owner.ToString());
-                            if (GUILayout.Button("Release", GUILayout.Width(88), GUILayout.Height(14))) {
-                                entity.Release(owner);
-                            }
-                            EntitasEditorLayout.EndHorizontal();
-                        }
-                    }
-                }
-                EntitasEditorLayout.EndVertical();
-
-                #endif
             }
             EntitasEditorLayout.EndVertical();
         }
@@ -202,17 +212,17 @@ namespace Entitas.Unity.VisualDebugging {
 
             var componentName = componentType.Name.RemoveComponentSuffix();
             if (componentName.ToLower().Contains(_componentNameSearchTerm.ToLower())) {
-                var memberInfos = componentType.GetPublicMemberInfos();
 
                 var boxStyle = getColoredBoxStyle(entity.totalComponents, index);
                 EntitasEditorLayout.BeginVerticalBox(boxStyle);
                 {
+                    var memberInfos = componentType.GetPublicMemberInfos();
                     EntitasEditorLayout.BeginHorizontal();
                     {
-                        if (memberInfos.Length == 0) {
+                        if (memberInfos.Count == 0) {
                             EditorGUILayout.LabelField(componentName, EditorStyles.boldLabel);
                         } else {
-                            unfoldedComponents[index] = EditorGUILayout.Foldout(unfoldedComponents[index], componentName, _foldoutStyle);
+                            unfoldedComponents[index] = EntitasEditorLayout.Foldout(unfoldedComponents[index], componentName, _foldoutStyle);
                         }
                         if (GUILayout.Button("-", GUILayout.Width(19), GUILayout.Height(14))) {
                             entity.RemoveComponent(index);
@@ -221,9 +231,26 @@ namespace Entitas.Unity.VisualDebugging {
                     EntitasEditorLayout.EndHorizontal();
 
                     if (unfoldedComponents[index]) {
-                        foreach (var info in memberInfos) {
-                            DrawAndSetElement(info.type, info.name, info.GetValue(component),
-                                entity, index, component, info.SetValue);
+
+                        var componentDrawer = getComponentDrawer(componentType);
+                        if (componentDrawer != null) {
+                            var newComponent = entity.CreateComponent(index, componentType);
+                            component.CopyPublicMemberValues(newComponent);
+                            EditorGUI.BeginChangeCheck();
+                            {
+                                componentDrawer.DrawComponent(newComponent);
+                            }
+                            var changed = EditorGUI.EndChangeCheck();
+                            if (changed) {
+                                entity.ReplaceComponent(index, newComponent);
+                            } else {
+                                entity.GetComponentPool(index).Push(newComponent);
+                            }
+                        } else {
+                            foreach (var info in memberInfos) {
+                                DrawAndSetElement(info.type, info.name, info.GetValue(component),
+                                    entity, index, component, info.SetValue);
+                            }
                         }
                     }
                 }
@@ -352,6 +379,16 @@ namespace Entitas.Unity.VisualDebugging {
 
         static ITypeDrawer getTypeDrawer(Type type) {
             foreach (var drawer in _typeDrawers) {
+                if (drawer.HandlesType(type)) {
+                    return drawer;
+                }
+            }
+
+            return null;
+        }
+
+        static IComponentDrawer getComponentDrawer(Type type) {
+            foreach (var drawer in _componentDrawers) {
                 if (drawer.HandlesType(type)) {
                     return drawer;
                 }

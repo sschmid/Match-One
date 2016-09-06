@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using Entitas.Serialization.Configuration;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace Entitas.Unity {
 
     public class EntitasPreferencesWindow : EditorWindow {
 
-        [MenuItem("Entitas/Preferences... #%e", false, 1)]
+        [MenuItem("Entitas/Preferences... #%e", false, EntitasMenuItemPriorities.preferences)]
         public static void OpenPreferences() {
             EntitasEditorLayout.ShowWindow<EntitasPreferencesWindow>("Entitas Preferences");
         }
@@ -26,7 +27,7 @@ namespace Entitas.Unity {
         Vector2 _scrollViewPosition;
 
         void OnEnable() {
-            _headerTexture = EntitasEditorLayout.LoadTexture("l:Entitas-Header");
+            _headerTexture = EntitasEditorLayout.LoadTexture("l:EntitasHeader");
             _localVersion = EntitasCheckForUpdates.GetLocalVersion();
             _config = EntitasPreferences.LoadConfig();
             _preferencesDrawers = Assembly.GetAssembly(typeof(IEntitasPreferencesDrawer)).GetTypes()

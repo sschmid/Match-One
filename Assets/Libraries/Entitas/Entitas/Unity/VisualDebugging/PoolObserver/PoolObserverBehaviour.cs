@@ -4,6 +4,7 @@ namespace Entitas.Unity.VisualDebugging {
 
     [ExecuteInEditMode]
     public class PoolObserverBehaviour : MonoBehaviour {
+
         public PoolObserver poolObserver { get { return _poolObserver; } }
 
         PoolObserver _poolObserver;
@@ -19,6 +20,10 @@ namespace Entitas.Unity.VisualDebugging {
             } else if (_poolObserver.entitiesContainer != null) {
                 _poolObserver.entitiesContainer.name = _poolObserver.ToString();
             }
+        }
+
+        void OnDestroy() {
+            _poolObserver.Deactivate();
         }
     }
 }

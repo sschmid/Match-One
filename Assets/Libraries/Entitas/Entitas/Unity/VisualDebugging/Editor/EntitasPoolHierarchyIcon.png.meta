@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: e23ad41464ef945d784cdb90d844e6c4
 labels:
-- PoolHierarchyIcon
+- EntitasPoolHierarchyIcon
 timeCreated: 1457898659
 licenseType: Pro
 TextureImporter:
@@ -29,7 +29,7 @@ TextureImporter:
   cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -3
-  maxTextureSize: 2048
+  maxTextureSize: 256
   textureSettings:
     filterMode: 0
     aniso: -1

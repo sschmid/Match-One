@@ -1,44 +1,39 @@
-﻿using Entitas.Serialization;
+﻿using System.Collections.Generic;
+using Entitas.Serialization;
 
 namespace Entitas.CodeGenerator {
+
     public class ComponentInfo {
 
-        public string fullTypeName { get { return _fullTypeName; } }
-        public PublicMemberInfo[] memberInfos { get { return _memberInfos; } }
-        public string[] pools { get { return _pools; } }
-        public bool isSingleEntity { get { return _isSingleEntity; } }
-        public string singleComponentPrefix { get { return _singleComponentPrefix; } }
-        public bool generateMethods { get { return _generateMethods; } }
-        public bool generateIndex { get { return _generateIndex; } }
+        public readonly string fullTypeName;
+        public readonly List<PublicMemberInfo> memberInfos;
+        public readonly string[] pools;
+        public readonly bool isSingleEntity;
+        public readonly string singleComponentPrefix;
+        public readonly bool generateComponent;
+        public readonly bool generateMethods;
+        public readonly bool generateIndex;
+        
+        public readonly string typeName;
+        public readonly bool isSingletonComponent;
 
-        public bool isSingletonComponent { get { return _isSingletonComponent; } }
-        public string typeName { get { return _typeName; } }
+        public ComponentInfo(string fullTypeName, List<PublicMemberInfo> memberInfos, string[] pools,
+                            bool isSingleEntity, string singleComponentPrefix,
+                            bool generateComponent, bool generateMethods, bool generateIndex) {
 
-        readonly string _fullTypeName;
-        readonly PublicMemberInfo[] _memberInfos;
-        readonly string[] _pools;
-        readonly bool _isSingleEntity;
-        readonly string _singleComponentPrefix;
-        readonly bool _generateMethods;
-        readonly bool _generateIndex;
-
-        readonly string _typeName;
-        readonly bool _isSingletonComponent;
-
-        public ComponentInfo(string fullTypeName, PublicMemberInfo[] memberInfos, string[] pools,
-            bool isSingleEntity, string singleComponentPrefix, bool generateMethods, bool generateIndex) {
-            _fullTypeName = fullTypeName;
-            _memberInfos = memberInfos;
-            _pools = pools;
-            _isSingleEntity = isSingleEntity;
-            _singleComponentPrefix = singleComponentPrefix;
-            _generateMethods = generateMethods;
-            _generateIndex = generateIndex;
+            this.fullTypeName = fullTypeName;
+            this.memberInfos = memberInfos;
+            this.pools = pools;
+            this.isSingleEntity = isSingleEntity;
+            this.singleComponentPrefix = singleComponentPrefix;
+            this.generateComponent = generateComponent;
+            this.generateMethods = generateMethods;
+            this.generateIndex = generateIndex;
 
             var nameSplit = fullTypeName.Split('.');
-            _typeName = nameSplit[nameSplit.Length - 1];
+            typeName = nameSplit[nameSplit.Length - 1];
 
-            _isSingletonComponent = memberInfos.Length == 0;
+            isSingletonComponent = memberInfos.Count == 0;
         }
     }
 }

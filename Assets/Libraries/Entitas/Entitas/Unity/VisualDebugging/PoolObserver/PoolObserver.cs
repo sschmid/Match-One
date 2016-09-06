@@ -4,6 +4,7 @@ using UnityEngine;
 namespace Entitas.Unity.VisualDebugging {
 
     public class PoolObserver {
+
         public Pool pool { get { return _pool; } }
         public Group[] groups { get { return _groups.ToArray(); }}
         public GameObject entitiesContainer { get { return _entitiesContainer.gameObject; } }
@@ -23,6 +24,12 @@ namespace Entitas.Unity.VisualDebugging {
             _pool.OnGroupCleared += onGroupCleared;
         }
 
+        public void Deactivate() {
+            _pool.OnEntityCreated -= onEntityCreated;
+            _pool.OnGroupCreated -= onGroupCreated;
+            _pool.OnGroupCleared -= onGroupCleared;
+        }
+
         void onEntityCreated(Pool pool, Entity entity) {
             var entityBehaviour = new GameObject().AddComponent<EntityBehaviour>();
             entityBehaviour.Init(pool, entity);
@@ -38,11 +45,19 @@ namespace Entitas.Unity.VisualDebugging {
         }
 
         public override string ToString() {
+            if (_pool.retainedEntitiesCount != 0) {
+                return _entitiesContainer.name = 
+                    _pool.metaData.poolName + " (" +
+                    _pool.count + " entities, " +
+                    _pool.reusableEntitiesCount + " reusable, " +
+                    _pool.retainedEntitiesCount + " retained, " +
+                    _groups.Count + " groups)";
+            }
+
             return _entitiesContainer.name = 
                 _pool.metaData.poolName + " (" +
                 _pool.count + " entities, " +
                 _pool.reusableEntitiesCount + " reusable, " +
-                _pool.retainedEntitiesCount + " retained, " +
                 _groups.Count + " groups)";
         }
     }

@@ -1,58 +1,66 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Entitas.Serialization;
 
 namespace Entitas.CodeGenerator {
 
-    [Obsolete("Deprecated since 0.30.0. Use ComponentExtensionsGenerator")]
-    public class ComponentsGenerator : ComponentExtensionsGenerator {}
-
     public class ComponentExtensionsGenerator : IComponentCodeGenerator {
 
-        const string CLASS_SUFFIX = "GeneratedExtension";
-
         public CodeGenFile[] Generate(ComponentInfo[] componentInfos) {
-            var generatorName = typeof(ComponentExtensionsGenerator).FullName;
+            var generatorName = GetType().FullName;
             return componentInfos
                 .Where(info => info.generateMethods)
-                .Select(info => new CodeGenFile {
-                    fileName = info.fullTypeName + CLASS_SUFFIX,
-                    fileContent = generateComponentExtension(info).ToUnixLineEndings(),
-                    generatorName = generatorName
-                }).ToArray();
+                .Select(info => new CodeGenFile(
+                    info.fullTypeName + "GeneratedExtension",
+                    generateComponentExtension(info),
+                    generatorName
+                )).ToArray();
         }
 
         static string generateComponentExtension(ComponentInfo componentInfo) {
-            return componentInfo.pools.Length == 0
-                        ? addDefaultPoolCode(componentInfo)
-                        : addCustomPoolCode(componentInfo);
-        }
-
-        static string addDefaultPoolCode(ComponentInfo componentInfo) {
             var code = addNamespace();
             code += addEntityMethods(componentInfo);
             if (componentInfo.isSingleEntity) {
                 code += addPoolMethods(componentInfo);
             }
-            code += addMatcher(componentInfo);
-            code += closeNamespace();
-            return code;
-        }
 
-        static string addCustomPoolCode(ComponentInfo componentInfo) {
-            var code = addUsings();
-            code += addNamespace();
-            code += addEntityMethods(componentInfo);
-            if (componentInfo.isSingleEntity) {
-                code += addPoolMethods(componentInfo);
+            if (componentInfo.generateComponent) {
+                // Add default matcher
+                code += addMatcher(componentInfo, true);
+                code += closeNamespace();
+                // Add custom matchers
+                code += addMatcher(componentInfo);
+                return addUsings("Entitas")
+                    + generateComponent(componentInfo)
+                    + code;
             }
+
+            code += addMatcher(componentInfo, true);
             code += closeNamespace();
-            code += addMatcher(componentInfo);
+
+            var hasCustomPools = componentInfo.pools.Length > 1 || !componentInfo.pools[0].IsDefaultPoolName();
+            if (hasCustomPools) {
+                code += addMatcher(componentInfo);
+                code = addUsings("Entitas") + code;
+            }
+
             return code;
         }
 
-        static string addUsings() {
-            return "using Entitas;\n\n";
+        static string generateComponent(ComponentInfo componentInfo) {
+            const string componentFormat = @"public class {0} : IComponent {{
+    public {1} {2};
+}}
+
+";
+            var memberInfo = componentInfo.memberInfos[0];
+            return string.Format(componentFormat, componentInfo.fullTypeName, memberInfo.type, memberInfo.name);
+        }
+
+        static string addUsings(params string[] usings) {
+            return string.Join("\n", usings
+                .Select(name => "using " + name + ";")
+                .ToArray()) + "\n\n";
         }
 
         static string addNamespace() {
@@ -240,7 +248,7 @@ $assign
         *
         */
 
-        static string addMatcher(ComponentInfo componentInfo) {
+       static string addMatcher(ComponentInfo componentInfo, bool onlyDefault = false) {
             const string matcherFormat = @"
     public partial class $TagMatcher {
         static IMatcher _matcher$Name;
@@ -258,16 +266,26 @@ $assign
         }
     }
 ";
-            if (componentInfo.pools.Length == 0) {
-                return buildString(componentInfo, matcherFormat);
+
+            if (onlyDefault) {
+                if (componentInfo.pools.Contains(CodeGenerator.DEFAULT_POOL_NAME)) {
+                    return buildString(componentInfo, matcherFormat);
+                } else {
+                    return string.Empty;
+                }
+            } else {
+                var poolIndex = 0;
+                var matchers = componentInfo.pools.Aggregate(string.Empty, (acc, poolName) => {
+                    if (!poolName.IsDefaultPoolName()) {
+                        return acc + buildString(componentInfo, matcherFormat, poolIndex++);
+                    } else {
+                        poolIndex += 1;
+                        return acc;
+                    }
+                });
+
+                return buildString(componentInfo, matchers);
             }
-
-            var poolIndex = 0;
-            var matchers = componentInfo.pools.Aggregate(string.Empty, (acc, poolName) => {
-                return acc + buildString(componentInfo, matcherFormat, poolIndex++);
-            });
-
-            return buildString(componentInfo, matchers);
         }
 
         /*
@@ -282,7 +300,7 @@ $assign
             var a1_name = componentInfo.typeName.RemoveComponentSuffix();
             var a2_lowercaseName = a1_name.LowercaseFirst();
             var poolNames = componentInfo.pools;
-            var a3_tag = poolNames.Length == 0 ? string.Empty : poolNames[poolIndex];
+            var a3_tag = poolNames[poolIndex].PoolPrefix();
             var lookupTags = componentInfo.ComponentLookupTags();
             var a4_ids = lookupTags.Length == 0 ? string.Empty : lookupTags[poolIndex];
             var memberInfos = componentInfo.memberInfos;
@@ -313,7 +331,7 @@ $assign
                         .Replace("$prefix", "{9}");
         }
 
-        static string memberNamesWithType(PublicMemberInfo[] memberInfos) {
+        static string memberNamesWithType(List<PublicMemberInfo> memberInfos) {
             var typedArgs = memberInfos
                 .Select(info => info.type.ToCompilableString() + " new" + info.name.UppercaseFirst())
                 .ToArray();
@@ -321,7 +339,7 @@ $assign
             return string.Join(", ", typedArgs);
         }
 
-        static string memberAssignments(PublicMemberInfo[] memberInfos) {
+        static string memberAssignments(List<PublicMemberInfo> memberInfos) {
             const string format = "            component.{0} = {1};";
             var assignments = memberInfos.Select(info => {
                 var newArg = "new" + info.name.UppercaseFirst();
@@ -331,7 +349,7 @@ $assign
             return string.Join("\n", assignments);
         }
 
-        static string memberNames(PublicMemberInfo[] memberInfos) {
+        static string memberNames(List<PublicMemberInfo> memberInfos) {
             var args = memberInfos.Select(info => "new" + info.name.UppercaseFirst()).ToArray();
             return string.Join(", ", args);
         }

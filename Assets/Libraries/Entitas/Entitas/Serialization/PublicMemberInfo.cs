@@ -1,27 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace Entitas.Serialization {
 
-    public struct PublicMemberInfo {
+    public class PublicMemberInfo {
 
-        public Type type {
-            get {
-                return _fieldInfo != null
-                    ? _fieldInfo.FieldType
-                    : _propertyInfo.PropertyType;
-            }
-        }
-
-        public string name {
-            get {
-                return _fieldInfo != null
-                    ? _fieldInfo.Name
-                    : _propertyInfo.Name;
-            }
-        }
+        public readonly Type type;
+        public readonly string name;
+        public readonly AttributeInfo[] attributes;
 
         readonly FieldInfo _fieldInfo;
         readonly PropertyInfo _propertyInfo;
@@ -29,11 +16,23 @@ namespace Entitas.Serialization {
         public PublicMemberInfo(FieldInfo info) {
             _fieldInfo = info;
             _propertyInfo = null;
+            type = _fieldInfo.FieldType;
+            name = _fieldInfo.Name;
+            attributes = getAttributes(_fieldInfo.GetCustomAttributes(false));
         }
 
         public PublicMemberInfo(PropertyInfo info) {
             _fieldInfo = null;
             _propertyInfo = info;
+            type = _propertyInfo.PropertyType;
+            name = _propertyInfo.Name;
+            attributes = getAttributes(_propertyInfo.GetCustomAttributes(false));
+        }
+
+        public PublicMemberInfo(Type type, string name, AttributeInfo[] attributes = null) {
+            this.type = type;
+            this.name = name;
+            this.attributes = attributes;
         }
 
         public object GetValue(object obj) {
@@ -49,18 +48,49 @@ namespace Entitas.Serialization {
                 _propertyInfo.SetValue(obj, value, null);                
             }
         }
+
+        static AttributeInfo[] getAttributes(object[] attributes) {
+            var infos = new AttributeInfo[attributes.Length];
+            for (int i = 0; i < attributes.Length; i++) {
+                var attr = attributes[i];
+                infos[i] = new AttributeInfo(attr, attr.GetType().GetPublicMemberInfos());
+            }
+
+            return infos;
+        }
+    }
+
+    public class AttributeInfo {
+        public readonly object attribute;
+        public readonly List<PublicMemberInfo> memberInfos;
+
+        public AttributeInfo(object attribute, List<PublicMemberInfo> memberInfos) {
+            this.attribute = attribute;
+            this.memberInfos = memberInfos;
+        }
     }
 
     public static class PublicMemberInfoExtension {
 
-        public static PublicMemberInfo[] GetPublicMemberInfos(this Type type) {
+        public static List<PublicMemberInfo> GetPublicMemberInfos(this Type type) {
             const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public;
-            var fieldInfos = type.GetFields(bindingFlags).Select(info => new PublicMemberInfo(info));
-            var propertyInfos = type.GetProperties(bindingFlags)
-                .Where(info => info.CanRead && info.CanWrite)
-                .Select(info => new PublicMemberInfo(info));
 
-            return fieldInfos.Concat(propertyInfos).ToArray();
+            var fieldInfos = type.GetFields(bindingFlags);
+            var propertyInfos = type.GetProperties(bindingFlags);
+            var memberInfos = new List<PublicMemberInfo>(fieldInfos.Length + propertyInfos.Length);
+
+            for (int i = 0; i < fieldInfos.Length; i++) {
+                memberInfos.Add(new PublicMemberInfo(fieldInfos[i]));
+            }
+
+            for (int i = 0; i < propertyInfos.Length; i++) {
+                var propertyInfo = propertyInfos[i];
+                if (propertyInfo.CanRead && propertyInfo.CanWrite) {
+                    memberInfos.Add(new PublicMemberInfo(propertyInfo));
+                }
+            }
+
+            return memberInfos;
         }
 
         public static object PublicMemberClone(this object obj) {
@@ -77,7 +107,7 @@ namespace Entitas.Serialization {
 
         public static void CopyPublicMemberValues(this object source, object target) {
             var memberInfos = source.GetType().GetPublicMemberInfos();
-            for (int i = 0, memberInfosLength = memberInfos.Length; i < memberInfosLength; i++) {
+            for (int i = 0; i < memberInfos.Count; i++) {
                 var info = memberInfos[i];
                 info.SetValue(target, info.GetValue(source));
             }

@@ -6,9 +6,10 @@ using UnityEditor;
 using UnityEngine;
 
 namespace Entitas.Unity.Migration {
+
     public class EntitasMigrationWindow : EditorWindow {
 
-        [MenuItem("Entitas/Migrate...", false, 300)]
+        [MenuItem("Entitas/Migrate...", false, EntitasMenuItemPriorities.migrate)]
         public static void OpenMigrate() {
             EntitasEditorLayout.ShowWindow<EntitasMigrationWindow>("Entitas Migration");
         }
@@ -19,7 +20,7 @@ namespace Entitas.Unity.Migration {
         Vector2 _scrollViewPosition;
 
         void OnEnable() {
-            _headerTexture = EntitasEditorLayout.LoadTexture("l:Entitas-Migration-Header");
+            _headerTexture = EntitasEditorLayout.LoadTexture("l:EntitasMigrationHeader");
             _localVersion = EntitasCheckForUpdates.GetLocalVersion();
             _migrations = getMigrations();
         }
