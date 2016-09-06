@@ -1,4 +1,4 @@
-﻿using Entitas;
+using Entitas;
 using UnityEngine;
 
 public class GameController : MonoBehaviour {
@@ -20,21 +20,21 @@ public class GameController : MonoBehaviour {
         return new Feature("Systems")
 
             // Input
-            .Add(pool.CreateSystem<ProcessInputSystem>())
+            .Add(pool.CreateSystem(new ProcessInputSystem()))
 
             // Update
-            .Add(pool.CreateSystem<CreateGameBoardCacheSystem>())
-            .Add(pool.CreateSystem<GameBoardSystem>())
-            .Add(pool.CreateSystem<FallSystem>())
-            .Add(pool.CreateSystem<FillSystem>())
-            .Add(pool.CreateSystem<ScoreSystem>())
+            .Add(pool.CreateSystem(new CreateGameBoardCacheSystem()))
+            .Add(pool.CreateSystem(new GameBoardSystem()))
+            .Add(pool.CreateSystem(new FallSystem()))
+            .Add(pool.CreateSystem(new FillSystem()))
+            .Add(pool.CreateSystem(new ScoreSystem()))
 
             // Render
-            .Add(pool.CreateSystem<RemoveViewSystem>())
-            .Add(pool.CreateSystem<AddViewSystem>())
-            .Add(pool.CreateSystem<RenderPositionSystem>())
+            .Add(pool.CreateSystem(new RemoveViewSystem()))
+            .Add(pool.CreateSystem(new AddViewSystem()))
+            .Add(pool.CreateSystem(new RenderPositionSystem()))
 
             // Destroy
-            .Add(pool.CreateSystem<DestroySystem>());
+            .Add(pool.CreateSystem(new DestroySystem()));
     }
 }
