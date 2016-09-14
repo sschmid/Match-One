@@ -28,6 +28,9 @@ public sealed class RemoveViewSystem : ISetPool, IReactiveSystem, IEnsureCompone
         spriteRenderer.material.DOColor(color, 0.2f);
         gameObject.transform
                   .DOScale(Vector3.one * 1.5f, 0.2f)
-                  .OnComplete(() => Object.Destroy(gameObject));
+                  .OnComplete(() => {
+                        gameObject.Unlink();
+			            Object.Destroy(gameObject);
+                    });
     }
 }
