@@ -13,8 +13,8 @@ public class ScoreLabelController : MonoBehaviour {
     void Start() {
         var pool = Pools.sharedInstance.score;
 
-        pool.GetGroup(ScoreMatcher.Score).OnEntityAdded += (group, entity, index, component) =>
-            updateScore(entity.score.value);
+        pool.GetGroup(ScoreMatcher.Score).OnEntityAdded +=
+            (group, entity, index, component) => updateScore(entity.score.value);
 
         updateScore(pool.score.value);
     }

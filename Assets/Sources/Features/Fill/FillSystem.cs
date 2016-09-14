@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Entitas;
 
-public sealed class FillSystem : IReactiveSystem, ISetPool {
+public sealed class FillSystem : ISetPool, IReactiveSystem {
 
     public TriggerOnEvent trigger { get { return CoreMatcher.GameBoardElement.OnEntityRemoved(); } }
 

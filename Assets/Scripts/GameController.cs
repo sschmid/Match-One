@@ -11,7 +11,15 @@ public class GameController : MonoBehaviour {
         var pools = Pools.sharedInstance;
         pools.SetAllPools();
 
+        // Manually add entity indices.
+        // It's planned to generate this in future versions of Entitas
         pools.AddEntityIndices();
+
+        // Recommended systems lifecycle:
+        // systems.Initialize() on Start
+        // systems.Execute() on Update
+        // systems.Cleanup() on Update
+        // systems.Deinitialize() on OnDestroy
 
         _systems = createSystems(pools);
         _systems.Initialize();
