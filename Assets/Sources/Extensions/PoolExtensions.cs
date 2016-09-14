@@ -1,4 +1,5 @@
-﻿using Entitas;
+﻿using System.Collections.Generic;
+using Entitas;
 using UnityEngine;
 
 public static class PoolExtensions {
@@ -29,7 +30,7 @@ public static class PoolExtensions {
     }
 
     public static void AddEntityIndices(this Pools pools) {
-        var positionIndex = new PrimaryEntityIndex<string>(
+        var positionIndex = new EntityIndex<string>(
             pools.core.GetGroup(CoreMatcher.Position),
             (e, c) => {
                 var positionComponent = c as PositionComponent;
@@ -42,8 +43,8 @@ public static class PoolExtensions {
         pools.core.AddEntityIndex(CoreComponentIds.Position.ToString(), positionIndex);
     }
 
-    public static Entity GetEntityWithPosition(this Pool pool, int x, int y) {
-        var index = (PrimaryEntityIndex<string>)pool.GetEntityIndex(CoreComponentIds.Position.ToString());
-        return index.TryGetEntity(x + "," + y);
+    public static HashSet<Entity> GetEntitiesWithPosition(this Pool pool, int x, int y) {
+        var index = (EntityIndex<string>)pool.GetEntityIndex(CoreComponentIds.Position.ToString());
+        return index.GetEntities(x + "," + y);
     }
 }

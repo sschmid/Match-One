@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Entitas;
+using System.Linq;
 
 public sealed class ProcessInputSystem : ISetPools, IReactiveSystem {
 
@@ -15,8 +16,7 @@ public sealed class ProcessInputSystem : ISetPools, IReactiveSystem {
         var inputEntity = entities.SingleEntity();
         var input = inputEntity.input;
 
-        var e = _pools.core.GetEntityWithPosition(input.x, input.y);
-        if(e != null && e.isInteractive) {
+        foreach(var e in _pools.core.GetEntitiesWithPosition(input.x, input.y).Where(e => e.isInteractive)) {
             e.isDestroy = true;
         }
     }

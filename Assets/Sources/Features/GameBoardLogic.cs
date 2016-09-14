@@ -4,7 +4,7 @@ public static class GameBoardLogic {
 
     public static int GetNextEmptyRow(Pool pool, int column, int row) {
         var rowBelow = row - 1;
-        while(rowBelow >= 0 && pool.GetEntityWithPosition(column, rowBelow) == null) {
+        while(rowBelow >= 0 && pool.GetEntitiesWithPosition(column, rowBelow).Count == 0) {
             rowBelow -= 1;
         }
 
