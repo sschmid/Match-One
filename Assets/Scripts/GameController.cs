@@ -8,12 +8,20 @@ public class GameController : MonoBehaviour {
     void Start() {
         Random.seed = 42;
 
-        _systems = createSystems(Pools.pool);
+        var pools = Pools.sharedInstance;
+        pools.SetAllPools();
+
+        _systems = createSystems(pools.pool);
         _systems.Initialize();
     }
 
     void Update() {
         _systems.Execute();
+        _systems.Cleanup();
+    }
+
+    void OnDestroy() {
+        _systems.Deinitialize();
     }
 
     Systems createSystems(Pool pool) {
