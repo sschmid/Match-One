@@ -1,7 +1,7 @@
 ﻿using Entitas;
 
 [Core]
-public sealed class ResourceComponent : IComponent {
+public sealed class AssetComponent : IComponent {
 
     public string name;
 }

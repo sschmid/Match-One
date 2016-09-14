@@ -7,36 +7,36 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public static class CoreComponentIds {
-    public const int Destroy = 0;
-    public const int GameBoard = 1;
-    public const int GameBoardElement = 2;
-    public const int Interactive = 3;
-    public const int Movable = 4;
-    public const int Position = 5;
-    public const int Resource = 6;
+    public const int Asset = 0;
+    public const int Destroy = 1;
+    public const int GameBoard = 2;
+    public const int GameBoardElement = 3;
+    public const int Interactive = 4;
+    public const int Movable = 5;
+    public const int Position = 6;
     public const int View = 7;
 
     public const int TotalComponents = 8;
 
     public static readonly string[] componentNames = {
+        "Asset",
         "Destroy",
         "GameBoard",
         "GameBoardElement",
         "Interactive",
         "Movable",
         "Position",
-        "Resource",
         "View"
     };
 
     public static readonly System.Type[] componentTypes = {
+        typeof(AssetComponent),
         typeof(DestroyComponent),
         typeof(GameBoardComponent),
         typeof(GameBoardElementComponent),
         typeof(InteractiveComponent),
         typeof(MovableComponent),
         typeof(PositionComponent),
-        typeof(ResourceComponent),
         typeof(ViewComponent)
     };
 }

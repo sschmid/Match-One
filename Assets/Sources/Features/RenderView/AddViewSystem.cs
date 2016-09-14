@@ -5,13 +5,13 @@ using UnityEngine;
 
 public sealed class AddViewSystem : IReactiveSystem {
 
-    public TriggerOnEvent trigger { get { return CoreMatcher.Resource.OnEntityAdded(); } }
+    public TriggerOnEvent trigger { get { return CoreMatcher.Asset.OnEntityAdded(); } }
 
     readonly Transform _viewContainer = new GameObject("Views").transform;
 
     public void Execute(List<Entity> entities) {
         foreach(var e in entities) {
-            var res = Resources.Load<GameObject>(e.resource.name);
+            var res = Resources.Load<GameObject>(e.asset.name);
             GameObject gameObject = null;
             try {
                 gameObject = UnityEngine.Object.Instantiate(res);

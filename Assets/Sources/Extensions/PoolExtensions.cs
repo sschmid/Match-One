@@ -18,14 +18,14 @@ public static class PoolExtensions {
             .AddPosition(x, y)
             .IsMovable(true)
             .IsInteractive(true)
-            .AddResource(_pieces[Random.Range(0, _pieces.Length)]);
+            .AddAsset(_pieces[Random.Range(0, _pieces.Length)]);
     }
 
     public static Entity CreateBlocker(this Pool pool, int x, int y) {
         return pool.CreateEntity()
             .IsGameBoardElement(true)
             .AddPosition(x, y)
-            .AddResource(Res.Blocker);
+            .AddAsset(Res.Blocker);
     }
 
     public static void AddEntityIndices(this Pools pools) {

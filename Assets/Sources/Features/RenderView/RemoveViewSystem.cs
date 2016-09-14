@@ -5,7 +5,7 @@ using UnityEngine;
 
 public sealed class RemoveViewSystem : ISetPool, IReactiveSystem, IEnsureComponents {
 
-    public TriggerOnEvent trigger { get { return CoreMatcher.Resource.OnEntityRemoved(); } }
+    public TriggerOnEvent trigger { get { return CoreMatcher.Asset.OnEntityRemoved(); } }
 
     public IMatcher ensureComponents { get { return CoreMatcher.View; } }
 
