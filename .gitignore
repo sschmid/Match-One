@@ -21,6 +21,4 @@ test-results
 # Custom
 Match One-csharp.sln
 Match One.sln
-
-bin
-!bin/Entitas.zip
+ProjectVersion.txt
