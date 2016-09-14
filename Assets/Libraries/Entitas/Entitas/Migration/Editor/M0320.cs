@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Entitas.Migration {
@@ -9,7 +9,7 @@ namespace Entitas.Migration {
 
         public string workingDirectory { get { return "project root"; } }
 
-        public string description { get { return "Updates Entitas.properties to use renamed keys"; } }
+        public string description { get { return "Updates Entitas.properties to use renamed keys and updates calls to pool.CreateSystem(new T())"; } }
 
         public MigrationFile[] Migrate(string path) {
             var properties = MigrationUtils.GetFiles(path, "Entitas.properties");
@@ -23,8 +23,6 @@ namespace Entitas.Migration {
                 file.fileContent = file.fileContent.Replace("Entitas.Unity.CodeGenerator.GeneratedFolderPath", "Entitas.CodeGenerator.GeneratedFolderPath");
                 file.fileContent = file.fileContent.Replace("Entitas.Unity.CodeGenerator.Pools", "Entitas.CodeGenerator.Pools");
                 file.fileContent = file.fileContent.Replace("Entitas.Unity.CodeGenerator.EnabledCodeGenerators", "Entitas.CodeGenerator.EnabledCodeGenerators");
-
-                properties[i] = file;
             }
 
             const string pattern = @".CreateSystem<(?<system>\w*)>\(\s*\)";
@@ -41,8 +39,6 @@ namespace Entitas.Migration {
                     pattern,
                     match => ".CreateSystem(new " + match.Groups["system"].Value + "())"
                 );
-
-                sources[i] = file;
             }
 
             return properties.Concat(sources).ToArray();

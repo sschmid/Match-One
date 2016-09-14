@@ -258,11 +258,13 @@ namespace Entitas {
             return entityIndex;
         }
 
-        /// Deactivates all entity indices.
-        public void DeactivateEntityIndices() {
+        /// Deactivates and removes all entity indices.
+        public void DeactivateAndRemoveEntityIndices() {
             foreach (var entityIndex in _entityIndices.Values) {
                 entityIndex.Deactivate();
             }
+
+            _entityIndices.Clear();
         }
 
         /// Resets the creationIndex back to 0.
@@ -304,17 +306,20 @@ namespace Entitas {
 
         void updateGroupsComponentAddedOrRemoved(Entity entity, int index, IComponent component) {
             var groups = _groupsForIndex[index];
-            if (groups != null) {
-                var events = EntitasCache.PopGroupChangedList();
-                for (int i = 0; i < groups.Count; i++) {
-                    events.Add(groups[i].handleEntity(entity));
-                }
-                for (int i = 0; i < events.Count; i++) {
-                    var groupChangedEvent = events[i];
-                    if (groupChangedEvent != null) {
-                        groupChangedEvent(groups[i], entity, index, component);
+            if(groups != null) {
+                var events = EntitasCache.GetGroupChangedList();
+
+                    for(int i = 0; i < groups.Count; i++) {
+                        events.Add(groups[i].handleEntity(entity));
                     }
-                }
+
+                    for(int i = 0; i < events.Count; i++) {
+                        var groupChangedEvent = events[i];
+                        if(groupChangedEvent != null) {
+                            groupChangedEvent(groups[i], entity, index, component);
+                        }
+                    }
+
                 EntitasCache.PushGroupChangedList(events);
             }
         }
