@@ -28,6 +28,7 @@ public class GameController : MonoBehaviour {
         return new Feature("Systems")
 
             // Input
+            .Add(pool.CreateSystem(new InputSystem()))
             .Add(pool.CreateSystem(new ProcessInputSystem()))
 
             // Update
