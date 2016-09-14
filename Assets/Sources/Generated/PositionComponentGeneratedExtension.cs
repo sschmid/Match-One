@@ -6,40 +6,43 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using Entitas;
+
 namespace Entitas {
     public partial class Entity {
-        public PositionComponent position { get { return (PositionComponent)GetComponent(ComponentIds.Position); } }
+        public PositionComponent position { get { return (PositionComponent)GetComponent(CoreComponentIds.Position); } }
 
-        public bool hasPosition { get { return HasComponent(ComponentIds.Position); } }
+        public bool hasPosition { get { return HasComponent(CoreComponentIds.Position); } }
 
         public Entity AddPosition(int newX, int newY) {
-            var component = CreateComponent<PositionComponent>(ComponentIds.Position);
+            var component = CreateComponent<PositionComponent>(CoreComponentIds.Position);
             component.x = newX;
             component.y = newY;
-            return AddComponent(ComponentIds.Position, component);
+            return AddComponent(CoreComponentIds.Position, component);
         }
 
         public Entity ReplacePosition(int newX, int newY) {
-            var component = CreateComponent<PositionComponent>(ComponentIds.Position);
+            var component = CreateComponent<PositionComponent>(CoreComponentIds.Position);
             component.x = newX;
             component.y = newY;
-            ReplaceComponent(ComponentIds.Position, component);
+            ReplaceComponent(CoreComponentIds.Position, component);
             return this;
         }
 
         public Entity RemovePosition() {
-            return RemoveComponent(ComponentIds.Position);
+            return RemoveComponent(CoreComponentIds.Position);
         }
     }
+}
 
-    public partial class Matcher {
+    public partial class CoreMatcher {
         static IMatcher _matcherPosition;
 
         public static IMatcher Position {
             get {
                 if (_matcherPosition == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.Position);
-                    matcher.componentNames = ComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.Position);
+                    matcher.componentNames = CoreComponentIds.componentNames;
                     _matcherPosition = matcher;
                 }
 
@@ -47,4 +50,3 @@ namespace Entitas {
             }
         }
     }
-}

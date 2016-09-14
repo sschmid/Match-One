@@ -1,15 +1,21 @@
-﻿using UnityEngine;
-using Entitas;
+﻿using Entitas;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ScoreLabelController : MonoBehaviour {
+
     Text _label;
 
-    void Start() {
-        _label = GetComponent<Text>();
+    void Awake() {
+		_label = GetComponent<Text>();
+    }
 
-        var pool = Pools.sharedInstance.pool;
-        pool.GetGroup(Matcher.Score).OnEntityAdded += (group, entity, index, component) => updateScore(entity.score.value);
+    void Start() {
+        var pool = Pools.sharedInstance.score;
+
+        pool.GetGroup(ScoreMatcher.Score).OnEntityAdded += (group, entity, index, component) =>
+            updateScore(entity.score.value);
+
         updateScore(pool.score.value);
     }
 

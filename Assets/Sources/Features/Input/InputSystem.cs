@@ -1,12 +1,14 @@
 ﻿using Entitas;
 using UnityEngine;
 
-public class InputSystem : ISetPool, IExecuteSystem {
+public sealed class InputSystem : ISetPool, IExecuteSystem, ICleanupSystem {
 
     Pool _pool;
+    Group _inputs;
 
     public void SetPool(Pool pool) {
         _pool = pool;
+        _inputs = pool.GetGroup(InputMatcher.Input);
     }
 
     public void Execute() {
@@ -22,9 +24,16 @@ public class InputSystem : ISetPool, IExecuteSystem {
             var hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, 100);
             if(hit.collider != null) {
                 var pos = hit.collider.transform.position;
-                Pools.sharedInstance.pool.CreateEntity()
+
+                _pool.CreateEntity()
                      .AddInput((int)pos.x, (int)pos.y);
             }
+        }
+    }
+
+    public void Cleanup() {
+        foreach(var e in _inputs.GetEntities()) {
+            _pool.DestroyEntity(e);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Entitas;
 
-public class InteractiveComponent : IComponent {
+[Core]
+public sealed class InteractiveComponent : IComponent {
 }
-

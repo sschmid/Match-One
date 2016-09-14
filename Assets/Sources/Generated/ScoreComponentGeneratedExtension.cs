@@ -6,32 +6,34 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using Entitas;
+
 namespace Entitas {
     public partial class Entity {
-        public ScoreComponent score { get { return (ScoreComponent)GetComponent(ComponentIds.Score); } }
+        public ScoreComponent score { get { return (ScoreComponent)GetComponent(ScoreComponentIds.Score); } }
 
-        public bool hasScore { get { return HasComponent(ComponentIds.Score); } }
+        public bool hasScore { get { return HasComponent(ScoreComponentIds.Score); } }
 
         public Entity AddScore(int newValue) {
-            var component = CreateComponent<ScoreComponent>(ComponentIds.Score);
+            var component = CreateComponent<ScoreComponent>(ScoreComponentIds.Score);
             component.value = newValue;
-            return AddComponent(ComponentIds.Score, component);
+            return AddComponent(ScoreComponentIds.Score, component);
         }
 
         public Entity ReplaceScore(int newValue) {
-            var component = CreateComponent<ScoreComponent>(ComponentIds.Score);
+            var component = CreateComponent<ScoreComponent>(ScoreComponentIds.Score);
             component.value = newValue;
-            ReplaceComponent(ComponentIds.Score, component);
+            ReplaceComponent(ScoreComponentIds.Score, component);
             return this;
         }
 
         public Entity RemoveScore() {
-            return RemoveComponent(ComponentIds.Score);
+            return RemoveComponent(ScoreComponentIds.Score);
         }
     }
 
     public partial class Pool {
-        public Entity scoreEntity { get { return GetGroup(Matcher.Score).GetSingleEntity(); } }
+        public Entity scoreEntity { get { return GetGroup(ScoreMatcher.Score).GetSingleEntity(); } }
 
         public ScoreComponent score { get { return scoreEntity.score; } }
 
@@ -62,15 +64,16 @@ namespace Entitas {
             DestroyEntity(scoreEntity);
         }
     }
+}
 
-    public partial class Matcher {
+    public partial class ScoreMatcher {
         static IMatcher _matcherScore;
 
         public static IMatcher Score {
             get {
                 if (_matcherScore == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.Score);
-                    matcher.componentNames = ComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(ScoreComponentIds.Score);
+                    matcher.componentNames = ScoreComponentIds.componentNames;
                     _matcherScore = matcher;
                 }
 
@@ -78,4 +81,3 @@ namespace Entitas {
             }
         }
     }
-}

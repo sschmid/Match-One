@@ -6,38 +6,41 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using Entitas;
+
 namespace Entitas {
     public partial class Entity {
-        public ViewComponent view { get { return (ViewComponent)GetComponent(ComponentIds.View); } }
+        public ViewComponent view { get { return (ViewComponent)GetComponent(CoreComponentIds.View); } }
 
-        public bool hasView { get { return HasComponent(ComponentIds.View); } }
+        public bool hasView { get { return HasComponent(CoreComponentIds.View); } }
 
         public Entity AddView(UnityEngine.GameObject newGameObject) {
-            var component = CreateComponent<ViewComponent>(ComponentIds.View);
+            var component = CreateComponent<ViewComponent>(CoreComponentIds.View);
             component.gameObject = newGameObject;
-            return AddComponent(ComponentIds.View, component);
+            return AddComponent(CoreComponentIds.View, component);
         }
 
         public Entity ReplaceView(UnityEngine.GameObject newGameObject) {
-            var component = CreateComponent<ViewComponent>(ComponentIds.View);
+            var component = CreateComponent<ViewComponent>(CoreComponentIds.View);
             component.gameObject = newGameObject;
-            ReplaceComponent(ComponentIds.View, component);
+            ReplaceComponent(CoreComponentIds.View, component);
             return this;
         }
 
         public Entity RemoveView() {
-            return RemoveComponent(ComponentIds.View);
+            return RemoveComponent(CoreComponentIds.View);
         }
     }
+}
 
-    public partial class Matcher {
+    public partial class CoreMatcher {
         static IMatcher _matcherView;
 
         public static IMatcher View {
             get {
                 if (_matcherView == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.View);
-                    matcher.componentNames = ComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.View);
+                    matcher.componentNames = CoreComponentIds.componentNames;
                     _matcherView = matcher;
                 }
 
@@ -45,4 +48,3 @@ namespace Entitas {
             }
         }
     }
-}

@@ -11,7 +11,9 @@ public class GameController : MonoBehaviour {
         var pools = Pools.sharedInstance;
         pools.SetAllPools();
 
-        _systems = createSystems(pools.pool);
+        pools.AddEntityIndices();
+
+        _systems = createSystems(pools);
         _systems.Initialize();
     }
 
@@ -24,26 +26,25 @@ public class GameController : MonoBehaviour {
         _systems.Deinitialize();
     }
 
-    Systems createSystems(Pool pool) {
+    Systems createSystems(Pools pools) {
         return new Feature("Systems")
 
             // Input
-            .Add(pool.CreateSystem(new InputSystem()))
-            .Add(pool.CreateSystem(new ProcessInputSystem()))
+            .Add(pools.input.CreateSystem(new InputSystem()))
+            .Add(pools.input.CreateSystem(new ProcessInputSystem()))
 
             // Update
-            .Add(pool.CreateSystem(new CreateGameBoardCacheSystem()))
-            .Add(pool.CreateSystem(new GameBoardSystem()))
-            .Add(pool.CreateSystem(new FallSystem()))
-            .Add(pool.CreateSystem(new FillSystem()))
-            .Add(pool.CreateSystem(new ScoreSystem()))
+            .Add(pools.core.CreateSystem(new GameBoardSystem()))
+            .Add(pools.core.CreateSystem(new FallSystem()))
+            .Add(pools.core.CreateSystem(new FillSystem()))
+            .Add(pools.core.CreateSystem(new ScoreSystem()))
 
             // Render
-            .Add(pool.CreateSystem(new RemoveViewSystem()))
-            .Add(pool.CreateSystem(new AddViewSystem()))
-            .Add(pool.CreateSystem(new RenderPositionSystem()))
+            .Add(pools.core.CreateSystem(new RemoveViewSystem()))
+            .Add(pools.core.CreateSystem(new AddViewSystem()))
+            .Add(pools.core.CreateSystem(new RenderPositionSystem()))
 
             // Destroy
-            .Add(pool.CreateSystem(new DestroySystem()));
+            .Add(pools.core.CreateSystem(new DestroySystem()));
     }
 }

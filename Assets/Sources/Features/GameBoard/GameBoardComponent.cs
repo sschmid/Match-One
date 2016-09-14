@@ -1,9 +1,9 @@
 ﻿using Entitas;
 using Entitas.CodeGenerator;
 
-[SingleEntity]
-public class GameBoardComponent : IComponent {
+[Core, SingleEntity]
+public sealed class GameBoardComponent : IComponent {
+
     public int columns;
     public int rows;
 }
-

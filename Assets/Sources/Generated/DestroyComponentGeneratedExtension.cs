@@ -6,18 +6,20 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using Entitas;
+
 namespace Entitas {
     public partial class Entity {
         static readonly DestroyComponent destroyComponent = new DestroyComponent();
 
         public bool isDestroy {
-            get { return HasComponent(ComponentIds.Destroy); }
+            get { return HasComponent(CoreComponentIds.Destroy); }
             set {
                 if (value != isDestroy) {
                     if (value) {
-                        AddComponent(ComponentIds.Destroy, destroyComponent);
+                        AddComponent(CoreComponentIds.Destroy, destroyComponent);
                     } else {
-                        RemoveComponent(ComponentIds.Destroy);
+                        RemoveComponent(CoreComponentIds.Destroy);
                     }
                 }
             }
@@ -28,15 +30,16 @@ namespace Entitas {
             return this;
         }
     }
+}
 
-    public partial class Matcher {
+    public partial class CoreMatcher {
         static IMatcher _matcherDestroy;
 
         public static IMatcher Destroy {
             get {
                 if (_matcherDestroy == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.Destroy);
-                    matcher.componentNames = ComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.Destroy);
+                    matcher.componentNames = CoreComponentIds.componentNames;
                     _matcherDestroy = matcher;
                 }
 
@@ -44,4 +47,3 @@ namespace Entitas {
             }
         }
     }
-}

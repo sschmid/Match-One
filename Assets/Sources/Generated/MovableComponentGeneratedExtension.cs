@@ -6,18 +6,20 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using Entitas;
+
 namespace Entitas {
     public partial class Entity {
         static readonly MovableComponent movableComponent = new MovableComponent();
 
         public bool isMovable {
-            get { return HasComponent(ComponentIds.Movable); }
+            get { return HasComponent(CoreComponentIds.Movable); }
             set {
                 if (value != isMovable) {
                     if (value) {
-                        AddComponent(ComponentIds.Movable, movableComponent);
+                        AddComponent(CoreComponentIds.Movable, movableComponent);
                     } else {
-                        RemoveComponent(ComponentIds.Movable);
+                        RemoveComponent(CoreComponentIds.Movable);
                     }
                 }
             }
@@ -28,15 +30,16 @@ namespace Entitas {
             return this;
         }
     }
+}
 
-    public partial class Matcher {
+    public partial class CoreMatcher {
         static IMatcher _matcherMovable;
 
         public static IMatcher Movable {
             get {
                 if (_matcherMovable == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.Movable);
-                    matcher.componentNames = ComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.Movable);
+                    matcher.componentNames = CoreComponentIds.componentNames;
                     _matcherMovable = matcher;
                 }
 
@@ -44,4 +47,3 @@ namespace Entitas {
             }
         }
     }
-}

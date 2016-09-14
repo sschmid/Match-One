@@ -6,18 +6,20 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using Entitas;
+
 namespace Entitas {
     public partial class Entity {
         static readonly BurstModeComponent burstModeComponent = new BurstModeComponent();
 
         public bool isBurstMode {
-            get { return HasComponent(ComponentIds.BurstMode); }
+            get { return HasComponent(InputComponentIds.BurstMode); }
             set {
                 if (value != isBurstMode) {
                     if (value) {
-                        AddComponent(ComponentIds.BurstMode, burstModeComponent);
+                        AddComponent(InputComponentIds.BurstMode, burstModeComponent);
                     } else {
-                        RemoveComponent(ComponentIds.BurstMode);
+                        RemoveComponent(InputComponentIds.BurstMode);
                     }
                 }
             }
@@ -30,7 +32,7 @@ namespace Entitas {
     }
 
     public partial class Pool {
-        public Entity burstModeEntity { get { return GetGroup(Matcher.BurstMode).GetSingleEntity(); } }
+        public Entity burstModeEntity { get { return GetGroup(InputMatcher.BurstMode).GetSingleEntity(); } }
 
         public bool isBurstMode {
             get { return burstModeEntity != null; }
@@ -46,15 +48,16 @@ namespace Entitas {
             }
         }
     }
+}
 
-    public partial class Matcher {
+    public partial class InputMatcher {
         static IMatcher _matcherBurstMode;
 
         public static IMatcher BurstMode {
             get {
                 if (_matcherBurstMode == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.BurstMode);
-                    matcher.componentNames = ComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(InputComponentIds.BurstMode);
+                    matcher.componentNames = InputComponentIds.componentNames;
                     _matcherBurstMode = matcher;
                 }
 
@@ -62,4 +65,3 @@ namespace Entitas {
             }
         }
     }
-}

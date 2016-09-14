@@ -1,7 +1,8 @@
 ﻿using Entitas;
 using UnityEngine;
 
-public class ViewComponent : IComponent {
+[Core]
+public sealed class ViewComponent : IComponent {
+
     public GameObject gameObject;
 }
-

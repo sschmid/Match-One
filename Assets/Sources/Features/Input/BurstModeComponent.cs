@@ -1,6 +1,6 @@
 ﻿using Entitas;
 using Entitas.CodeGenerator;
 
-[SingleEntity]
-public class BurstModeComponent : IComponent {
+[Input, SingleEntity]
+public sealed class BurstModeComponent : IComponent {
 }

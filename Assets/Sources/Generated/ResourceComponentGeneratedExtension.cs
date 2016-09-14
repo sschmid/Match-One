@@ -6,38 +6,41 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using Entitas;
+
 namespace Entitas {
     public partial class Entity {
-        public ResourceComponent resource { get { return (ResourceComponent)GetComponent(ComponentIds.Resource); } }
+        public ResourceComponent resource { get { return (ResourceComponent)GetComponent(CoreComponentIds.Resource); } }
 
-        public bool hasResource { get { return HasComponent(ComponentIds.Resource); } }
+        public bool hasResource { get { return HasComponent(CoreComponentIds.Resource); } }
 
         public Entity AddResource(string newName) {
-            var component = CreateComponent<ResourceComponent>(ComponentIds.Resource);
+            var component = CreateComponent<ResourceComponent>(CoreComponentIds.Resource);
             component.name = newName;
-            return AddComponent(ComponentIds.Resource, component);
+            return AddComponent(CoreComponentIds.Resource, component);
         }
 
         public Entity ReplaceResource(string newName) {
-            var component = CreateComponent<ResourceComponent>(ComponentIds.Resource);
+            var component = CreateComponent<ResourceComponent>(CoreComponentIds.Resource);
             component.name = newName;
-            ReplaceComponent(ComponentIds.Resource, component);
+            ReplaceComponent(CoreComponentIds.Resource, component);
             return this;
         }
 
         public Entity RemoveResource() {
-            return RemoveComponent(ComponentIds.Resource);
+            return RemoveComponent(CoreComponentIds.Resource);
         }
     }
+}
 
-    public partial class Matcher {
+    public partial class CoreMatcher {
         static IMatcher _matcherResource;
 
         public static IMatcher Resource {
             get {
                 if (_matcherResource == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.Resource);
-                    matcher.componentNames = ComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.Resource);
+                    matcher.componentNames = CoreComponentIds.componentNames;
                     _matcherResource = matcher;
                 }
 
@@ -45,4 +48,3 @@ namespace Entitas {
             }
         }
     }
-}

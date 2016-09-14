@@ -6,34 +6,36 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using Entitas;
+
 namespace Entitas {
     public partial class Entity {
-        public GameBoardComponent gameBoard { get { return (GameBoardComponent)GetComponent(ComponentIds.GameBoard); } }
+        public GameBoardComponent gameBoard { get { return (GameBoardComponent)GetComponent(CoreComponentIds.GameBoard); } }
 
-        public bool hasGameBoard { get { return HasComponent(ComponentIds.GameBoard); } }
+        public bool hasGameBoard { get { return HasComponent(CoreComponentIds.GameBoard); } }
 
         public Entity AddGameBoard(int newColumns, int newRows) {
-            var component = CreateComponent<GameBoardComponent>(ComponentIds.GameBoard);
+            var component = CreateComponent<GameBoardComponent>(CoreComponentIds.GameBoard);
             component.columns = newColumns;
             component.rows = newRows;
-            return AddComponent(ComponentIds.GameBoard, component);
+            return AddComponent(CoreComponentIds.GameBoard, component);
         }
 
         public Entity ReplaceGameBoard(int newColumns, int newRows) {
-            var component = CreateComponent<GameBoardComponent>(ComponentIds.GameBoard);
+            var component = CreateComponent<GameBoardComponent>(CoreComponentIds.GameBoard);
             component.columns = newColumns;
             component.rows = newRows;
-            ReplaceComponent(ComponentIds.GameBoard, component);
+            ReplaceComponent(CoreComponentIds.GameBoard, component);
             return this;
         }
 
         public Entity RemoveGameBoard() {
-            return RemoveComponent(ComponentIds.GameBoard);
+            return RemoveComponent(CoreComponentIds.GameBoard);
         }
     }
 
     public partial class Pool {
-        public Entity gameBoardEntity { get { return GetGroup(Matcher.GameBoard).GetSingleEntity(); } }
+        public Entity gameBoardEntity { get { return GetGroup(CoreMatcher.GameBoard).GetSingleEntity(); } }
 
         public GameBoardComponent gameBoard { get { return gameBoardEntity.gameBoard; } }
 
@@ -64,15 +66,16 @@ namespace Entitas {
             DestroyEntity(gameBoardEntity);
         }
     }
+}
 
-    public partial class Matcher {
+    public partial class CoreMatcher {
         static IMatcher _matcherGameBoard;
 
         public static IMatcher GameBoard {
             get {
                 if (_matcherGameBoard == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.GameBoard);
-                    matcher.componentNames = ComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.GameBoard);
+                    matcher.componentNames = CoreComponentIds.componentNames;
                     _matcherGameBoard = matcher;
                 }
 
@@ -80,4 +83,3 @@ namespace Entitas {
             }
         }
     }
-}

@@ -1,25 +1,21 @@
 using System.Collections.Generic;
 using Entitas;
-using UnityEngine;
 
-public class ScoreSystem : IInitializeSystem, IReactiveSystem, ISetPool {
-    public TriggerOnEvent trigger { get { return Matcher.GameBoardElement.OnEntityRemoved(); } }
+public sealed class ScoreSystem : ISetPools, IInitializeSystem, IReactiveSystem {
 
-    Pool _pool;
+    public TriggerOnEvent trigger { get { return CoreMatcher.GameBoardElement.OnEntityRemoved(); } }
 
-    public void SetPool(Pool pool) {
-        _pool = pool;
+    Pools _pools;
+
+    public void SetPools(Pools pools) {
+        _pools = pools;
     }
 
     public void Initialize() {
-        _pool.SetScore(0);
+        _pools.score.SetScore(0);
     }
 
     public void Execute(List<Entity> entities) {
-
-        Debug.Log("Score");
-
-        _pool.ReplaceScore(_pool.score.value + entities.Count);
+        _pools.score.ReplaceScore(_pools.score.score.value + entities.Count);
     }
 }
-

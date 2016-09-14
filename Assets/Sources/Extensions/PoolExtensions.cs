@@ -27,5 +27,23 @@ public static class PoolExtensions {
             .AddPosition(x, y)
             .AddResource(Res.Blocker);
     }
-}
 
+    public static void AddEntityIndices(this Pools pools) {
+        var positionIndex = new PrimaryEntityIndex<string>(
+            pools.core.GetGroup(CoreMatcher.Position),
+            (e, c) => {
+                var positionComponent = c as PositionComponent;
+                return positionComponent != null
+                    ? positionComponent.x + "," + positionComponent.y
+                    : e.position.x + "," + e.position.y;
+            }
+        );
+
+        pools.core.AddEntityIndex(CoreComponentIds.Position.ToString(), positionIndex);
+    }
+
+    public static Entity GetEntityWithPosition(this Pool pool, int x, int y) {
+        var index = (PrimaryEntityIndex<string>)pool.GetEntityIndex(CoreComponentIds.Position.ToString());
+        return index.TryGetEntity(x + "," + y);
+    }
+}

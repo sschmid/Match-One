@@ -6,18 +6,20 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using Entitas;
+
 namespace Entitas {
     public partial class Entity {
         static readonly InteractiveComponent interactiveComponent = new InteractiveComponent();
 
         public bool isInteractive {
-            get { return HasComponent(ComponentIds.Interactive); }
+            get { return HasComponent(CoreComponentIds.Interactive); }
             set {
                 if (value != isInteractive) {
                     if (value) {
-                        AddComponent(ComponentIds.Interactive, interactiveComponent);
+                        AddComponent(CoreComponentIds.Interactive, interactiveComponent);
                     } else {
-                        RemoveComponent(ComponentIds.Interactive);
+                        RemoveComponent(CoreComponentIds.Interactive);
                     }
                 }
             }
@@ -28,15 +30,16 @@ namespace Entitas {
             return this;
         }
     }
+}
 
-    public partial class Matcher {
+    public partial class CoreMatcher {
         static IMatcher _matcherInteractive;
 
         public static IMatcher Interactive {
             get {
                 if (_matcherInteractive == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.Interactive);
-                    matcher.componentNames = ComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.Interactive);
+                    matcher.componentNames = CoreComponentIds.componentNames;
                     _matcherInteractive = matcher;
                 }
 
@@ -44,4 +47,3 @@ namespace Entitas {
             }
         }
     }
-}

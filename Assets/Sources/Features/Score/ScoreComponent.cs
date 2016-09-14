@@ -1,8 +1,8 @@
 ﻿using Entitas;
 using Entitas.CodeGenerator;
 
-[SingleEntity]
-public class ScoreComponent : IComponent {
+[Score, SingleEntity]
+public sealed class ScoreComponent : IComponent {
+
     public int value;
 }
-
