@@ -7,7 +7,7 @@ public class ScoreLabelController : MonoBehaviour {
     Text _label;
 
     void Awake() {
-		_label = GetComponent<Text>();
+        _label = GetComponent<Text>();
     }
 
     void Start() {

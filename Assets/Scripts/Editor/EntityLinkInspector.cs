@@ -14,8 +14,8 @@ public class EntityLinkInspector : Editor {
         var link = (EntityLink)target;
         EditorGUILayout.LabelField(link.entity.ToString());
 
-        if (GUILayout.Button("Show entity")) {
-            Selection.activeGameObject = Object.FindObjectsOfType<EntityBehaviour>()
+        if(GUILayout.Button("Show entity")) {
+            Selection.activeGameObject = FindObjectsOfType<EntityBehaviour>()
                 .Single(e => e.entity == link.entity).gameObject;
         }
 

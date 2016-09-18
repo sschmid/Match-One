@@ -22,7 +22,7 @@ namespace Entitas {
             return CreatePool("Score", ScoreComponentIds.TotalComponents, ScoreComponentIds.componentNames, ScoreComponentIds.componentTypes);
         }
 
-        public Pool[] allPools { get { return new[] { core, input, score }; } }
+        public Pool[] allPools { get { return new [] { core, input, score }; } }
 
         public Pool core;
         public Pool input;
