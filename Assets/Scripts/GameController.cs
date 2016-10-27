@@ -47,7 +47,7 @@ public class GameController : MonoBehaviour {
             // Render
             .Add(pools.core.CreateSystem(new RemoveViewSystem()))
             .Add(pools.core.CreateSystem(new AddViewSystem()))
-            .Add(pools.core.CreateSystem(new RenderPositionSystem()))
+            .Add(pools.core.CreateSystem(new AnimatePositionSystem()))
 
             // Destroy
             .Add(pools.core.CreateSystem(new DestroySystem()));

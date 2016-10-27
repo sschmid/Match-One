@@ -3,7 +3,7 @@ using DG.Tweening;
 using Entitas;
 using UnityEngine;
 
-public sealed class RenderPositionSystem : IReactiveSystem {
+public sealed class AnimatePositionSystem : IReactiveSystem {
 
     public TriggerOnEvent trigger { get { return Matcher.AllOf(CoreMatcher.Position, CoreMatcher.View).OnEntityAdded(); } }
 
