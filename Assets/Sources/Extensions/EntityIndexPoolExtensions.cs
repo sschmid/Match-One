@@ -4,15 +4,16 @@ using Entitas;
 public static class EntityIndexPoolExtensions {
 
     public const string PositionKey = "Position";
+    const int shiftX = 8;
 
     public static void AddEntityIndices(this Pools pools) {
-        var positionIndex = new EntityIndex<string>(
+        var positionIndex = new EntityIndex<int>(
             pools.core.GetGroup(CoreMatcher.Position),
             (e, c) => {
                 var positionComponent = c as PositionComponent;
                 return positionComponent != null
-                    ? positionComponent.x + "," + positionComponent.y
-                    : e.position.x + "," + e.position.y;
+                    ? (positionComponent.x << shiftX) + positionComponent.y
+                    : (e.position.x << shiftX) + e.position.y;
             }
         );
 
@@ -20,7 +21,7 @@ public static class EntityIndexPoolExtensions {
     }
 
     public static HashSet<Entity> GetEntitiesWithPosition(this Pool pool, int x, int y) {
-        var index = (EntityIndex<string>)pool.GetEntityIndex(PositionKey);
-        return index.GetEntities(x + "," + y);
+        var index = (EntityIndex<int>)pool.GetEntityIndex(PositionKey);
+        return index.GetEntities((x << shiftX) + y);
     }
 }
