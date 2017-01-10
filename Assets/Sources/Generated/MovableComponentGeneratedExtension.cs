@@ -15,13 +15,13 @@ namespace Entitas {
         static readonly MovableComponent movableComponent = new MovableComponent();
 
         public bool isMovable {
-            get { return HasComponent(CoreComponentIds.Movable); }
+            get { return HasComponent(GameComponentIds.Movable); }
             set {
                 if(value != isMovable) {
                     if(value) {
-                        AddComponent(CoreComponentIds.Movable, movableComponent);
+                        AddComponent(GameComponentIds.Movable, movableComponent);
                     } else {
-                        RemoveComponent(CoreComponentIds.Movable);
+                        RemoveComponent(GameComponentIds.Movable);
                     }
                 }
             }
@@ -34,15 +34,15 @@ namespace Entitas {
     }
 }
 
-    public partial class CoreMatcher {
+    public partial class GameMatcher {
 
         static IMatcher _matcherMovable;
 
         public static IMatcher Movable {
             get {
                 if(_matcherMovable == null) {
-                    var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.Movable);
-                    matcher.componentNames = CoreComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(GameComponentIds.Movable);
+                    matcher.componentNames = GameComponentIds.componentNames;
                     _matcherMovable = matcher;
                 }
 

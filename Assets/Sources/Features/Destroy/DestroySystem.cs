@@ -5,12 +5,12 @@ public sealed class DestroySystem : ReactiveSystem {
 
     readonly Context _context;
 
-    public DestroySystem(Contexts contexts) : base(contexts.core) {
-        _context = contexts.core;
+    public DestroySystem(Contexts contexts) : base(contexts.game) {
+        _context = contexts.game;
     }
 
     protected override Collector GetTrigger(Context context) {
-        return context.CreateCollector(CoreMatcher.Destroy);
+        return context.CreateCollector(GameMatcher.Destroy);
     }
 
     protected override bool Filter(Entity entity) {

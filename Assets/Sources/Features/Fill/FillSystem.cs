@@ -5,12 +5,12 @@ public sealed class FillSystem : ReactiveSystem {
 
     readonly Context _context;
 
-    public FillSystem(Contexts contexts) : base(contexts.core) {
-        _context = contexts.core;
+    public FillSystem(Contexts contexts) : base(contexts.game) {
+        _context = contexts.game;
     }
 
     protected override Collector GetTrigger(Context context) {
-        return context.CreateCollector(CoreMatcher.GameBoardElement, GroupEvent.Removed);
+        return context.CreateCollector(GameMatcher.GameBoardElement, GroupEvent.Removed);
     }
 
     protected override bool Filter(Entity entity) {

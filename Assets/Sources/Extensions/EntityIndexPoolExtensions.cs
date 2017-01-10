@@ -8,7 +8,7 @@ public static class EntityIndexPoolExtensions {
 
     public static void AddEntityIndices(this Contexts pools) {
         var positionIndex = new EntityIndex<int>(
-            pools.core.GetGroup(CoreMatcher.Position),
+            pools.game.GetGroup(GameMatcher.Position),
             (e, c) => {
                 var positionComponent = c as PositionComponent;
                 return positionComponent != null
@@ -17,7 +17,7 @@ public static class EntityIndexPoolExtensions {
             }
         );
 
-        pools.core.AddEntityIndex(PositionKey, positionIndex);
+        pools.game.AddEntityIndex(PositionKey, positionIndex);
     }
 
     public static HashSet<Entity> GetEntitiesWithPosition(this Context pool, int x, int y) {

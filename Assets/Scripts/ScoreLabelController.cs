@@ -11,9 +11,9 @@ public class ScoreLabelController : MonoBehaviour {
     }
 
     void Start() {
-        var pool = Contexts.sharedInstance.score;
+        var pool = Contexts.sharedInstance.gameSession;
 
-        pool.GetGroup(ScoreMatcher.Score).OnEntityAdded +=
+        pool.GetGroup(GameSessionMatcher.Score).OnEntityAdded +=
             (group, entity, index, component) => updateScore(entity.score.value);
 
         updateScore(pool.score.value);

@@ -15,13 +15,13 @@ namespace Entitas {
         static readonly InteractiveComponent interactiveComponent = new InteractiveComponent();
 
         public bool isInteractive {
-            get { return HasComponent(CoreComponentIds.Interactive); }
+            get { return HasComponent(GameComponentIds.Interactive); }
             set {
                 if(value != isInteractive) {
                     if(value) {
-                        AddComponent(CoreComponentIds.Interactive, interactiveComponent);
+                        AddComponent(GameComponentIds.Interactive, interactiveComponent);
                     } else {
-                        RemoveComponent(CoreComponentIds.Interactive);
+                        RemoveComponent(GameComponentIds.Interactive);
                     }
                 }
             }
@@ -34,15 +34,15 @@ namespace Entitas {
     }
 }
 
-    public partial class CoreMatcher {
+    public partial class GameMatcher {
 
         static IMatcher _matcherInteractive;
 
         public static IMatcher Interactive {
             get {
                 if(_matcherInteractive == null) {
-                    var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.Interactive);
-                    matcher.componentNames = CoreComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(GameComponentIds.Interactive);
+                    matcher.componentNames = GameComponentIds.componentNames;
                     _matcherInteractive = matcher;
                 }
 

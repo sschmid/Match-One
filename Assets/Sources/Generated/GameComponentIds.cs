@@ -6,7 +6,7 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public static class CoreComponentIds {
+public static class GameComponentIds {
 
     public const int Asset = 0;
     public const int Destroy = 1;

@@ -8,9 +8,9 @@
 //------------------------------------------------------------------------------
 using Entitas.CodeGenerator;
 
-public class ScoreAttribute : ContextAttribute {
+public class GameSessionAttribute : ContextAttribute {
 
-    public ScoreAttribute() : base("Score") {
+    public GameSessionAttribute() : base("GameSession") {
     }
 }
 

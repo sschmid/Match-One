@@ -12,30 +12,30 @@ namespace Entitas {
 
     public partial class Entity {
 
-        public ScoreComponent score { get { return (ScoreComponent)GetComponent(ScoreComponentIds.Score); } }
-        public bool hasScore { get { return HasComponent(ScoreComponentIds.Score); } }
+        public ScoreComponent score { get { return (ScoreComponent)GetComponent(GameSessionComponentIds.Score); } }
+        public bool hasScore { get { return HasComponent(GameSessionComponentIds.Score); } }
 
         public Entity AddScore(int newValue) {
-            var component = CreateComponent<ScoreComponent>(ScoreComponentIds.Score);
+            var component = CreateComponent<ScoreComponent>(GameSessionComponentIds.Score);
             component.value = newValue;
-            return AddComponent(ScoreComponentIds.Score, component);
+            return AddComponent(GameSessionComponentIds.Score, component);
         }
 
         public Entity ReplaceScore(int newValue) {
-            var component = CreateComponent<ScoreComponent>(ScoreComponentIds.Score);
+            var component = CreateComponent<ScoreComponent>(GameSessionComponentIds.Score);
             component.value = newValue;
-            ReplaceComponent(ScoreComponentIds.Score, component);
+            ReplaceComponent(GameSessionComponentIds.Score, component);
             return this;
         }
 
         public Entity RemoveScore() {
-            return RemoveComponent(ScoreComponentIds.Score);
+            return RemoveComponent(GameSessionComponentIds.Score);
         }
     }
 
     public partial class Context {
 
-        public Entity scoreEntity { get { return GetGroup(ScoreMatcher.Score).GetSingleEntity(); } }
+        public Entity scoreEntity { get { return GetGroup(GameSessionMatcher.Score).GetSingleEntity(); } }
         public ScoreComponent score { get { return scoreEntity.score; } }
         public bool hasScore { get { return scoreEntity != null; } }
 
@@ -66,15 +66,15 @@ namespace Entitas {
     }
 }
 
-    public partial class ScoreMatcher {
+    public partial class GameSessionMatcher {
 
         static IMatcher _matcherScore;
 
         public static IMatcher Score {
             get {
                 if(_matcherScore == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ScoreComponentIds.Score);
-                    matcher.componentNames = ScoreComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(GameSessionComponentIds.Score);
+                    matcher.componentNames = GameSessionComponentIds.componentNames;
                     _matcherScore = matcher;
                 }
 

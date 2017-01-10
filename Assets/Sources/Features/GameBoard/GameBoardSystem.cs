@@ -7,13 +7,13 @@ public sealed class GameBoardSystem : ReactiveSystem, IInitializeSystem {
     readonly Context _context;
     readonly Group _gameBoardElements;
 
-    public GameBoardSystem(Contexts contexts) : base(contexts.core) {
-        _context = contexts.core;
-        _gameBoardElements = _context.GetGroup(Matcher.AllOf(CoreMatcher.GameBoardElement, CoreMatcher.Position));
+    public GameBoardSystem(Contexts contexts) : base(contexts.game) {
+        _context = contexts.game;
+        _gameBoardElements = _context.GetGroup(Matcher.AllOf(GameMatcher.GameBoardElement, GameMatcher.Position));
     }
 
     protected override Collector GetTrigger(Context context) {
-        return context.CreateCollector(CoreMatcher.GameBoard);
+        return context.CreateCollector(GameMatcher.GameBoard);
     }
 
     protected override bool Filter(Entity entity) {

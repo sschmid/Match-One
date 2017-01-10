@@ -12,37 +12,37 @@ namespace Entitas {
 
     public partial class Entity {
 
-        public AssetComponent asset { get { return (AssetComponent)GetComponent(CoreComponentIds.Asset); } }
-        public bool hasAsset { get { return HasComponent(CoreComponentIds.Asset); } }
+        public AssetComponent asset { get { return (AssetComponent)GetComponent(GameComponentIds.Asset); } }
+        public bool hasAsset { get { return HasComponent(GameComponentIds.Asset); } }
 
         public Entity AddAsset(string newName) {
-            var component = CreateComponent<AssetComponent>(CoreComponentIds.Asset);
+            var component = CreateComponent<AssetComponent>(GameComponentIds.Asset);
             component.name = newName;
-            return AddComponent(CoreComponentIds.Asset, component);
+            return AddComponent(GameComponentIds.Asset, component);
         }
 
         public Entity ReplaceAsset(string newName) {
-            var component = CreateComponent<AssetComponent>(CoreComponentIds.Asset);
+            var component = CreateComponent<AssetComponent>(GameComponentIds.Asset);
             component.name = newName;
-            ReplaceComponent(CoreComponentIds.Asset, component);
+            ReplaceComponent(GameComponentIds.Asset, component);
             return this;
         }
 
         public Entity RemoveAsset() {
-            return RemoveComponent(CoreComponentIds.Asset);
+            return RemoveComponent(GameComponentIds.Asset);
         }
     }
 }
 
-    public partial class CoreMatcher {
+    public partial class GameMatcher {
 
         static IMatcher _matcherAsset;
 
         public static IMatcher Asset {
             get {
                 if(_matcherAsset == null) {
-                    var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.Asset);
-                    matcher.componentNames = CoreComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(GameComponentIds.Asset);
+                    matcher.componentNames = GameComponentIds.componentNames;
                     _matcherAsset = matcher;
                 }
 

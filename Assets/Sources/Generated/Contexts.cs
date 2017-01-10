@@ -10,28 +10,28 @@ namespace Entitas {
 
     public partial class Contexts {
 
-        public static Context CreateCoreContext() {
-            return CreateContext("Core", CoreComponentIds.TotalComponents, CoreComponentIds.componentNames, CoreComponentIds.componentTypes);
+        public static Context CreateGameContext() {
+            return CreateContext("Game", GameComponentIds.TotalComponents, GameComponentIds.componentNames, GameComponentIds.componentTypes);
+        }
+
+        public static Context CreateGameSessionContext() {
+            return CreateContext("GameSession", GameSessionComponentIds.TotalComponents, GameSessionComponentIds.componentNames, GameSessionComponentIds.componentTypes);
         }
 
         public static Context CreateInputContext() {
             return CreateContext("Input", InputComponentIds.TotalComponents, InputComponentIds.componentNames, InputComponentIds.componentTypes);
         }
 
-        public static Context CreateScoreContext() {
-            return CreateContext("Score", ScoreComponentIds.TotalComponents, ScoreComponentIds.componentNames, ScoreComponentIds.componentTypes);
-        }
+        public Context[] allContexts { get { return new [] { game, gameSession, input }; } }
 
-        public Context[] allContexts { get { return new [] { core, input, score }; } }
-
-        public Context core;
+        public Context game;
+        public Context gameSession;
         public Context input;
-        public Context score;
 
         public void SetAllContexts() {
-            core = CreateCoreContext();
+            game = CreateGameContext();
+            gameSession = CreateGameSessionContext();
             input = CreateInputContext();
-            score = CreateScoreContext();
         }
     }
 }

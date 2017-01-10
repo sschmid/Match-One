@@ -6,7 +6,7 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public static class ScoreComponentIds {
+public static class GameSessionComponentIds {
 
     public const int Score = 0;
 

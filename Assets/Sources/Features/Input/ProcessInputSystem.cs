@@ -22,7 +22,7 @@ public sealed class ProcessInputSystem : ReactiveSystem {
         var inputEntity = entities.SingleEntity();
         var input = inputEntity.input;
 
-        foreach(var e in _contexts.core.GetEntitiesWithPosition(input.x, input.y).Where(e => e.isInteractive)) {
+        foreach(var e in _contexts.game.GetEntitiesWithPosition(input.x, input.y).Where(e => e.isInteractive)) {
             e.isDestroy = true;
         }
     }

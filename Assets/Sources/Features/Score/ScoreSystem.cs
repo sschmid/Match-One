@@ -5,12 +5,12 @@ public sealed class ScoreSystem : ReactiveSystem, IInitializeSystem {
 
     readonly Contexts _contexts;
 
-    public ScoreSystem(Contexts contexts) : base(contexts.core) {
+    public ScoreSystem(Contexts contexts) : base(contexts.game) {
         _contexts = contexts;
     }
 
     protected override Collector GetTrigger(Context context) {
-        return context.CreateCollector(CoreMatcher.GameBoardElement, GroupEvent.Removed);
+        return context.CreateCollector(GameMatcher.GameBoardElement, GroupEvent.Removed);
     }
 
     protected override bool Filter(Entity entity) {
@@ -18,10 +18,10 @@ public sealed class ScoreSystem : ReactiveSystem, IInitializeSystem {
     }
 
     public void Initialize() {
-        _contexts.score.SetScore(0);
+        _contexts.gameSession.SetScore(0);
     }
 
     protected override void Execute(List<Entity> entities) {
-        _contexts.score.ReplaceScore(_contexts.score.score.value + entities.Count);
+        _contexts.gameSession.ReplaceScore(_contexts.gameSession.score.value + entities.Count);
     }
 }

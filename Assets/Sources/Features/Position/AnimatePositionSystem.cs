@@ -5,11 +5,11 @@ using UnityEngine;
 
 public sealed class AnimatePositionSystem : ReactiveSystem {
 
-    public AnimatePositionSystem(Contexts contexts) : base(contexts.core) {
+    public AnimatePositionSystem(Contexts contexts) : base(contexts.game) {
     }
 
     protected override Collector GetTrigger(Context context) {
-        return context.CreateCollector(CoreMatcher.Position);
+        return context.CreateCollector(GameMatcher.Position);
     }
 
     protected override bool Filter(Entity entity) {

@@ -6,12 +6,12 @@ public sealed class FallSystem : ReactiveSystem {
 
     readonly Context _contexts;
 
-    public FallSystem(Contexts contexts) : base(contexts.core) {
-        _contexts = contexts.core;
+    public FallSystem(Contexts contexts) : base(contexts.game) {
+        _contexts = contexts.game;
     }
 
     protected override Collector GetTrigger(Context context) {
-        return context.CreateCollector(CoreMatcher.GameBoardElement, GroupEvent.Removed);
+        return context.CreateCollector(GameMatcher.GameBoardElement, GroupEvent.Removed);
     }
 
     protected override bool Filter(Entity entity) {

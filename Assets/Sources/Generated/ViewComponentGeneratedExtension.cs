@@ -12,37 +12,37 @@ namespace Entitas {
 
     public partial class Entity {
 
-        public ViewComponent view { get { return (ViewComponent)GetComponent(CoreComponentIds.View); } }
-        public bool hasView { get { return HasComponent(CoreComponentIds.View); } }
+        public ViewComponent view { get { return (ViewComponent)GetComponent(GameComponentIds.View); } }
+        public bool hasView { get { return HasComponent(GameComponentIds.View); } }
 
         public Entity AddView(UnityEngine.GameObject newGameObject) {
-            var component = CreateComponent<ViewComponent>(CoreComponentIds.View);
+            var component = CreateComponent<ViewComponent>(GameComponentIds.View);
             component.gameObject = newGameObject;
-            return AddComponent(CoreComponentIds.View, component);
+            return AddComponent(GameComponentIds.View, component);
         }
 
         public Entity ReplaceView(UnityEngine.GameObject newGameObject) {
-            var component = CreateComponent<ViewComponent>(CoreComponentIds.View);
+            var component = CreateComponent<ViewComponent>(GameComponentIds.View);
             component.gameObject = newGameObject;
-            ReplaceComponent(CoreComponentIds.View, component);
+            ReplaceComponent(GameComponentIds.View, component);
             return this;
         }
 
         public Entity RemoveView() {
-            return RemoveComponent(CoreComponentIds.View);
+            return RemoveComponent(GameComponentIds.View);
         }
     }
 }
 
-    public partial class CoreMatcher {
+    public partial class GameMatcher {
 
         static IMatcher _matcherView;
 
         public static IMatcher View {
             get {
                 if(_matcherView == null) {
-                    var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.View);
-                    matcher.componentNames = CoreComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(GameComponentIds.View);
+                    matcher.componentNames = GameComponentIds.componentNames;
                     _matcherView = matcher;
                 }
 

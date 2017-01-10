@@ -8,12 +8,12 @@ public sealed class AddViewSystem : ReactiveSystem {
     readonly Transform _viewContainer = new GameObject("Views").transform;
     readonly Context _context;
 
-    public AddViewSystem(Contexts contexts) : base(contexts.core) {
-        _context = contexts.core;
+    public AddViewSystem(Contexts contexts) : base(contexts.game) {
+        _context = contexts.game;
     }
 
     protected override Collector GetTrigger(Context context) {
-        return context.CreateCollector(CoreMatcher.Asset);
+        return context.CreateCollector(GameMatcher.Asset);
     }
 
     protected override bool Filter(Entity entity) {

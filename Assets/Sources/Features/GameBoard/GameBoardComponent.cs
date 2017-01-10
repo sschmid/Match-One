@@ -1,7 +1,7 @@
 using Entitas;
 using Entitas.CodeGenerator;
 
-[Core, SingleEntity]
+[Game, SingleEntity]
 public sealed class GameBoardComponent : IComponent {
 
     public int columns;

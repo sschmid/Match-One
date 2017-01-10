@@ -12,39 +12,39 @@ namespace Entitas {
 
     public partial class Entity {
 
-        public PositionComponent position { get { return (PositionComponent)GetComponent(CoreComponentIds.Position); } }
-        public bool hasPosition { get { return HasComponent(CoreComponentIds.Position); } }
+        public PositionComponent position { get { return (PositionComponent)GetComponent(GameComponentIds.Position); } }
+        public bool hasPosition { get { return HasComponent(GameComponentIds.Position); } }
 
         public Entity AddPosition(int newX, int newY) {
-            var component = CreateComponent<PositionComponent>(CoreComponentIds.Position);
+            var component = CreateComponent<PositionComponent>(GameComponentIds.Position);
             component.x = newX;
             component.y = newY;
-            return AddComponent(CoreComponentIds.Position, component);
+            return AddComponent(GameComponentIds.Position, component);
         }
 
         public Entity ReplacePosition(int newX, int newY) {
-            var component = CreateComponent<PositionComponent>(CoreComponentIds.Position);
+            var component = CreateComponent<PositionComponent>(GameComponentIds.Position);
             component.x = newX;
             component.y = newY;
-            ReplaceComponent(CoreComponentIds.Position, component);
+            ReplaceComponent(GameComponentIds.Position, component);
             return this;
         }
 
         public Entity RemovePosition() {
-            return RemoveComponent(CoreComponentIds.Position);
+            return RemoveComponent(GameComponentIds.Position);
         }
     }
 }
 
-    public partial class CoreMatcher {
+    public partial class GameMatcher {
 
         static IMatcher _matcherPosition;
 
         public static IMatcher Position {
             get {
                 if(_matcherPosition == null) {
-                    var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.Position);
-                    matcher.componentNames = CoreComponentIds.componentNames;
+                    var matcher = (Matcher)Matcher.AllOf(GameComponentIds.Position);
+                    matcher.componentNames = GameComponentIds.componentNames;
                     _matcherPosition = matcher;
                 }
 

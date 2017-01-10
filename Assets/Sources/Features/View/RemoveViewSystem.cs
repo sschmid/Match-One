@@ -5,12 +5,12 @@ using UnityEngine;
 
 public sealed class RemoveViewSystem : ReactiveSystem {
 
-    public RemoveViewSystem(Contexts contexts) : base(contexts.core) {
-        contexts.core.GetGroup(CoreMatcher.View).OnEntityRemoved += onEntityRemoved;
+    public RemoveViewSystem(Contexts contexts) : base(contexts.game) {
+        contexts.game.GetGroup(GameMatcher.View).OnEntityRemoved += onEntityRemoved;
     }
 
     protected override Collector GetTrigger(Context context) {
-        return context.CreateCollector(CoreMatcher.Asset, GroupEvent.Removed);
+        return context.CreateCollector(GameMatcher.Asset, GroupEvent.Removed);
     }
 
     protected override bool Filter(Entity entity) {
