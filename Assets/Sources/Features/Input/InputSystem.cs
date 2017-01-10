@@ -3,20 +3,20 @@ using UnityEngine;
 
 public sealed class InputSystem : IExecuteSystem, ICleanupSystem {
 
-    readonly Context _pool;
+    readonly Context _context;
     readonly Group _inputs;
 
     public InputSystem(Contexts contexts) {
-        _pool = contexts.input;
-        _inputs = _pool.GetGroup(InputMatcher.Input);
+        _context = contexts.input;
+        _inputs = _context.GetGroup(InputMatcher.Input);
     }
 
     public void Execute() {
         if(Input.GetKeyDown("b")) {
-            _pool.isBurstMode = !_pool.isBurstMode;
+            _context.isBurstMode = !_context.isBurstMode;
         }
 
-        var input = _pool.isBurstMode
+        var input = _context.isBurstMode
             ? Input.GetMouseButton(0)
             : Input.GetMouseButtonDown(0);
 
@@ -25,7 +25,7 @@ public sealed class InputSystem : IExecuteSystem, ICleanupSystem {
             if(hit.collider != null) {
                 var pos = hit.collider.transform.position;
 
-                _pool.CreateEntity()
+                _context.CreateEntity()
                      .AddInput((int)pos.x, (int)pos.y);
             }
         }
@@ -33,7 +33,7 @@ public sealed class InputSystem : IExecuteSystem, ICleanupSystem {
 
     public void Cleanup() {
         foreach(var e in _inputs.GetEntities()) {
-            _pool.DestroyEntity(e);
+            _context.DestroyEntity(e);
         }
     }
 }

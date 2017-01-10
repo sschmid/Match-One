@@ -8,9 +8,9 @@ public class GameController : MonoBehaviour {
     void Start() {
         Random.InitState(42);
 
-        var pools = Contexts.sharedInstance;
-        pools.SetAllContexts();
-        pools.AddEntityIndices();
+        var contexts = Contexts.sharedInstance;
+        contexts.SetAllContexts();
+        contexts.AddEntityIndices();
 
         // Suggested systems lifecycle:
         // systems.Initialize() on Start
@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour {
         // systems.Cleanup() on Update after systems.Execute()
         // systems.TearDown() on OnDestroy
 
-        _systems = createSystems(pools);
+        _systems = createSystems(contexts);
         _systems.Initialize();
     }
 

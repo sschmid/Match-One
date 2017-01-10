@@ -21,6 +21,6 @@ public class EntityLinkInspector : Editor {
 
         EditorGUILayout.Space();
 
-        EntityDrawer.DrawEntity(link.pool, link.entity);
+        EntityDrawer.DrawEntity(link.context, link.entity);
     }
 }
