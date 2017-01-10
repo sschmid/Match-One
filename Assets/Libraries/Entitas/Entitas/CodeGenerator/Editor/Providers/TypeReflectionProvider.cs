@@ -8,22 +8,22 @@ namespace Entitas.CodeGenerator {
     public class TypeReflectionProvider : ICodeGeneratorDataProvider {
 
         public ComponentInfo[] componentInfos { get { return _componentInfos; } }
-        public string[] poolNames { get { return _poolNames; } }
+        public string[] contextNames { get { return _contextNames; } }
         public string[] blueprintNames { get { return _blueprintNames; } }
 
         readonly ComponentInfo[] _componentInfos;
-        readonly string[] _poolNames;
+        readonly string[] _contextNames;
         readonly string[] _blueprintNames;
 
-        public TypeReflectionProvider(Type[] types, string[] poolNames, string[] blueprintNames) {
-            var pools = new HashSet<string>(poolNames);
-            if (poolNames.Length == 0) {
-                pools.Add(CodeGenerator.DEFAULT_POOL_NAME);
+        public TypeReflectionProvider(Type[] types, string[] contextNames, string[] blueprintNames) {
+            var contexts = new HashSet<string>(contextNames);
+            if(contextNames.Length == 0) {
+                contexts.Add(CodeGenerator.DEFAULT_CONTEXT_NAME);
             }
             _componentInfos = GetComponentInfos(types);
-            _poolNames = pools
-                .Select(poolName => poolName.UppercaseFirst())
-                .OrderBy(poolName => poolName)
+            _contextNames = contexts
+                .Select(contextName => contextName.UppercaseFirst())
+                .OrderBy(contextName => contextName)
                 .ToArray();
             _blueprintNames = blueprintNames;
         }
@@ -38,7 +38,7 @@ namespace Entitas.CodeGenerator {
             var infosForNonComponents = types
                 .Where(type => !type.IsGenericType)
                 .Where(type => !type.GetInterfaces().Any(i => i.FullName == "Entitas.IComponent"))
-                .Where(type => GetPools(type, false).Length > 0)
+                .Where(type => GetContexts(type, false).Length > 0)
                 .SelectMany(type => CreateComponentInfosForClass(type));
 
             var generatedComponentsLookup = infosForNonComponents.ToLookup(info => info.fullTypeName);
@@ -53,12 +53,13 @@ namespace Entitas.CodeGenerator {
             return new ComponentInfo(
                 type.ToCompilableString(),
                 GetPublicMemberInfo(type),
-                GetPools(type, true),
+                GetContexts(type, true),
                 GetIsSingleEntity(type),
                 GetSingleComponentPrefix(type),
                 false,
                 GetGenerateMethods(type),
-                GetGenerateIndex(type)
+                GetGenerateIndex(type),
+                GetHideInBlueprintInspector(type)
             );
         }
 
@@ -69,12 +70,13 @@ namespace Entitas.CodeGenerator {
                     new List<PublicMemberInfo> {
                         new PublicMemberInfo(type, "value")
                     },
-                    GetPools(type, false),
+                    GetContexts(type, false),
                     GetIsSingleEntity(type),
                     GetSingleComponentPrefix(type),
                     true,
                     GetGenerateMethods(type),
-                    GetGenerateIndex(type)
+                    GetGenerateIndex(type),
+                    GetHideInBlueprintInspector(type)
                 )).ToArray();
         }
 
@@ -82,24 +84,24 @@ namespace Entitas.CodeGenerator {
             return type.GetPublicMemberInfos();
         }
 
-        public static string[] GetPools(Type type, bool defaultIfEmpty) {
-            var pools = Attribute.GetCustomAttributes(type)
-                .Where(attr => isTypeOrHasBaseType(attr.GetType(), "Entitas.CodeGenerator.PoolAttribute"))
-                .Select(attr => attr.GetType().GetField("poolName").GetValue(attr) as string)
-                .OrderBy(poolName => poolName)
+        public static string[] GetContexts(Type type, bool defaultIfEmpty) {
+            var contexts = Attribute.GetCustomAttributes(type)
+                .Where(attr => isTypeOrHasBaseType(attr.GetType(), "Entitas.CodeGenerator.ContextAttribute"))
+                .Select(attr => attr.GetType().GetField("contextName").GetValue(attr) as string)
+                .OrderBy(contextName => contextName)
                 .ToArray();
 
-            if (pools.Length == 0 && defaultIfEmpty) {
-                return new [] { CodeGenerator.DEFAULT_POOL_NAME };
+            if(contexts.Length == 0 && defaultIfEmpty) {
+                return new [] { CodeGenerator.DEFAULT_CONTEXT_NAME };
             }
 
-            var defaultPoolIndex = Array.IndexOf(pools, CodeGenerator.DEFAULT_POOL_NAME);
-            if (defaultPoolIndex != -1) {
-                pools[defaultPoolIndex] = pools[0];
-                pools[0] = CodeGenerator.DEFAULT_POOL_NAME;
+            var defaultContextIndex = Array.IndexOf(contexts, CodeGenerator.DEFAULT_CONTEXT_NAME);
+            if(defaultContextIndex != -1) {
+                contexts[defaultContextIndex] = contexts[0];
+                contexts[0] = CodeGenerator.DEFAULT_CONTEXT_NAME;
             }
 
-            return pools;
+            return contexts;
         }
 
         public static bool GetIsSingleEntity(Type type) {
@@ -118,7 +120,7 @@ namespace Entitas.CodeGenerator {
             var attr = Attribute.GetCustomAttributes(type)
                 .SingleOrDefault(a => isTypeOrHasBaseType(a.GetType(), "Entitas.CodeGenerator.CustomComponentNameAttribute"));
 
-            if (attr == null) {
+            if(attr == null) {
                 var nameSplit = type.ToCompilableString().Split('.');
                 var componentName = nameSplit[nameSplit.Length - 1].AddComponentSuffix();
                 return new [] { componentName };
@@ -139,8 +141,15 @@ namespace Entitas.CodeGenerator {
             return attr == null || (bool)attr.GetType().GetField("generateIndex").GetValue(attr);
         }
 
+        public static bool GetHideInBlueprintInspector(Type type) {
+            var attr = Attribute.GetCustomAttributes(type)
+                .SingleOrDefault(a => isTypeOrHasBaseType(a.GetType(), "Entitas.Serialization.Blueprints.HideInBlueprintInspectorAttribute"));
+
+            return attr != null;
+        }
+
         static bool hasBaseType(Type type, string fullTypeName) {
-            if (type.FullName == fullTypeName) {
+            if(type.FullName == fullTypeName) {
                 return false;
             }
 
@@ -150,7 +159,7 @@ namespace Entitas.CodeGenerator {
         static bool isTypeOrHasBaseType(Type type, string fullTypeName) {
             var t = type;
             while (t != null) {
-                if (t.FullName == fullTypeName) {
+                if(t.FullName == fullTypeName) {
                     return true;
                 }
                 t = t.BaseType;

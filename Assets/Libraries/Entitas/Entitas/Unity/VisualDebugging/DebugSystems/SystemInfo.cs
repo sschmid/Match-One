@@ -1,6 +1,16 @@
-﻿using System;
+using System;
 
 namespace Entitas.Unity.VisualDebugging {
+
+    [Flags]
+    public enum SystemInterfaceFlags {
+        None              = 0,
+        IInitializeSystem = 1 << 1,
+        IExecuteSystem    = 1 << 2,
+        ICleanupSystem    = 1 << 3,
+        ITearDownSystem   = 1 << 4,
+        IReactiveSystem   = 1 << 5
+    }
 
     public class SystemInfo {
 
@@ -13,6 +23,14 @@ namespace Entitas.Unity.VisualDebugging {
 
         public bool isExecuteSystems {
             get { return (_interfaceFlags & SystemInterfaceFlags.IExecuteSystem) == SystemInterfaceFlags.IExecuteSystem; }
+        }
+
+        public bool isCleanupSystems {
+            get { return (_interfaceFlags & SystemInterfaceFlags.ICleanupSystem) == SystemInterfaceFlags.ICleanupSystem; }
+        }
+
+        public bool isTearDownSystems {
+            get { return (_interfaceFlags & SystemInterfaceFlags.ITearDownSystem) == SystemInterfaceFlags.ITearDownSystem; }
         }
 
         public bool isReactiveSystems {
@@ -45,16 +63,16 @@ namespace Entitas.Unity.VisualDebugging {
             var reactiveSystem = system as ReactiveSystem;
             var isReactive = reactiveSystem != null;
             Type systemType;
-            if (isReactive) {
-                _interfaceFlags = getInterfaceFlags(reactiveSystem.subsystem, isReactive);
-                systemType = reactiveSystem.subsystem.GetType();
+            if(isReactive) {
+                _interfaceFlags = getInterfaceFlags(reactiveSystem, isReactive);
+                systemType = reactiveSystem.GetType();
             } else {
                 _interfaceFlags = getInterfaceFlags(system, isReactive);
                 systemType = system.GetType();
             }
 
             var debugSystem = system as DebugSystems;
-            if (debugSystem != null) {
+            if(debugSystem != null) {
                 _systemName = debugSystem.name;
             } else {
                 _systemName = systemType.Name.EndsWith(SYSTEM_SUFFIX, StringComparison.Ordinal)
@@ -66,10 +84,10 @@ namespace Entitas.Unity.VisualDebugging {
         }
 
         public void AddExecutionDuration(double executionDuration) {
-            if (executionDuration < _minExecutionDuration || _minExecutionDuration == 0) {
+            if(executionDuration < _minExecutionDuration || _minExecutionDuration == 0) {
                 _minExecutionDuration = executionDuration;
             }
-            if (executionDuration > _maxExecutionDuration) {
+            if(executionDuration > _maxExecutionDuration) {
                 _maxExecutionDuration = executionDuration;
             }
 
@@ -84,25 +102,22 @@ namespace Entitas.Unity.VisualDebugging {
 
         static SystemInterfaceFlags getInterfaceFlags(ISystem system, bool isReactive) {
             var flags = SystemInterfaceFlags.None;
-            if (system is IInitializeSystem) {
+            if(system is IInitializeSystem) {
                 flags |= SystemInterfaceFlags.IInitializeSystem;
             }
-            if (system is IExecuteSystem) {
+            if(isReactive) {
+                flags |= SystemInterfaceFlags.IReactiveSystem;
+            } else if(system is IExecuteSystem) {
                 flags |= SystemInterfaceFlags.IExecuteSystem;
             }
-            if (isReactive) {
-                flags |= SystemInterfaceFlags.IReactiveSystem;
+            if(system is ICleanupSystem) {
+                flags |= SystemInterfaceFlags.ICleanupSystem;
+            }
+            if(system is ITearDownSystem) {
+                flags |= SystemInterfaceFlags.ITearDownSystem;
             }
 
             return flags;
-        }
-
-        [Flags]
-        enum SystemInterfaceFlags {
-            None = 0,
-            IInitializeSystem = 1,
-            IExecuteSystem = 2,
-            IReactiveSystem = 4
         }
     }
 }

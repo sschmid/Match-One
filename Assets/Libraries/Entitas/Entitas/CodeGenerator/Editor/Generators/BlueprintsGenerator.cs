@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 
 namespace Entitas.CodeGenerator {
 
@@ -17,7 +17,7 @@ namespace Entitas.Unity.Serialization.Blueprints {{
         const string GETTER_FORMAT = "        public Blueprint {0} {{ get {{ return GetBlueprint(\"{1}\"); }} }}";
 
         public CodeGenFile[] Generate(string[] blueprintNames) {
-            if (blueprintNames.Length == 0) {
+            if(blueprintNames.Length == 0) {
                 return new CodeGenFile[0];
             }
 
@@ -43,4 +43,3 @@ namespace Entitas.Unity.Serialization.Blueprints {{
         }
     }
 }
-

@@ -1,4 +1,4 @@
-﻿namespace Entitas {
+namespace Entitas {
 
     public partial class Contexts {
 
@@ -15,16 +15,21 @@
 
         static Contexts _sharedInstance;
 
-        public static Context CreateContext(string poolName, int totalComponents, string[] componentNames, System.Type[] componentTypes) {
-            var pool = new Context(totalComponents, 0, new PoolMetaData(poolName, componentNames, componentTypes));
-            #if(!ENTITAS_DISABLE_VISUAL_DEBUGGING && UNITY_EDITOR)
-            if (UnityEngine.Application.isPlaying) {
-                var poolObserver = new Entitas.Unity.VisualDebugging.PoolObserver(pool);
-                UnityEngine.Object.DontDestroyOnLoad(poolObserver.entitiesContainer);
+        public static Context CreateContext(string name,
+                                      int totalComponents,
+                                      string[] componentNames,
+                                      System.Type[] componentTypes) {
+            var context = new Context(totalComponents, 0, new ContextInfo(
+                name, componentNames, componentTypes)
+            );
+#if(!ENTITAS_DISABLE_VISUAL_DEBUGGING && UNITY_EDITOR)
+            if(UnityEngine.Application.isPlaying) {
+                var observer = new Entitas.Unity.VisualDebugging.ContextObserver(context);
+                UnityEngine.Object.DontDestroyOnLoad(observer.gameObject);
             }
-            #endif
+#endif
 
-            return pool;
+            return context;
         }
     }
 }

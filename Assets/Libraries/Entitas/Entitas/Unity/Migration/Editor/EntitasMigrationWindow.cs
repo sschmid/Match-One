@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using Entitas.Migration;
@@ -9,7 +9,7 @@ namespace Entitas.Unity.Migration {
 
     public class EntitasMigrationWindow : EditorWindow {
 
-        [MenuItem("Entitas/Migrate...", false, EntitasMenuItemPriorities.migrate)]
+        [MenuItem(EntitasMenuItems.migrate, false, EntitasMenuItemPriorities.migrate)]
         public static void OpenMigrate() {
             EntitasEditorLayout.ShowWindow<EntitasMigrationWindow>("Entitas Migration");
         }
@@ -43,12 +43,12 @@ namespace Entitas.Unity.Migration {
 
                 var descriptionStyle = new GUIStyle(GUI.skin.label);
                 descriptionStyle.wordWrap = true;
-                foreach (var migration in _migrations) {
+                foreach(var migration in _migrations) {
                     EntitasEditorLayout.BeginVerticalBox();
                     {
                         EditorGUILayout.LabelField(migration.version, EditorStyles.boldLabel);
                         EditorGUILayout.LabelField(migration.description, descriptionStyle);
-                        if (GUILayout.Button("Apply migration " + migration.version)) {
+                        if(GUILayout.Button("Apply migration " + migration.version)) {
                             migrate(migration);
                         }
                     }
@@ -66,7 +66,7 @@ namespace Entitas.Unity.Migration {
                                     "Cancel"
                                 );
 
-            if (shouldMigrate) {
+            if(shouldMigrate) {
                 EditorUtility.DisplayDialog("Migrate",
                     "Please select the folder, " + migration.workingDirectory + ".",
                     "I will select the requested folder"
@@ -74,10 +74,10 @@ namespace Entitas.Unity.Migration {
 
                 var path = "Assets/";
                 path = EditorUtility.OpenFolderPanel(migration.version + ": " + migration.workingDirectory, path, string.Empty);
-                if (!string.IsNullOrEmpty(path)) {
+                if(!string.IsNullOrEmpty(path)) {
                     var changedFiles = migration.Migrate(path);
                     Debug.Log("Applying " + migration.version);
-                    foreach (var file in changedFiles) {
+                    foreach(var file in changedFiles) {
                         MigrationUtils.WriteFiles(changedFiles);
                         Debug.Log("Migrated " + file.fileName);
                     }
@@ -88,4 +88,3 @@ namespace Entitas.Unity.Migration {
         }
     }
 }
-

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using Entitas.CodeGenerator;
@@ -11,7 +11,7 @@ namespace Entitas.Unity.CodeGenerator {
 
     public static class UnityCodeGenerator {
 
-        [MenuItem("Entitas/Generate #%g", false, EntitasMenuItemPriorities.generate)]
+        [MenuItem(EntitasMenuItems.generate, false, EntitasMenuItemPriorities.generate)]
         public static void Generate() {
             checkCanGenerate();
 
@@ -32,7 +32,7 @@ namespace Entitas.Unity.CodeGenerator {
                 .ToArray();
 
             var assembly = Assembly.GetAssembly(typeof(Entity));
-            var generatedFiles = TypeReflectionCodeGenerator.Generate(assembly, config.pools,
+            var generatedFiles = TypeReflectionCodeGenerator.Generate(assembly, config.contexts,
                 blueprintNames, config.generatedFolderPath, enabledCodeGenerators);
 
             foreach(var file in generatedFiles) {

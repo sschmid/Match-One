@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -42,7 +42,7 @@ namespace Entitas.Serialization {
         }
 
         public void SetValue(object obj, object value) {
-            if (_fieldInfo != null) {
+            if(_fieldInfo != null) {
                 _fieldInfo.SetValue(obj, value);
             } else {
                 _propertyInfo.SetValue(obj, value, null);                
@@ -78,7 +78,9 @@ namespace Entitas.Serialization {
 
             var fieldInfos = type.GetFields(bindingFlags);
             var propertyInfos = type.GetProperties(bindingFlags);
-            var memberInfos = new List<PublicMemberInfo>(fieldInfos.Length + propertyInfos.Length);
+            var memberInfos = new List<PublicMemberInfo>(
+                fieldInfos.Length + propertyInfos.Length
+            );
 
             for (int i = 0; i < fieldInfos.Length; i++) {
                 memberInfos.Add(new PublicMemberInfo(fieldInfos[i]));
@@ -86,7 +88,7 @@ namespace Entitas.Serialization {
 
             for (int i = 0; i < propertyInfos.Length; i++) {
                 var propertyInfo = propertyInfos[i];
-                if (propertyInfo.CanRead && propertyInfo.CanWrite) {
+                if(propertyInfo.CanRead && propertyInfo.CanWrite) {
                     memberInfos.Add(new PublicMemberInfo(propertyInfo));
                 }
             }
@@ -115,4 +117,3 @@ namespace Entitas.Serialization {
         }
     }
 }
-

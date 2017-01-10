@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 
 namespace Entitas {
 
@@ -7,23 +7,27 @@ namespace Entitas {
         public string[] componentNames;
 
         string _toStringCache;
+        StringBuilder _toStringBuilder;
 
         public override string ToString() {
-            if (_toStringCache == null) {
-                var sb = new StringBuilder();
-                if (_allOfIndices != null) {
-                    appendIndices(sb, "AllOf", _allOfIndices, componentNames);
+            if(_toStringCache == null) {
+                if(_toStringBuilder == null) {
+                    _toStringBuilder = new StringBuilder();
                 }
-                if (_anyOfIndices != null) {
-                    if (_allOfIndices != null) {
-                        sb.Append(".");
+                _toStringBuilder.Length = 0;
+                if(_allOfIndices != null) {
+                    appendIndices(_toStringBuilder, "AllOf", _allOfIndices, componentNames);
+                }
+                if(_anyOfIndices != null) {
+                    if(_allOfIndices != null) {
+                        _toStringBuilder.Append(".");
                     }
-                    appendIndices(sb, "AnyOf", _anyOfIndices, componentNames);
+                    appendIndices(_toStringBuilder, "AnyOf", _anyOfIndices, componentNames);
                 }
-                if (_noneOfIndices != null) {
-                    appendIndices(sb, ".NoneOf", _noneOfIndices, componentNames);
+                if(_noneOfIndices != null) {
+                    appendIndices(_toStringBuilder, ".NoneOf", _noneOfIndices, componentNames);
                 }
-                _toStringCache = sb.ToString();
+                _toStringCache = _toStringBuilder.ToString();
             }
 
             return _toStringCache;
@@ -36,13 +40,13 @@ namespace Entitas {
             var lastSeparator = indexArray.Length - 1;
             for (int i = 0; i < indexArray.Length; i++) {
                 var index = indexArray[i];
-                if (componentNames == null) {
+                if(componentNames == null) {
                     sb.Append(index);
                 } else {
                     sb.Append(componentNames[index]);
                 }
 
-                if (i < lastSeparator) {
+                if(i < lastSeparator) {
                     sb.Append(separator);
                 }
             }

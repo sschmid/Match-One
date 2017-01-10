@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,9 +10,9 @@ namespace Entitas.Unity.VisualDebugging {
 
     public static class EntitasStats {
 
-        [MenuItem("Entitas/Log Stats", false, EntitasMenuItemPriorities.log_stats)]
+        [MenuItem(EntitasMenuItems.log_stats, false, EntitasMenuItemPriorities.log_stats)]
         public static void LogStats() {
-            foreach (var stat in GetStats()) {
+            foreach(var stat in GetStats()) {
                 Debug.Log(stat.Key + ": " + stat.Value);
             }
         }
@@ -20,28 +20,28 @@ namespace Entitas.Unity.VisualDebugging {
         public static Dictionary<string, int> GetStats() {
             var types = Assembly.GetAssembly(typeof(Entity)).GetTypes();
             var components = types.Where(type => type.ImplementsInterface<IComponent>()).ToArray();
-            var pools = getPools(components);
+            var contexts = getContexts(components);
 
             var stats = new Dictionary<string, int> {
                 { "Total Components", components.Length },
                 { "Systems", types.Count(implementsSystem) }
             };
 
-            foreach (var pool in pools) {
-                stats.Add("Components in " + pool.Key, pool.Value);
+            foreach(var context in contexts) {
+                stats.Add("Components in " + context.Key, context.Value);
             }
 
             return stats;
         }
 
-        static Dictionary<string, int> getPools(Type[] components) {
+        static Dictionary<string, int> getContexts(Type[] components) {
             return components.Aggregate(new Dictionary<string, int>(), (lookups, type) => {
-                var lookupTags = TypeReflectionProvider.GetPools(type, false);
-                if (lookupTags.Length == 0) {
-                    lookupTags = new [] { "Pool" };
+                var lookupTags = TypeReflectionProvider.GetContexts(type, false);
+                if(lookupTags.Length == 0) {
+                    lookupTags = new [] { "Context" };
                 }
-                foreach (var lookupTag in lookupTags) {
-                    if (!lookups.ContainsKey(lookupTag)) {
+                foreach(var lookupTag in lookupTags) {
+                    if(!lookups.ContainsKey(lookupTag)) {
                         lookups.Add(lookupTag, 0);
                     }
 
@@ -60,4 +60,3 @@ namespace Entitas.Unity.VisualDebugging {
         }
     }
 }
-

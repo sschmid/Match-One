@@ -1,11 +1,11 @@
-﻿using System.IO;
+using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Entitas.Serialization.Blueprints;
 using UnityEngine;
 
 namespace Entitas.Unity.Serialization.Blueprints {
 
-    [CreateAssetMenu(menuName = "Entitas/Blueprint", fileName = "Assets/New Blueprint.asset")]
+    [CreateAssetMenu(menuName = "Entitas/Blueprint", fileName = "New Blueprint.asset")]
     public class BinaryBlueprint : ScriptableObject {
 
         public byte[] blueprintData;
@@ -14,7 +14,7 @@ namespace Entitas.Unity.Serialization.Blueprints {
 
         public Blueprint Deserialize() {
             Blueprint blueprint;
-            if (blueprintData == null || blueprintData.Length == 0) {
+            if(blueprintData == null || blueprintData.Length == 0) {
                 blueprint = new Blueprint(string.Empty, "New Blueprint", new Entity(0, null, null));
             } else {
                 using (var stream = new MemoryStream(blueprintData)) {
@@ -27,7 +27,7 @@ namespace Entitas.Unity.Serialization.Blueprints {
         }
 
         public void Serialize(Entity entity) {
-            var blueprint = new Blueprint(entity.poolMetaData.poolName, name, entity);
+            var blueprint = new Blueprint(entity.contextInfo.name, name, entity);
             Serialize(blueprint);
         }
 

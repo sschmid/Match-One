@@ -1,19 +1,19 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Entitas.Unity.VisualDebugging {
 
     [ExecuteInEditMode]
     public class EntityBehaviour : MonoBehaviour {
 
-        public Context pool { get { return _pool; } }
+        public Context context { get { return _context; } }
         public Entity entity { get { return _entity; } }
 
-        Context _pool;
+        Context _context;
         Entity _entity;
         string _cachedName;
 
-        public void Init(Context pool, Entity entity) {
-            _pool = pool;
+        public void Init(Context context, Entity entity) {
+            _context = context;
             _entity = entity;
             _entity.OnEntityReleased += onEntityReleased;
             Update();
@@ -24,13 +24,13 @@ namespace Entitas.Unity.VisualDebugging {
         }
 
         void Update() {
-            if (_entity != null && _cachedName != _entity.ToString()) {
+            if(_entity != null && _cachedName != _entity.ToString()) {
                 name = _cachedName = _entity.ToString();
             }
         }
 
         void OnDestroy() {
-            if (_entity != null) {
+            if(_entity != null) {
                 _entity.OnEntityReleased -= onEntityReleased;
             }
         }

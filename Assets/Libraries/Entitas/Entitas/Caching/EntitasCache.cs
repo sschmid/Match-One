@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Entitas {
 
     public static class EntitasCache {
 
-        static ObjectCache _cache = new ObjectCache();
+        static readonly ObjectCache _cache = new ObjectCache();
 
         public static List<IComponent> GetIComponentList() { return _cache.Get<List<IComponent>>(); }
         public static void PushIComponentList(List<IComponent> list) { list.Clear(); _cache.Push(list); }
@@ -23,4 +23,3 @@ namespace Entitas {
         }
     }
 }
-
