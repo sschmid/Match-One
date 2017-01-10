@@ -9,9 +9,10 @@
 using Entitas;
 
 namespace Entitas {
-    public partial class Entity {
-        public ScoreComponent score { get { return (ScoreComponent)GetComponent(ScoreComponentIds.Score); } }
 
+    public partial class Entity {
+
+        public ScoreComponent score { get { return (ScoreComponent)GetComponent(ScoreComponentIds.Score); } }
         public bool hasScore { get { return HasComponent(ScoreComponentIds.Score); } }
 
         public Entity AddScore(int newValue) {
@@ -33,16 +34,15 @@ namespace Entitas {
     }
 
     public partial class Context {
+
         public Entity scoreEntity { get { return GetGroup(ScoreMatcher.Score).GetSingleEntity(); } }
-
         public ScoreComponent score { get { return scoreEntity.score; } }
-
         public bool hasScore { get { return scoreEntity != null; } }
 
         public Entity SetScore(int newValue) {
-            if (hasScore) {
+            if(hasScore) {
                 throw new EntitasException("Could not set score!\n" + this + " already has an entity with ScoreComponent!",
-                    "You should check if the pool already has a scoreEntity before setting it or use pool.ReplaceScore().");
+                    "You should check if the context already has a scoreEntity before setting it or use context.ReplaceScore().");
             }
             var entity = CreateEntity();
             entity.AddScore(newValue);
@@ -51,7 +51,7 @@ namespace Entitas {
 
         public Entity ReplaceScore(int newValue) {
             var entity = scoreEntity;
-            if (entity == null) {
+            if(entity == null) {
                 entity = SetScore(newValue);
             } else {
                 entity.ReplaceScore(newValue);
@@ -67,11 +67,12 @@ namespace Entitas {
 }
 
     public partial class ScoreMatcher {
+
         static IMatcher _matcherScore;
 
         public static IMatcher Score {
             get {
-                if (_matcherScore == null) {
+                if(_matcherScore == null) {
                     var matcher = (Matcher)Matcher.AllOf(ScoreComponentIds.Score);
                     matcher.componentNames = ScoreComponentIds.componentNames;
                     _matcherScore = matcher;

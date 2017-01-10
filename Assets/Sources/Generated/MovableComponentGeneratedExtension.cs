@@ -9,14 +9,16 @@
 using Entitas;
 
 namespace Entitas {
+
     public partial class Entity {
+
         static readonly MovableComponent movableComponent = new MovableComponent();
 
         public bool isMovable {
             get { return HasComponent(CoreComponentIds.Movable); }
             set {
-                if (value != isMovable) {
-                    if (value) {
+                if(value != isMovable) {
+                    if(value) {
                         AddComponent(CoreComponentIds.Movable, movableComponent);
                     } else {
                         RemoveComponent(CoreComponentIds.Movable);
@@ -33,11 +35,12 @@ namespace Entitas {
 }
 
     public partial class CoreMatcher {
+
         static IMatcher _matcherMovable;
 
         public static IMatcher Movable {
             get {
-                if (_matcherMovable == null) {
+                if(_matcherMovable == null) {
                     var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.Movable);
                     matcher.componentNames = CoreComponentIds.componentNames;
                     _matcherMovable = matcher;

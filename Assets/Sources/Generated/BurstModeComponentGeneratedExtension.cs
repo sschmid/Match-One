@@ -9,14 +9,16 @@
 using Entitas;
 
 namespace Entitas {
+
     public partial class Entity {
+
         static readonly BurstModeComponent burstModeComponent = new BurstModeComponent();
 
         public bool isBurstMode {
             get { return HasComponent(InputComponentIds.BurstMode); }
             set {
-                if (value != isBurstMode) {
-                    if (value) {
+                if(value != isBurstMode) {
+                    if(value) {
                         AddComponent(InputComponentIds.BurstMode, burstModeComponent);
                     } else {
                         RemoveComponent(InputComponentIds.BurstMode);
@@ -32,14 +34,15 @@ namespace Entitas {
     }
 
     public partial class Context {
+
         public Entity burstModeEntity { get { return GetGroup(InputMatcher.BurstMode).GetSingleEntity(); } }
 
         public bool isBurstMode {
             get { return burstModeEntity != null; }
             set {
                 var entity = burstModeEntity;
-                if (value != (entity != null)) {
-                    if (value) {
+                if(value != (entity != null)) {
+                    if(value) {
                         CreateEntity().isBurstMode = true;
                     } else {
                         DestroyEntity(entity);
@@ -51,11 +54,12 @@ namespace Entitas {
 }
 
     public partial class InputMatcher {
+
         static IMatcher _matcherBurstMode;
 
         public static IMatcher BurstMode {
             get {
-                if (_matcherBurstMode == null) {
+                if(_matcherBurstMode == null) {
                     var matcher = (Matcher)Matcher.AllOf(InputComponentIds.BurstMode);
                     matcher.componentNames = InputComponentIds.componentNames;
                     _matcherBurstMode = matcher;

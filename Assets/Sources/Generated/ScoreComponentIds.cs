@@ -7,6 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public static class ScoreComponentIds {
+
     public const int Score = 0;
 
     public const int TotalComponents = 1;

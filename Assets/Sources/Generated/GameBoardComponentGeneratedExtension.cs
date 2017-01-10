@@ -9,9 +9,10 @@
 using Entitas;
 
 namespace Entitas {
-    public partial class Entity {
-        public GameBoardComponent gameBoard { get { return (GameBoardComponent)GetComponent(CoreComponentIds.GameBoard); } }
 
+    public partial class Entity {
+
+        public GameBoardComponent gameBoard { get { return (GameBoardComponent)GetComponent(CoreComponentIds.GameBoard); } }
         public bool hasGameBoard { get { return HasComponent(CoreComponentIds.GameBoard); } }
 
         public Entity AddGameBoard(int newColumns, int newRows) {
@@ -35,16 +36,15 @@ namespace Entitas {
     }
 
     public partial class Context {
+
         public Entity gameBoardEntity { get { return GetGroup(CoreMatcher.GameBoard).GetSingleEntity(); } }
-
         public GameBoardComponent gameBoard { get { return gameBoardEntity.gameBoard; } }
-
         public bool hasGameBoard { get { return gameBoardEntity != null; } }
 
         public Entity SetGameBoard(int newColumns, int newRows) {
-            if (hasGameBoard) {
+            if(hasGameBoard) {
                 throw new EntitasException("Could not set gameBoard!\n" + this + " already has an entity with GameBoardComponent!",
-                    "You should check if the pool already has a gameBoardEntity before setting it or use pool.ReplaceGameBoard().");
+                    "You should check if the context already has a gameBoardEntity before setting it or use context.ReplaceGameBoard().");
             }
             var entity = CreateEntity();
             entity.AddGameBoard(newColumns, newRows);
@@ -53,7 +53,7 @@ namespace Entitas {
 
         public Entity ReplaceGameBoard(int newColumns, int newRows) {
             var entity = gameBoardEntity;
-            if (entity == null) {
+            if(entity == null) {
                 entity = SetGameBoard(newColumns, newRows);
             } else {
                 entity.ReplaceGameBoard(newColumns, newRows);
@@ -69,11 +69,12 @@ namespace Entitas {
 }
 
     public partial class CoreMatcher {
+
         static IMatcher _matcherGameBoard;
 
         public static IMatcher GameBoard {
             get {
-                if (_matcherGameBoard == null) {
+                if(_matcherGameBoard == null) {
                     var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.GameBoard);
                     matcher.componentNames = CoreComponentIds.componentNames;
                     _matcherGameBoard = matcher;

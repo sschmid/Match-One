@@ -9,7 +9,7 @@ public class GameController : MonoBehaviour {
         Random.InitState(42);
 
         var pools = Contexts.sharedInstance;
-        pools.SetAllPools();
+        pools.SetAllContexts();
         pools.AddEntityIndices();
 
         // Suggested systems lifecycle:

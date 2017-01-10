@@ -7,6 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public static class InputComponentIds {
+
     public const int BurstMode = 0;
     public const int Input = 1;
 

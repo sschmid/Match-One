@@ -7,6 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public static class CoreComponentIds {
+
     public const int Asset = 0;
     public const int Destroy = 1;
     public const int GameBoard = 2;

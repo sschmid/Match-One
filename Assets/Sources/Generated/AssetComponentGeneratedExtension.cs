@@ -9,9 +9,10 @@
 using Entitas;
 
 namespace Entitas {
-    public partial class Entity {
-        public AssetComponent asset { get { return (AssetComponent)GetComponent(CoreComponentIds.Asset); } }
 
+    public partial class Entity {
+
+        public AssetComponent asset { get { return (AssetComponent)GetComponent(CoreComponentIds.Asset); } }
         public bool hasAsset { get { return HasComponent(CoreComponentIds.Asset); } }
 
         public Entity AddAsset(string newName) {
@@ -34,11 +35,12 @@ namespace Entitas {
 }
 
     public partial class CoreMatcher {
+
         static IMatcher _matcherAsset;
 
         public static IMatcher Asset {
             get {
-                if (_matcherAsset == null) {
+                if(_matcherAsset == null) {
                     var matcher = (Matcher)Matcher.AllOf(CoreComponentIds.Asset);
                     matcher.componentNames = CoreComponentIds.componentNames;
                     _matcherAsset = matcher;
