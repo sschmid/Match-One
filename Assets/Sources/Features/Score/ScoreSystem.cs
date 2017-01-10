@@ -1,21 +1,27 @@
 using System.Collections.Generic;
 using Entitas;
 
-public sealed class ScoreSystem : ISetPools, IInitializeSystem, IReactiveSystem {
+public sealed class ScoreSystem : ReactiveSystem, IInitializeSystem {
 
-    public TriggerOnEvent trigger { get { return CoreMatcher.GameBoardElement.OnEntityRemoved(); } }
+    readonly Contexts _contexts;
 
-    Contexts _pools;
+    public ScoreSystem(Contexts contexts) : base(contexts.core) {
+        _contexts = contexts;
+    }
 
-    public void SetPools(Contexts pools) {
-        _pools = pools;
+    protected override Collector GetTrigger(Context context) {
+        return context.CreateCollector(CoreMatcher.GameBoardElement, GroupEvent.Removed);
+    }
+
+    protected override bool Filter(Entity entity) {
+        return true;
     }
 
     public void Initialize() {
-        _pools.score.SetScore(0);
+        _contexts.score.SetScore(0);
     }
 
-    public void Execute(List<Entity> entities) {
-        _pools.score.ReplaceScore(_pools.score.score.value + entities.Count);
+    protected override void Execute(List<Entity> entities) {
+        _contexts.score.ReplaceScore(_contexts.score.score.value + entities.Count);
     }
 }

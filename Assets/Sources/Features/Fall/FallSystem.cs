@@ -2,21 +2,27 @@ using System.Collections.Generic;
 using Entitas;
 using System.Linq;
 
-public sealed class FallSystem : ISetPool, IReactiveSystem {
+public sealed class FallSystem : ReactiveSystem {
 
-    public TriggerOnEvent trigger { get { return CoreMatcher.GameBoardElement.OnEntityRemoved(); } }
+    readonly Context _contexts;
 
-    Context _pool;
-
-    public void SetPool(Context pool) {
-        _pool = pool;
+    public FallSystem(Contexts contexts) : base(contexts.core) {
+        _contexts = contexts.core;
     }
 
-    public void Execute(List<Entity> entities) {
-        var gameBoard = _pool.gameBoard;
+    protected override Collector GetTrigger(Context context) {
+        return context.CreateCollector(CoreMatcher.GameBoardElement, GroupEvent.Removed);
+    }
+
+    protected override bool Filter(Entity entity) {
+        return true;
+    }
+
+    protected override void Execute(List<Entity> entities) {
+        var gameBoard = _contexts.gameBoard;
         for(int column = 0; column < gameBoard.columns; column++) {
             for(int row = 1; row < gameBoard.rows; row++) {
-                var movables = _pool.GetEntitiesWithPosition(column, row)
+                var movables = _contexts.GetEntitiesWithPosition(column, row)
                                     .Where(e => e.isMovable)
                                     .ToArray();
 
@@ -28,7 +34,7 @@ public sealed class FallSystem : ISetPool, IReactiveSystem {
     }
 
     void moveDown(Entity e, int column, int row) {
-        var nextRowPos = GameBoardLogic.GetNextEmptyRow(_pool, column, row);
+        var nextRowPos = GameBoardLogic.GetNextEmptyRow(_contexts, column, row);
         if(nextRowPos != row) {
             e.ReplacePosition(column, nextRowPos);
         }

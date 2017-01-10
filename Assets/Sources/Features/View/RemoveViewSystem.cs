@@ -3,17 +3,21 @@ using DG.Tweening;
 using Entitas;
 using UnityEngine;
 
-public sealed class RemoveViewSystem : ISetPool, IReactiveSystem, IEnsureComponents {
+public sealed class RemoveViewSystem : ReactiveSystem {
 
-    public TriggerOnEvent trigger { get { return CoreMatcher.Asset.OnEntityRemoved(); } }
-
-    public IMatcher ensureComponents { get { return CoreMatcher.View; } }
-
-    public void SetPool(Context pool) {
-        pool.GetGroup(CoreMatcher.View).OnEntityRemoved += onEntityRemoved;
+    public RemoveViewSystem(Contexts contexts) : base(contexts.core) {
+        contexts.core.GetGroup(CoreMatcher.View).OnEntityRemoved += onEntityRemoved;
     }
 
-    public void Execute(List<Entity> entities) {
+    protected override Collector GetTrigger(Context context) {
+        return context.CreateCollector(CoreMatcher.Asset, GroupEvent.Removed);
+    }
+
+    protected override bool Filter(Entity entity) {
+        return entity.hasView;
+    }
+
+    protected override void Execute(List<Entity> entities) {
         foreach(var e in entities) {
             e.RemoveView();
         }

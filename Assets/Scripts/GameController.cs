@@ -6,7 +6,7 @@ public class GameController : MonoBehaviour {
     Systems _systems;
 
     void Start() {
-        Random.seed = 42;
+        Random.InitState(42);
 
         var pools = Contexts.sharedInstance;
         pools.SetAllPools();
@@ -31,25 +31,25 @@ public class GameController : MonoBehaviour {
         _systems.TearDown();
     }
 
-    Systems createSystems(Contexts pools) {
+    Systems createSystems(Contexts contexts) {
         return new Feature("Systems")
 
             // Input
-            .Add(pools.input.CreateSystem(new InputSystem()))
-            .Add(pools.input.CreateSystem(new ProcessInputSystem()))
+            .Add(new InputSystem(contexts))
+            .Add(new ProcessInputSystem(contexts))
 
             // Update
-            .Add(pools.core.CreateSystem(new GameBoardSystem()))
-            .Add(pools.core.CreateSystem(new FallSystem()))
-            .Add(pools.core.CreateSystem(new FillSystem()))
-            .Add(pools.core.CreateSystem(new ScoreSystem()))
+            .Add(new GameBoardSystem(contexts))
+            .Add(new FallSystem(contexts))
+            .Add(new FillSystem(contexts))
+            .Add(new ScoreSystem(contexts))
 
             // Render
-            .Add(pools.core.CreateSystem(new RemoveViewSystem()))
-            .Add(pools.core.CreateSystem(new AddViewSystem()))
-            .Add(pools.core.CreateSystem(new AnimatePositionSystem()))
+            .Add(new RemoveViewSystem(contexts))
+            .Add(new AddViewSystem(contexts))
+            .Add(new AnimatePositionSystem(contexts))
 
             // Destroy
-            .Add(pools.core.CreateSystem(new DestroySystem()));
+            .Add(new DestroySystem(contexts));
     }
 }

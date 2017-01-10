@@ -1,19 +1,25 @@
 using System.Collections.Generic;
 using Entitas;
 
-public sealed class DestroySystem : ISetPool, IReactiveSystem {
+public sealed class DestroySystem : ReactiveSystem {
 
-    public TriggerOnEvent trigger { get { return CoreMatcher.Destroy.OnEntityAdded(); } }
+    readonly Context _context;
 
-    Context _pool;
-
-    public void SetPool(Context pool) {
-        _pool = pool;
+    public DestroySystem(Contexts contexts) : base(contexts.core) {
+        _context = contexts.core;
     }
 
-    public void Execute(List<Entity> entities) {
+    protected override Collector GetTrigger(Context context) {
+        return context.CreateCollector(CoreMatcher.Destroy);
+    }
+
+    protected override bool Filter(Entity entity) {
+        return entity.isDestroy;
+    }
+
+    protected override void Execute(List<Entity> entities) {
         foreach(var e in entities) {
-            _pool.DestroyEntity(e);
+            _context.DestroyEntity(e);
         }
     }
 }

@@ -1,14 +1,14 @@
-﻿using Entitas;
+using Entitas;
 using UnityEngine;
 
-public sealed class InputSystem : ISetPool, IExecuteSystem, ICleanupSystem {
+public sealed class InputSystem : IExecuteSystem, ICleanupSystem {
 
-    Context _pool;
-    Group _inputs;
+    readonly Context _pool;
+    readonly Group _inputs;
 
-    public void SetPool(Context pool) {
-        _pool = pool;
-        _inputs = pool.GetGroup(InputMatcher.Input);
+    public InputSystem(Contexts contexts) {
+        _pool = contexts.input;
+        _inputs = _pool.GetGroup(InputMatcher.Input);
     }
 
     public void Execute() {

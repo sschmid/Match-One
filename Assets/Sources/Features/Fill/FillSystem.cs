@@ -1,23 +1,29 @@
 using System.Collections.Generic;
 using Entitas;
 
-public sealed class FillSystem : ISetPool, IReactiveSystem {
+public sealed class FillSystem : ReactiveSystem {
 
-    public TriggerOnEvent trigger { get { return CoreMatcher.GameBoardElement.OnEntityRemoved(); } }
+    readonly Context _context;
 
-    Context _pool;
-
-    public void SetPool(Context pool) {
-        _pool = pool;
+    public FillSystem(Contexts contexts) : base(contexts.core) {
+        _context = contexts.core;
     }
 
-    public void Execute(List<Entity> entities) {
-        var gameBoard = _pool.gameBoard;
+    protected override Collector GetTrigger(Context context) {
+        return context.CreateCollector(CoreMatcher.GameBoardElement, GroupEvent.Removed);
+    }
+
+    protected override bool Filter(Entity entity) {
+        return true;
+    }
+
+    protected override void Execute(List<Entity> entities) {
+        var gameBoard = _context.gameBoard;
         for(int column = 0; column < gameBoard.columns; column++) {
-            var nextRowPos = GameBoardLogic.GetNextEmptyRow(_pool, column, gameBoard.rows);
+            var nextRowPos = GameBoardLogic.GetNextEmptyRow(_context, column, gameBoard.rows);
             while(nextRowPos != gameBoard.rows) {
-                _pool.CreateRandomPiece(column, nextRowPos);
-                nextRowPos = GameBoardLogic.GetNextEmptyRow(_pool, column, gameBoard.rows);
+                _context.CreateRandomPiece(column, nextRowPos);
+                nextRowPos = GameBoardLogic.GetNextEmptyRow(_context, column, gameBoard.rows);
             }
         }
     }
