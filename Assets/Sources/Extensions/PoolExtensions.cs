@@ -12,7 +12,7 @@ public static class PoolExtensions {
         Res.Piece5
     };
 
-    public static Entity CreateRandomPiece(this Pool pool, int x, int y) {
+    public static Entity CreateRandomPiece(this Context pool, int x, int y) {
         return pool.CreateEntity()
             .IsGameBoardElement(true)
             .AddPosition(x, y)
@@ -21,7 +21,7 @@ public static class PoolExtensions {
             .AddAsset(_pieces[Random.Range(0, _pieces.Length)]);
     }
 
-    public static Entity CreateBlocker(this Pool pool, int x, int y) {
+    public static Entity CreateBlocker(this Context pool, int x, int y) {
         return pool.CreateEntity()
             .IsGameBoardElement(true)
             .AddPosition(x, y)

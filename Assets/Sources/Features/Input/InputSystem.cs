@@ -3,10 +3,10 @@ using UnityEngine;
 
 public sealed class InputSystem : ISetPool, IExecuteSystem, ICleanupSystem {
 
-    Pool _pool;
+    Context _pool;
     Group _inputs;
 
-    public void SetPool(Pool pool) {
+    public void SetPool(Context pool) {
         _pool = pool;
         _inputs = pool.GetGroup(InputMatcher.Input);
     }

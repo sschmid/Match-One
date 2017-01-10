@@ -34,7 +34,7 @@ namespace Entitas {
         }
     }
 
-    public partial class Pool {
+    public partial class Context {
         public Entity gameBoardEntity { get { return GetGroup(CoreMatcher.GameBoard).GetSingleEntity(); } }
 
         public GameBoardComponent gameBoard { get { return gameBoardEntity.gameBoard; } }

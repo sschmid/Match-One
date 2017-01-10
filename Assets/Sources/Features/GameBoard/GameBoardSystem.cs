@@ -6,10 +6,10 @@ public sealed class GameBoardSystem : ISetPool, IInitializeSystem, IReactiveSyst
 
     public TriggerOnEvent trigger { get { return CoreMatcher.GameBoard.OnEntityAdded(); } }
 
-    Pool _pool;
+    Context _pool;
     Group _gameBoardElements;
 
-    public void SetPool(Pool pool) {
+    public void SetPool(Context pool) {
         _pool = pool;
         _gameBoardElements = _pool.GetGroup(Matcher.AllOf(CoreMatcher.GameBoardElement, CoreMatcher.Position));
     }

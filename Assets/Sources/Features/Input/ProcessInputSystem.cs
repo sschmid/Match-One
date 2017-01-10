@@ -6,9 +6,9 @@ public sealed class ProcessInputSystem : ISetPools, IReactiveSystem {
 
     public TriggerOnEvent trigger { get { return InputMatcher.Input.OnEntityAdded(); } }
 
-    Pools _pools;
+    Contexts _pools;
 
-    public void SetPools(Pools pools) {
+    public void SetPools(Contexts pools) {
         _pools = pools;
     }
 

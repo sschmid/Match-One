@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 using Entitas.CodeGenerator;
 
-public class InputAttribute : PoolAttribute {
+public class InputAttribute : ContextAttribute {
 
     public InputAttribute() : base("Input") {
     }

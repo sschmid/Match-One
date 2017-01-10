@@ -9,9 +9,9 @@ public sealed class AddViewSystem : ISetPool, IReactiveSystem {
 
     readonly Transform _viewContainer = new GameObject("Views").transform;
 
-    Pool _pool;
+    Context _pool;
 
-    public void SetPool(Pool pool) {
+    public void SetPool(Context pool) {
         _pool = pool;
     }
 

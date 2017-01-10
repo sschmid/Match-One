@@ -9,7 +9,7 @@ public sealed class RemoveViewSystem : ISetPool, IReactiveSystem, IEnsureCompone
 
     public IMatcher ensureComponents { get { return CoreMatcher.View; } }
 
-    public void SetPool(Pool pool) {
+    public void SetPool(Context pool) {
         pool.GetGroup(CoreMatcher.View).OnEntityRemoved += onEntityRemoved;
     }
 

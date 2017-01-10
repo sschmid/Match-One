@@ -3,9 +3,9 @@
     public struct TriggerOnEvent {
 
         public IMatcher trigger;
-        public GroupEventType eventType;
+        public GroupEvent eventType;
 
-        public TriggerOnEvent(IMatcher trigger, GroupEventType eventType) {
+        public TriggerOnEvent(IMatcher trigger, GroupEvent eventType) {
             this.trigger = trigger;
             this.eventType = eventType;
         }

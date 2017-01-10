@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour {
     void Start() {
         Random.seed = 42;
 
-        var pools = Pools.sharedInstance;
+        var pools = Contexts.sharedInstance;
         pools.SetAllPools();
         pools.AddEntityIndices();
 
@@ -31,7 +31,7 @@ public class GameController : MonoBehaviour {
         _systems.TearDown();
     }
 
-    Systems createSystems(Pools pools) {
+    Systems createSystems(Contexts pools) {
         return new Feature("Systems")
 
             // Input

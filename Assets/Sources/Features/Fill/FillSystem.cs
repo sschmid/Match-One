@@ -5,9 +5,9 @@ public sealed class FillSystem : ISetPool, IReactiveSystem {
 
     public TriggerOnEvent trigger { get { return CoreMatcher.GameBoardElement.OnEntityRemoved(); } }
 
-    Pool _pool;
+    Context _pool;
 
-    public void SetPool(Pool pool) {
+    public void SetPool(Context pool) {
         _pool = pool;
     }
 

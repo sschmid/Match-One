@@ -14,7 +14,7 @@ namespace Entitas {
         public IReactiveExecuteSystem subsystem { get { return _subsystem; } }
 
         readonly IReactiveExecuteSystem _subsystem;
-        readonly GroupObserver _observer;
+        readonly Collector _observer;
         readonly IMatcher _ensureComponents;
         readonly IMatcher _excludeComponents;
         readonly bool _clearAfterExecute;
@@ -22,12 +22,12 @@ namespace Entitas {
         string _toStringCache;
 
         /// Recommended way to create systems in general: pool.CreateSystem(new MySystem());
-        public ReactiveSystem(Pool pool, IReactiveSystem subSystem) :
+        public ReactiveSystem(Context pool, IReactiveSystem subSystem) :
             this(subSystem, createGroupObserver(pool, new [] { subSystem.trigger })) {
         }
 
         /// Recommended way to create systems in general: pool.CreateSystem(new MySystem());
-        public ReactiveSystem(Pool pool, IMultiReactiveSystem subSystem) :
+        public ReactiveSystem(Context pool, IMultiReactiveSystem subSystem) :
             this(subSystem, createGroupObserver(pool, subSystem.triggers)) {
         }
 
@@ -36,7 +36,7 @@ namespace Entitas {
             this(subSystem, subSystem.groupObserver) {
         }
 
-        ReactiveSystem(IReactiveExecuteSystem subSystem, GroupObserver groupObserver) {
+        ReactiveSystem(IReactiveExecuteSystem subSystem, Collector groupObserver) {
             _subsystem = subSystem;
             var ensureComponents = subSystem as IEnsureComponents;
             if (ensureComponents != null) {
@@ -53,17 +53,17 @@ namespace Entitas {
             _buffer = new List<Entity>();
         }
 
-        static GroupObserver createGroupObserver(Pool pool, TriggerOnEvent[] triggers) {
+        static Collector createGroupObserver(Context pool, TriggerOnEvent[] triggers) {
             var triggersLength = triggers.Length;
             var groups = new Group[triggersLength];
-            var eventTypes = new GroupEventType[triggersLength];
+            var eventTypes = new GroupEvent[triggersLength];
             for (int i = 0; i < triggersLength; i++) {
                 var trigger = triggers[i];
                 groups[i] = pool.GetGroup(trigger.trigger);
                 eventTypes[i] = trigger.eventType;
             }
 
-            return new GroupObserver(groups, eventTypes);
+            return new Collector(groups, eventTypes);
         }
 
         /// Activates the ReactiveSystem (ReactiveSystem are activated by default) and starts observing changes

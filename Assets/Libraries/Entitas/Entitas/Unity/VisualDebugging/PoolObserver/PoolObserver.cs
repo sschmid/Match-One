@@ -5,15 +5,15 @@ namespace Entitas.Unity.VisualDebugging {
 
     public class PoolObserver {
 
-        public Pool pool { get { return _pool; } }
+        public Context pool { get { return _pool; } }
         public Group[] groups { get { return _groups.ToArray(); }}
         public GameObject entitiesContainer { get { return _entitiesContainer.gameObject; } }
 
-        readonly Pool _pool;
+        readonly Context _pool;
         readonly List<Group> _groups;
         readonly Transform _entitiesContainer;
 
-        public PoolObserver(Pool pool) {
+        public PoolObserver(Context pool) {
             _pool = pool;
             _groups = new List<Group>();
             _entitiesContainer = new GameObject().transform;
@@ -30,17 +30,17 @@ namespace Entitas.Unity.VisualDebugging {
             _pool.OnGroupCleared -= onGroupCleared;
         }
 
-        void onEntityCreated(Pool pool, Entity entity) {
+        void onEntityCreated(Context pool, Entity entity) {
             var entityBehaviour = new GameObject().AddComponent<EntityBehaviour>();
             entityBehaviour.Init(pool, entity);
             entityBehaviour.transform.SetParent(_entitiesContainer, false);
         }
 
-        void onGroupCreated(Pool pool, Group group) {
+        void onGroupCreated(Context pool, Group group) {
             _groups.Add(group);
         }
 
-        void onGroupCleared(Pool pool, Group group) {
+        void onGroupCleared(Context pool, Group group) {
             _groups.Remove(group);
         }
 

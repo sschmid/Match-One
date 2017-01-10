@@ -7,7 +7,7 @@ namespace Entitas {
     /// Calling pool.CreateSystem(new MySystem()) will automatically inject the pool if ISetPool is implemented.
     /// It's recommended to pass in the pool as a dependency using ISetPool rather than using Pools.sharedInstance.pool directly within the system to avoid tight coupling.
     public interface ISetPool {
-        void SetPool(Pool pool);
+        void SetPool(Context pool);
     }
 
     /// Implement this interface if you want to create a system which needs a reference to pools.
@@ -15,13 +15,13 @@ namespace Entitas {
     /// Calling pool.CreateSystem(new MySystem()) will automatically inject the pools if ISetPools is implemented.
     /// It's recommended to pass in the pools as a dependency using ISetPools rather than using Pools.sharedInstance directly within the system to avoid tight coupling.
     public interface ISetPools {
-        void SetPools(Pools pools);
+        void SetPools(Contexts pools);
     }
 
     public static class PoolExtension {
 
         /// Returns all entities matching the specified matcher.
-        public static Entity[] GetEntities(this Pool pool, IMatcher matcher) {
+        public static Entity[] GetEntities(this Context pool, IMatcher matcher) {
             return pool.GetGroup(matcher).GetEntities();
         }
 
@@ -29,14 +29,14 @@ namespace Entitas {
         /// It will inject the pool if ISetPool is implemented.
         /// It will inject the Pools.sharedInstance if ISetPools is implemented.
         /// It will automatically create a ReactiveSystem if it is a IReactiveSystem, IMultiReactiveSystem or IGroupObserverSystem.
-        public static ISystem CreateSystem(this Pool pool, ISystem system) {
-            return CreateSystem(pool, system, Pools.sharedInstance);
+        public static ISystem CreateSystem(this Context pool, ISystem system) {
+            return CreateSystem(pool, system, Contexts.sharedInstance);
         }
 
         /// This is the recommended way to create systems.
         /// It will inject the pool if ISetPool is implemented.
         /// It will inject the pools if ISetPools is implemented.
-        public static ISystem CreateSystem(this Pool pool, ISystem system, Pools pools) {
+        public static ISystem CreateSystem(this Context pool, ISystem system, Contexts pools) {
             SetPool(system, pool);
             SetPools(system, pools);
             return system;
@@ -46,15 +46,15 @@ namespace Entitas {
         /// It will inject the pool if ISetPool is implemented.
         /// It will inject the pools if ISetPools is implemented.
         /// It will automatically create a ReactiveSystem if it is a IReactiveSystem, IMultiReactiveSystem or IGroupObserverSystem.
-        public static ISystem CreateSystem(this Pool pool, IReactiveExecuteSystem system) {
-            return CreateSystem(pool, system, Pools.sharedInstance);
+        public static ISystem CreateSystem(this Context pool, IReactiveExecuteSystem system) {
+            return CreateSystem(pool, system, Contexts.sharedInstance);
         }
 
         /// This is the recommended way to create systems.
         /// It will inject the pool if ISetPool is implemented.
         /// It will inject the pools if ISetPools is implemented.
         /// It will automatically create a ReactiveSystem if it is a IReactiveSystem, IMultiReactiveSystem or IGroupObserverSystem.
-        public static ISystem CreateSystem(this Pool pool, IReactiveExecuteSystem system, Pools pools) {
+        public static ISystem CreateSystem(this Context pool, IReactiveExecuteSystem system, Contexts pools) {
             SetPool(system, pool);
             SetPools(system, pools);
 
@@ -79,7 +79,7 @@ namespace Entitas {
 
         /// This is the recommended way to create systems.
         /// It will inject the pools if ISetPools is implemented.
-        public static ISystem CreateSystem(this Pools pools, ISystem system) {
+        public static ISystem CreateSystem(this Contexts pools, ISystem system) {
             SetPools(system, pools);
             return system;
         }
@@ -87,7 +87,7 @@ namespace Entitas {
         /// This is the recommended way to create systems.
         /// It will inject the pools if ISetPools is implemented.
         /// It will automatically create a ReactiveSystem if it is a IGroupObserverSystem.
-        public static ISystem CreateSystem(this Pools pools, IReactiveExecuteSystem system) {
+        public static ISystem CreateSystem(this Contexts pools, IReactiveExecuteSystem system) {
             SetPools(system, pools);
 
             var groupObserverSystem = system as IGroupObserverSystem;
@@ -102,7 +102,7 @@ namespace Entitas {
         }
 
         [Obsolete("pools.CreateSystem(system) can not infer which pool to set for ISetPool!", true)]
-        public static ISystem CreateSystem(this Pools pools, ISetPool system) {
+        public static ISystem CreateSystem(this Contexts pools, ISetPool system) {
             throw new EntitasException(
                 "pools.CreateSystem(" + system + ") can not infer which pool to set for ISetPool!",
                 "pools.CreateSystem(system) only supports IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearDownSystem and IGroupObserverSystem."
@@ -110,7 +110,7 @@ namespace Entitas {
         }
 
         [Obsolete("pools.CreateSystem(system) can not infer which pool to use to create a ReactiveSystem!", true)]
-        public static ISystem CreateSystem(this Pools pools, IReactiveSystem system) {
+        public static ISystem CreateSystem(this Contexts pools, IReactiveSystem system) {
             throw new EntitasException(
                 "pools.CreateSystem(" + system + ") can not infer which pool to use to create a ReactiveSystem!",
                 "pools.CreateSystem(system) only supports IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearDownSystem and IGroupObserverSystem."
@@ -118,7 +118,7 @@ namespace Entitas {
         }
 
         [Obsolete("pools.CreateSystem(system) can not infer which pool to use to create a ReactiveSystem!", true)]
-        public static ISystem CreateSystem(this Pools pools, IMultiReactiveSystem system) {
+        public static ISystem CreateSystem(this Contexts pools, IMultiReactiveSystem system) {
             throw new EntitasException(
                 "pools.CreateSystem(" + system + ") can not infer which pool to use to create a ReactiveSystem!",
                 "pools.CreateSystem(system) only supports IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearDownSystem and IGroupObserverSystem."
@@ -126,7 +126,7 @@ namespace Entitas {
         }
 
         /// This will set the pool if ISetPool is implemented.
-        public static void SetPool(ISystem system, Pool pool) {
+        public static void SetPool(ISystem system, Context pool) {
             var poolSystem = system as ISetPool;
             if (poolSystem != null) {
                 poolSystem.SetPool(pool);
@@ -134,7 +134,7 @@ namespace Entitas {
         }
 
         /// This will set the pools if ISetPools is implemented.
-        public static void SetPools(ISystem system, Pools pools) {
+        public static void SetPools(ISystem system, Contexts pools) {
             var poolsSystem = system as ISetPools;
             if (poolsSystem != null) {
                 poolsSystem.SetPools(pools);
@@ -144,16 +144,16 @@ namespace Entitas {
         /// Creates a GroupObserver which observes all specified pools.
         /// This is useful when you want to create a GroupObserver for multiple pools
         /// which can be used with IGroupObserverSystem.
-        public static GroupObserver CreateGroupObserver(this Pool[] pools, IMatcher matcher, GroupEventType eventType = GroupEventType.OnEntityAdded) {
+        public static Collector CreateCollector(this Context[] pools, IMatcher matcher, GroupEvent eventType = GroupEvent.Added) {
             var groups = new Group[pools.Length];
-            var eventTypes = new GroupEventType[pools.Length];
+            var eventTypes = new GroupEvent[pools.Length];
 
             for (int i = 0; i < pools.Length; i++) {
                 groups[i] = pools[i].GetGroup(matcher);
                 eventTypes[i] = eventType;
             }
 
-            return new GroupObserver(groups, eventTypes);
+            return new Collector(groups, eventTypes);
         }
     }
 }

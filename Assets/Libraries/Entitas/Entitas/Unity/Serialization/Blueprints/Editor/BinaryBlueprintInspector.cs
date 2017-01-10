@@ -44,7 +44,7 @@ namespace Entitas.Unity.Serialization.Blueprints {
             }
         }
 
-        public static bool UpdateBinaryBlueprint(BinaryBlueprint binaryBlueprint, Pool[] allPools, string[] allPoolNames) {
+        public static bool UpdateBinaryBlueprint(BinaryBlueprint binaryBlueprint, Context[] allPools, string[] allPoolNames) {
             var blueprint = binaryBlueprint.Deserialize();
             var needsUpdate = false;
 
@@ -79,7 +79,7 @@ namespace Entitas.Unity.Serialization.Blueprints {
             return needsUpdate;
         }
 
-        static Pool[] findAllPools() {
+        static Context[] findAllPools() {
 
             // Use reflection because there is no generated Pools.cs when you create a new emtpy project.
 
@@ -89,33 +89,33 @@ namespace Entitas.Unity.Serialization.Blueprints {
 
             if (oldPoolsType != null) {
                 var allPoolsProperty = oldPoolsType.GetProperty("allPools", BindingFlags.Public | BindingFlags.Static);
-                return (Pool[])allPoolsProperty.GetValue(oldPoolsType, null);
+                return (Context[])allPoolsProperty.GetValue(oldPoolsType, null);
             } else {
                 const BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance;
-                var allPoolsProperty = typeof(Pools).GetProperty("allPools", bindingFlags);
+                var allPoolsProperty = typeof(Contexts).GetProperty("allPools", bindingFlags);
                 if (allPoolsProperty != null) {
-                    var poolsType = typeof(Pools);
+                    var poolsType = typeof(Contexts);
                     var setAllPoolsMethod = poolsType.GetMethod("SetAllPools", bindingFlags);
                     if (setAllPoolsMethod != null) {
-                        var pools = new Pools();
+                        var pools = new Contexts();
                         setAllPoolsMethod.Invoke(pools, null);
                         var allPoolsGetter = poolsType.GetProperty("allPools", bindingFlags);
 
-                        return (Pool[])allPoolsGetter.GetValue(pools, null);
+                        return (Context[])allPoolsGetter.GetValue(pools, null);
                     }
                 }
 			}
 
-            return new Pool[0];
+            return new Context[0];
         }
 
         Blueprint _blueprint;
 
-        Pool[] _allPools;
+        Context[] _allPools;
         string[] _allPoolNames;
         int _poolIndex;
 
-        Pool _pool;
+        Context _pool;
         Entity _entity;
 
         void Awake() {
@@ -181,7 +181,7 @@ namespace Entitas.Unity.Serialization.Blueprints {
                 _pool.Reset();
             }
             var targetPool = _allPools[_poolIndex];
-            _pool = new Pool(targetPool.totalComponents, 0, targetPool.metaData);
+            _pool = new Context(targetPool.totalComponents, 0, targetPool.metaData);
             _entity = _pool.CreateEntity();
         }
     }

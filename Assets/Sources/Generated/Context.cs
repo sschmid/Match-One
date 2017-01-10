@@ -31,7 +31,7 @@ namespace Entitas {
         }
     }
 
-    public partial class Pool {
+    public partial class Context {
         public Entity burstModeEntity { get { return GetGroup(InputMatcher.BurstMode).GetSingleEntity(); } }
 
         public bool isBurstMode {

@@ -32,7 +32,7 @@ namespace Entitas {
         }
     }
 
-    public partial class Pool {
+    public partial class Context {
         public Entity scoreEntity { get { return GetGroup(ScoreMatcher.Score).GetSingleEntity(); } }
 
         public ScoreComponent score { get { return scoreEntity.score; } }

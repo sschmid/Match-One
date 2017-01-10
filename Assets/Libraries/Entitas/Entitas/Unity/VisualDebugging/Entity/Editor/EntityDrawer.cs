@@ -12,7 +12,7 @@ namespace Entitas.Unity.VisualDebugging {
 
     public static class EntityDrawer {
 
-        static Dictionary<Pool, bool[]> _poolToUnfoldedComponents;
+        static Dictionary<Context, bool[]> _poolToUnfoldedComponents;
         static GUIStyle _foldoutStyle;
         static Dictionary<int, GUIStyle[]> _coloredBoxStyles;
 
@@ -28,7 +28,7 @@ namespace Entitas.Unity.VisualDebugging {
             if (!_isInitialized) {
                 _isInitialized = true;
 
-                _poolToUnfoldedComponents = new Dictionary<Pool, bool[]>();
+                _poolToUnfoldedComponents = new Dictionary<Context, bool[]>();
 
                 var types = Assembly.GetAssembly(typeof(EntityInspector)).GetTypes();
                 _defaultInstanceCreators = types
@@ -58,7 +58,7 @@ namespace Entitas.Unity.VisualDebugging {
             _coloredBoxStyles = new Dictionary<int, GUIStyle[]>();
         }
 
-        public static void DrawEntity(Pool pool, Entity entity) {
+        public static void DrawEntity(Context pool, Entity entity) {
             var bgColor = GUI.backgroundColor;
             GUI.backgroundColor = Color.red;
             if (GUILayout.Button("Destroy Entity")) {
@@ -92,7 +92,7 @@ namespace Entitas.Unity.VisualDebugging {
             #endif
         }
 
-        public static void DrawComponents(Pool pool, Entity entity) {
+        public static void DrawComponents(Context pool, Entity entity) {
             bool[] unfoldedComponents;
             if (!_poolToUnfoldedComponents.TryGetValue(pool, out unfoldedComponents)) {
                 unfoldedComponents = new bool[pool.totalComponents];
@@ -156,7 +156,7 @@ namespace Entitas.Unity.VisualDebugging {
             EntitasEditorLayout.EndVertical();
         }
 
-        public static void DrawMultipleEntities(Pool pool, Entity[] entities) {
+        public static void DrawMultipleEntities(Context pool, Entity[] entities) {
             EditorGUILayout.Space();
             EntitasEditorLayout.BeginHorizontal();
             {

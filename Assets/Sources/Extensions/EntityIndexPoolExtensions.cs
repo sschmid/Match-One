@@ -6,7 +6,7 @@ public static class EntityIndexPoolExtensions {
     public const string PositionKey = "Position";
     const int shiftX = 8;
 
-    public static void AddEntityIndices(this Pools pools) {
+    public static void AddEntityIndices(this Contexts pools) {
         var positionIndex = new EntityIndex<int>(
             pools.core.GetGroup(CoreMatcher.Position),
             (e, c) => {
@@ -20,7 +20,7 @@ public static class EntityIndexPoolExtensions {
         pools.core.AddEntityIndex(PositionKey, positionIndex);
     }
 
-    public static HashSet<Entity> GetEntitiesWithPosition(this Pool pool, int x, int y) {
+    public static HashSet<Entity> GetEntitiesWithPosition(this Context pool, int x, int y) {
         var index = (EntityIndex<int>)pool.GetEntityIndex(PositionKey);
         return index.GetEntities((x << shiftX) + y);
     }
