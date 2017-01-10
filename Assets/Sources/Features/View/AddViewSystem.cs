@@ -17,7 +17,7 @@ public sealed class AddViewSystem : ReactiveSystem {
     }
 
     protected override bool Filter(Entity entity) {
-        return entity.hasAsset;
+        return entity.hasAsset && !entity.hasView;
     }
 
     protected override void Execute(List<Entity> entities) {

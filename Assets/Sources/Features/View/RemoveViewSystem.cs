@@ -6,11 +6,19 @@ using UnityEngine;
 public sealed class RemoveViewSystem : ReactiveSystem {
 
     public RemoveViewSystem(Contexts contexts) : base(contexts.game) {
-        contexts.game.GetGroup(GameMatcher.View).OnEntityRemoved += onEntityRemoved;
     }
 
     protected override Collector GetTrigger(Context context) {
-        return context.CreateCollector(GameMatcher.Asset, GroupEvent.Removed);
+        return new Collector(
+            new [] {
+                context.GetGroup(GameMatcher.Asset),
+                context.GetGroup(GameMatcher.Destroy)
+            },
+            new [] {
+                GroupEvent.Removed,
+                GroupEvent.Added
+            }
+        );
     }
 
     protected override bool Filter(Entity entity) {
@@ -19,12 +27,12 @@ public sealed class RemoveViewSystem : ReactiveSystem {
 
     protected override void Execute(List<Entity> entities) {
         foreach(var e in entities) {
+            destroyView(e.view);
             e.RemoveView();
         }
     }
 
-    void onEntityRemoved(Group group, Entity entity, int index, IComponent component) {
-        var viewComponent = (ViewComponent)component;
+    void destroyView(ViewComponent viewComponent) {
         var gameObject = viewComponent.gameObject;
         var spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         var color = spriteRenderer.color;

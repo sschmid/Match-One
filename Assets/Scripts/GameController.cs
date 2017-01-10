@@ -35,7 +35,7 @@ public class GameController : MonoBehaviour {
         return new Feature("Systems")
 
             // Input
-            .Add(new InputSystem(contexts))
+            .Add(new EmitInputSystem(contexts))
             .Add(new ProcessInputSystem(contexts))
 
             // Update

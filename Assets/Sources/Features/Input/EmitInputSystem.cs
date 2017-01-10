@@ -1,12 +1,12 @@
 using Entitas;
 using UnityEngine;
 
-public sealed class InputSystem : IExecuteSystem, ICleanupSystem {
+public sealed class EmitInputSystem : IExecuteSystem, ICleanupSystem {
 
     readonly Context _context;
     readonly Group _inputs;
 
-    public InputSystem(Contexts contexts) {
+    public EmitInputSystem(Contexts contexts) {
         _context = contexts.input;
         _inputs = _context.GetGroup(InputMatcher.Input);
     }
