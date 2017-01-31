@@ -1,3 +1,8 @@
+# 0.37.0
+
+#### Entitas
+- Entity API doesn't return Entity anymore
+
 # 0.36.0
 
 See and discuss changes in [Milestone 0.36.0](https://github.com/sschmid/Entitas-CSharp/milestone/6)
@@ -29,9 +34,6 @@ to get a nice description, e.g. `Health(42)` (#203 #196)
 
 ### Other
 - Simplified build pipeline
-
-
-
 
 
 # 0.35.0

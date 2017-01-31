@@ -12,19 +12,22 @@ public static class ContextExtensions {
         Res.Piece5
     };
 
-    public static Entity CreateRandomPiece(this Context context, int x, int y) {
-        return context.CreateEntity()
-            .IsGameBoardElement(true)
-            .AddPosition(x, y)
-            .IsMovable(true)
-            .IsInteractive(true)
-            .AddAsset(_pieces[Random.Range(0, _pieces.Length)]);
+    public static Entity CreateRandomPiece(this GameContext context, int x, int y) {
+        var entity = context.CreateEntity();
+        entity.isGameBoardElement = true;
+        entity.AddPosition(x, y);
+        entity.isMovable = true;
+        entity.isInteractive = true;
+        entity.AddAsset(_pieces[Random.Range(0, _pieces.Length)]);
+
+        return entity;
     }
 
-    public static Entity CreateBlocker(this Context context, int x, int y) {
-        return context.CreateEntity()
-            .IsGameBoardElement(true)
-            .AddPosition(x, y)
-            .AddAsset(Res.Blocker);
+    public static Entity CreateBlocker(this GameContext context, int x, int y) {
+        var entity = context.CreateEntity();
+        entity.isGameBoardElement = true;
+        entity.AddPosition(x, y);
+        entity.AddAsset(Res.Blocker);
+        return entity;
     }
 }

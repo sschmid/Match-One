@@ -1,23 +1,23 @@
 using System.Collections.Generic;
 using Entitas;
 
-public sealed class DestroySystem : ReactiveSystem {
+public sealed class DestroySystem : ReactiveSystem<GameEntity> {
 
-    readonly Context _context;
+    readonly GameContext _context;
 
     public DestroySystem(Contexts contexts) : base(contexts.game) {
         _context = contexts.game;
     }
 
-    protected override Collector GetTrigger(Context context) {
+    protected override Collector<GameEntity> GetTrigger(IContext<GameEntity> context) {
         return context.CreateCollector(GameMatcher.Destroy);
     }
 
-    protected override bool Filter(Entity entity) {
+    protected override bool Filter(GameEntity entity) {
         return entity.isDestroy;
     }
 
-    protected override void Execute(List<Entity> entities) {
+    protected override void Execute(List<GameEntity> entities) {
         foreach(var e in entities) {
             _context.DestroyEntity(e);
         }

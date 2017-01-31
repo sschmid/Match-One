@@ -3,8 +3,8 @@ using UnityEngine;
 
 public sealed class EmitInputSystem : IExecuteSystem, ICleanupSystem {
 
-    readonly Context _context;
-    readonly Group _inputs;
+    readonly InputContext _context;
+    readonly IGroup<InputEntity> _inputs;
 
     public EmitInputSystem(Contexts contexts) {
         _context = contexts.input;

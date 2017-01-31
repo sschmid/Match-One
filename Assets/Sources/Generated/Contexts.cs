@@ -6,32 +6,45 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace Entitas {
+using Entitas;
+            
+public partial class Contexts {
 
-    public partial class Contexts {
+    public static Contexts sharedInstance {
+        get {
+            if(_sharedInstance == null) {
+                _sharedInstance = new Contexts();
+            }
 
-        public static Context CreateGameContext() {
-            return CreateContext("Game", GameComponentIds.TotalComponents, GameComponentIds.componentNames, GameComponentIds.componentTypes);
+            return _sharedInstance;
         }
+        set { _sharedInstance = value; }
+    }
 
-        public static Context CreateGameSessionContext() {
-            return CreateContext("GameSession", GameSessionComponentIds.TotalComponents, GameSessionComponentIds.componentNames, GameSessionComponentIds.componentTypes);
+    static Contexts _sharedInstance;
+
+    public static void CreateContextObserver(IContext context) {
+#if(!ENTITAS_DISABLE_VISUAL_DEBUGGING && UNITY_EDITOR)
+        if(UnityEngine.Application.isPlaying) {
+            var observer = new Entitas.Unity.VisualDebugging.ContextObserver(context);
+            UnityEngine.Object.DontDestroyOnLoad(observer.gameObject);
         }
+#endif
+    }
 
-        public static Context CreateInputContext() {
-            return CreateContext("Input", InputComponentIds.TotalComponents, InputComponentIds.componentNames, InputComponentIds.componentTypes);
-        }
+    public GameContext game { get; set; }
+    public GameSessionContext gameSession { get; set; }
+    public InputContext input { get; set; }
 
-        public Context[] allContexts { get { return new [] { game, gameSession, input }; } }
+    public IContext[] allContexts { get { return new IContext [] { game, gameSession, input }; } }
 
-        public Context game;
-        public Context gameSession;
-        public Context input;
+    public virtual void SetAllContexts() {
+        game = new GameContext();
+        gameSession = new GameSessionContext();
+        input = new InputContext();
 
-        public void SetAllContexts() {
-            game = CreateGameContext();
-            gameSession = CreateGameSessionContext();
-            input = CreateInputContext();
-        }
+        CreateContextObserver(game);
+        CreateContextObserver(gameSession);
+        CreateContextObserver(input);
     }
 }

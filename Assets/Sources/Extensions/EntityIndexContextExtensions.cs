@@ -7,7 +7,7 @@ public static class EntityIndexContextExtensions {
     const int shiftX = 8;
 
     public static void AddEntityIndices(this Contexts contexts) {
-        var positionIndex = new EntityIndex<int>(
+        var positionIndex = new EntityIndex<GameEntity, int>(
             contexts.game.GetGroup(GameMatcher.Position),
             (e, c) => {
                 var positionComponent = c as PositionComponent;
@@ -20,8 +20,8 @@ public static class EntityIndexContextExtensions {
         contexts.game.AddEntityIndex(PositionKey, positionIndex);
     }
 
-    public static HashSet<Entity> GetEntitiesWithPosition(this Context context, int x, int y) {
-        var index = (EntityIndex<int>)context.GetEntityIndex(PositionKey);
+    public static HashSet<GameEntity> GetEntitiesWithPosition(this GameContext context, int x, int y) {
+        var index = (EntityIndex<GameEntity, int>)context.GetEntityIndex(PositionKey);
         return index.GetEntities((x << shiftX) + y);
     }
 }

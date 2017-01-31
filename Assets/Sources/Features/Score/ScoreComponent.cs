@@ -1,7 +1,7 @@
 using Entitas;
-using Entitas.CodeGenerator;
+using Entitas.CodeGenerator.Api;
 
-[GameSession, SingleEntity]
+[GameSession, Unique]
 public sealed class ScoreComponent : IComponent {
 
     public int value;

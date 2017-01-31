@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Entitas;
 
-public sealed class ScoreSystem : ReactiveSystem, IInitializeSystem {
+public sealed class ScoreSystem : ReactiveSystem<GameEntity>, IInitializeSystem {
 
     readonly Contexts _contexts;
 
@@ -9,11 +9,11 @@ public sealed class ScoreSystem : ReactiveSystem, IInitializeSystem {
         _contexts = contexts;
     }
 
-    protected override Collector GetTrigger(Context context) {
+    protected override Collector<GameEntity> GetTrigger(IContext<GameEntity> context) {
         return context.CreateCollector(GameMatcher.GameBoardElement, GroupEvent.Removed);
     }
 
-    protected override bool Filter(Entity entity) {
+    protected override bool Filter(GameEntity entity) {
         return true;
     }
 
@@ -21,7 +21,7 @@ public sealed class ScoreSystem : ReactiveSystem, IInitializeSystem {
         _contexts.gameSession.SetScore(0);
     }
 
-    protected override void Execute(List<Entity> entities) {
+    protected override void Execute(List<GameEntity> entities) {
         _contexts.gameSession.ReplaceScore(_contexts.gameSession.score.value + entities.Count);
     }
 }

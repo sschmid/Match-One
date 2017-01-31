@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Entitas;
 using System.Linq;
 
-public sealed class ProcessInputSystem : ReactiveSystem {
+public sealed class ProcessInputSystem : ReactiveSystem<InputEntity> {
 
     readonly Contexts _contexts;
 
@@ -10,15 +10,15 @@ public sealed class ProcessInputSystem : ReactiveSystem {
         _contexts = contexts;
     }
 
-    protected override Collector GetTrigger(Context context) {
+    protected override Collector<InputEntity> GetTrigger(IContext<InputEntity> context) {
         return context.CreateCollector(InputMatcher.Input);
     }
 
-    protected override bool Filter(Entity entity) {
+    protected override bool Filter(InputEntity entity) {
         return entity.hasInput;
     }
 
-    protected override void Execute(List<Entity> entities) {
+    protected override void Execute(List<InputEntity> entities) {
         var inputEntity = entities.SingleEntity();
         var input = inputEntity.input;
 

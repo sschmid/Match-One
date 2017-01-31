@@ -2,21 +2,21 @@ using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
 
-public sealed class GameBoardSystem : ReactiveSystem, IInitializeSystem {
+public sealed class GameBoardSystem : ReactiveSystem<GameEntity>, IInitializeSystem {
 
-    readonly Context _context;
-    readonly Group _gameBoardElements;
+    readonly GameContext _context;
+    readonly IGroup<GameEntity> _gameBoardElements;
 
     public GameBoardSystem(Contexts contexts) : base(contexts.game) {
         _context = contexts.game;
-        _gameBoardElements = _context.GetGroup(Matcher.AllOf(GameMatcher.GameBoardElement, GameMatcher.Position));
+        _gameBoardElements = _context.GetGroup(Matcher<GameEntity>.AllOf(GameMatcher.GameBoardElement, GameMatcher.Position));
     }
 
-    protected override Collector GetTrigger(Context context) {
+    protected override Collector<GameEntity> GetTrigger(IContext<GameEntity> context) {
         return context.CreateCollector(GameMatcher.GameBoard);
     }
 
-    protected override bool Filter(Entity entity) {
+    protected override bool Filter(GameEntity entity) {
         return entity.hasGameBoard;
     }
 
@@ -33,7 +33,7 @@ public sealed class GameBoardSystem : ReactiveSystem, IInitializeSystem {
         }
     }
 
-    protected override void Execute(List<Entity> entities) {
+    protected override void Execute(List<GameEntity> entities) {
         var gameBoard = entities.SingleEntity().gameBoard;
         foreach(var e in _gameBoardElements.GetEntities()) {
             if(e.position.x >= gameBoard.columns || e.position.y >= gameBoard.rows) {

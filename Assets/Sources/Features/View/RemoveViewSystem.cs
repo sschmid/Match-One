@@ -3,13 +3,13 @@ using DG.Tweening;
 using Entitas;
 using UnityEngine;
 
-public sealed class RemoveViewSystem : ReactiveSystem {
+public sealed class RemoveViewSystem : ReactiveSystem<GameEntity> {
 
     public RemoveViewSystem(Contexts contexts) : base(contexts.game) {
     }
 
-    protected override Collector GetTrigger(Context context) {
-        return new Collector(
+    protected override Collector<GameEntity> GetTrigger(IContext<GameEntity> context) {
+        return new Collector<GameEntity>(
             new [] {
                 context.GetGroup(GameMatcher.Asset),
                 context.GetGroup(GameMatcher.Destroy)
@@ -21,11 +21,11 @@ public sealed class RemoveViewSystem : ReactiveSystem {
         );
     }
 
-    protected override bool Filter(Entity entity) {
+    protected override bool Filter(GameEntity entity) {
         return entity.hasView;
     }
 
-    protected override void Execute(List<Entity> entities) {
+    protected override void Execute(List<GameEntity> entities) {
         foreach(var e in entities) {
             destroyView(e.view);
             e.RemoveView();
