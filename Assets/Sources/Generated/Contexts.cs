@@ -33,18 +33,18 @@ public partial class Contexts {
     }
 
     public GameContext game { get; set; }
-    public GameSessionContext gameSession { get; set; }
+    public GameStateContext gameState { get; set; }
     public InputContext input { get; set; }
 
-    public IContext[] allContexts { get { return new IContext [] { game, gameSession, input }; } }
+    public IContext[] allContexts { get { return new IContext [] { game, gameState, input }; } }
 
     public virtual void SetAllContexts() {
         game = new GameContext();
-        gameSession = new GameSessionContext();
+        gameState = new GameStateContext();
         input = new InputContext();
 
         CreateContextObserver(game);
-        CreateContextObserver(gameSession);
+        CreateContextObserver(gameState);
         CreateContextObserver(input);
     }
 }

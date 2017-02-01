@@ -15,7 +15,7 @@ public sealed partial class InputContext : Context<InputEntity> {
             InputComponentsLookup.TotalComponents,
             0,
             new ContextInfo(
-                "Input Context",
+                "Input",
                 InputComponentsLookup.componentNames,
                 InputComponentsLookup.componentTypes
             )

@@ -5,7 +5,7 @@ namespace Entitas.CodeGenerator {
     public class ContextsGenerator : ICodeGenerator {
 
         const string CONTEXTS_TEMPLATE =
-            @"using Entitas;
+@"using Entitas;
             
 public partial class Contexts {
 
@@ -64,24 +64,24 @@ ${contextObservers}
 
         string generateContextsClass(string[] contextNames) {
             var contextProperties = string.Join("\n", contextNames
-                                                .Select(contextName => CONTEXT_PROPERTY_TEMPLATE
+                .Select(contextName => CONTEXT_PROPERTY_TEMPLATE
                         .Replace("${Context}", contextName)
                         .Replace("${context}", contextName.LowercaseFirst())
                        ).ToArray());
 
             var contextList = string.Join(", ", contextNames
-                                          .Select(contextName => CONTEXT_LIST_TEMPLATE
+                .Select(contextName => CONTEXT_LIST_TEMPLATE
                         .Replace("${context}", contextName.LowercaseFirst())
                        ).ToArray());
 
             var contextAssignments = string.Join("\n", contextNames
-                                                 .Select(contextName => CONTEXT_ASSIGNMENT_TEMPLATE
+                .Select(contextName => CONTEXT_ASSIGNMENT_TEMPLATE
                         .Replace("${Context}", contextName)
                         .Replace("${context}", contextName.LowercaseFirst())
                        ).ToArray());
 
             var contextObservers = string.Join("\n", contextNames
-                                               .Select(contextName => CONTEXT_OBSERVER_TEMPLATE
+                .Select(contextName => CONTEXT_OBSERVER_TEMPLATE
                         .Replace("${context}", contextName.LowercaseFirst())
                        ).ToArray());
 

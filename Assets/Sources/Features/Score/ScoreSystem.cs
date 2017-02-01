@@ -18,10 +18,10 @@ public sealed class ScoreSystem : ReactiveSystem<GameEntity>, IInitializeSystem 
     }
 
     public void Initialize() {
-        _contexts.gameSession.SetScore(0);
+        _contexts.gameState.SetScore(0);
     }
 
     protected override void Execute(List<GameEntity> entities) {
-        _contexts.gameSession.ReplaceScore(_contexts.gameSession.score.value + entities.Count);
+        _contexts.gameState.ReplaceScore(_contexts.gameState.score.value + entities.Count);
     }
 }

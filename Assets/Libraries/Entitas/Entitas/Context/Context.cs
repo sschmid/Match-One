@@ -81,16 +81,11 @@ namespace Entitas {
         public virtual TEntity CreateEntity() {
             TEntity entity;
 
-            // TODO UNIT TEST
-            // Test Reactivate
-            // Test Initialize
             if(_reusableEntities.Count > 0) {
                 entity = _reusableEntities.Pop();
-                // TODO
                 entity.Reactivate(_creationIndex++);
             } else {
                 entity = new TEntity();
-                // TODO
                 entity.Initialize(_creationIndex++, _totalComponents, _componentPools, _contextInfo);
             }
 
@@ -123,7 +118,7 @@ namespace Entitas {
                 OnEntityWillBeDestroyed(this, entity);
             }
 
-            entity.destroy();
+            entity.Destroy();
 
             if(OnEntityDestroyed != null) {
                 OnEntityDestroyed(this, entity);
@@ -135,7 +130,7 @@ namespace Entitas {
                 entity.OnEntityReleased -= _cachedEntityReleased;
                 _reusableEntities.Push(entity);
                 entity.Release(this);
-                entity.removeAllOnEntityReleasedHandlers();
+                entity.RemoveAllOnEntityReleasedHandlers();
             } else {
                 _retainedEntities.Add(entity);
                 entity.Release(this);
@@ -279,7 +274,7 @@ namespace Entitas {
                     var tEntity = (TEntity)entity;
 
                     for(int i = 0; i < groups.Count; i++) {
-                        events.Add(groups[i].handleEntity(tEntity));
+                        events.Add(groups[i].HandleEntity(tEntity));
                     }
 
                     for(int i = 0; i < events.Count; i++) {
@@ -316,7 +311,7 @@ namespace Entitas {
                 );
             }
             var tEntity = (TEntity)entity;
-            entity.removeAllOnEntityReleasedHandlers();
+            entity.RemoveAllOnEntityReleasedHandlers();
             _retainedEntities.Remove(tEntity);
             _reusableEntities.Push(tEntity);
         }

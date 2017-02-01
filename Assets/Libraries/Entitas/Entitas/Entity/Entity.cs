@@ -55,7 +55,7 @@ namespace Entitas {
         public ContextInfo contextInfo { get { return _contextInfo; } }
 
         int _creationIndex;
-        bool _isEnabled = true;
+        bool _isEnabled;
 
         int _totalComponents;
         IComponent[] _components;
@@ -68,9 +68,6 @@ namespace Entitas {
         StringBuilder _toStringBuilder;
 
         public void Initialize(int creationIndex, int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo = null) {
-            // TODO UNIT Test
-            // Should set creation index
-            // shoud set isEnabled = true
             Reactivate(creationIndex);
 
             _totalComponents = totalComponents;
@@ -90,9 +87,6 @@ namespace Entitas {
         }
 
         public void Reactivate(int creationIndex) {
-            // TODO UNIT TEST
-            // Set creation index
-            // Set isEnabled = true
             _creationIndex = creationIndex;
             _isEnabled = true;
         }
@@ -329,9 +323,6 @@ namespace Entitas {
             return componentPool.Count > 0 ? (T)componentPool.Pop() : new T();
         }
 
-
-        // TODO update tests to check if contains owner
-
         /// Returns the number of objects that retain this entity.
         public int retainCount { get { return owners.Count; } }
 
@@ -374,7 +365,7 @@ namespace Entitas {
 
         // This method is used internally. Don't call it yourself.
         // Use context.DestroyEntity(entity);
-        public void destroy() {
+        public void Destroy() {
             _isEnabled = false;
             RemoveAllComponents();
             OnComponentAdded = null;
@@ -383,7 +374,7 @@ namespace Entitas {
         }
 
         // Do not call this method manually. This method is called by the context.
-        public void removeAllOnEntityReleasedHandlers() {
+        public void RemoveAllOnEntityReleasedHandlers() {
             OnEntityReleased = null;
         }
 

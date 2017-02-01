@@ -11,110 +11,38 @@ namespace Entitas.Unity.CodeGenerator {
 
         [MenuItem(EntitasMenuItems.generate, false, EntitasMenuItemPriorities.generate)]
         public static void Generate() {
+            checkCanGenerate();
 
+            Debug.Log("Generating...");
 
-            // TODO
-            //checkCanGenerate();
+			var config = new CodeGeneratorConfig(EntitasPreferences.LoadConfig(), new string[0], new string[0], new string[0]);
 
-            //Debug.Log("Generating...");
-
-            //var codeGenerators = GetCodeGenerators();
-            //var codeGeneratorNames = codeGenerators.Select(cg => cg.Name).ToArray();
-            //var config = new CodeGeneratorConfig(EntitasPreferences.LoadConfig(), codeGeneratorNames);
-
-            //var enabledCodeGeneratorNames = config.enabledCodeGenerators;
-            //var enabledCodeGenerators = codeGenerators
-            //    .Where(type => enabledCodeGeneratorNames.Contains(type.Name))
-            //    .Select(type => (ICodeGenerator)Activator.CreateInstance(type))
-            //    .ToArray();
-
-            //var blueprintNames = BinaryBlueprintInspector.FindAllBlueprints()
-            //    .Select(b => b.Deserialize().name)
-            //    .ToArray();
-
-            //var assembly = Assembly.GetAssembly(typeof(IEntity));
-            //var generatedFiles = TypeReflectionCodeGenerator.Generate(assembly, config.contexts,
-            //    blueprintNames, config.generatedFolderPath, enabledCodeGenerators);
-
-            //foreach(var file in generatedFiles) {
-            //    Debug.Log(file.generatorName + ": " + file.fileName);
-            //}
-
-            //var totalGeneratedFiles = generatedFiles.Select(file => file.fileName).Distinct().Count();
-            //Debug.Log("Generated " + totalGeneratedFiles + " files.");
-
-            GenerateTypeSafe();
-
-			AssetDatabase.Refresh();
-        }
-
-
-
-        static readonly string[] contextNames = { "Game", "GameSession", "Input" };
-        const string path = "Assets/Sources/";
-
-        public static void GenerateTypeSafe() {
-            var types = Assembly
-                .GetAssembly(typeof(Entity))
-                .GetTypes();
-
-            var dataProviders = new ICodeGeneratorDataProvider[] {
-                new ContextDataProvider(contextNames),
-                new ComponentDataProvider(types)
-            };
-
-            var codeGenerators = new ICodeGenerator[] {
-                new EntityGenerator(),
-                new ContextGenerator(),
-                new ContextAttributeGenerator(),
-                new ContextsGenerator(),
-                new ComponentsLookupGenerator(),
-                new ComponentEntityGenerator(),
-                new ComponentContextGenerator(),
-                new ComponentGenerator(),
-                new MatcherGenerator()
-            };
-
-            var postProcessors = new ICodeGenFilePostProcessor [] {
-                new AddFileHeaderPostProcessor(),
-                new NewLinePostProcessor(),
-                new WriteToDiskPostProcessor(path),
-            };
-
-            var codeGenerator = new Entitas.CodeGenerator.CodeGenerator(dataProviders, codeGenerators, postProcessors);
-            var files = codeGenerator.Generate();
+            var files = new Entitas.CodeGenerator.CodeGenerator(
+                getEnabled<ICodeGeneratorDataProvider>(config.dataProviders),
+                getEnabled<ICodeGenerator>(config.codeGenerators),
+                getEnabled<ICodeGenFilePostProcessor>(config.postProcessors)
+            ).Generate();
 
             foreach(var file in files) {
-                UnityEngine.Debug.Log("file.fileName: " + file.fileName);
+                Debug.Log(file.generatorName + ": " + file.fileName);
             }
 
-            UnityEngine.Debug.Log("Done. " + files.Length + " files generated.");
+            var totalGeneratedFiles = files.Select(file => file.fileName).Distinct().Count();
+            Debug.Log("Generated " + totalGeneratedFiles + " files.");
+
+            AssetDatabase.Refresh();
         }
 
+        static T[] getEnabled<T>(string[] names) {
+            return GetTypes<T>()
+                    .Where(type => names.Contains(type.Name))
+                    .Select(type => (T)Activator.CreateInstance(type))
+                    .ToArray();
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        public static Type[] GetCodeGenerators() {
-            return Assembly.GetAssembly(typeof(ICodeGenerator)).GetTypes()
-                .Where(type => type.ImplementsInterface<ICodeGenerator>())
+        public static Type[] GetTypes<T>() {
+            return Assembly.GetAssembly(typeof(T)).GetTypes()
+                .Where(type => type.ImplementsInterface<T>())
                 .OrderBy(type => type.FullName)
                 .ToArray();
         }

@@ -15,7 +15,7 @@ public sealed partial class GameContext : Context<GameEntity> {
             GameComponentsLookup.TotalComponents,
             0,
             new ContextInfo(
-                "Game Context",
+                "Game",
                 GameComponentsLookup.componentNames,
                 GameComponentsLookup.componentTypes
             )
