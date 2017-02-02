@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 using Entitas;
             
-public partial class Contexts {
+public partial class Contexts : IContexts {
 
     public static Contexts sharedInstance {
         get {
