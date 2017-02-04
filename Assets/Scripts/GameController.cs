@@ -1,7 +1,10 @@
 using Entitas;
 using UnityEngine;
+using Entitas.Unity.Blueprints;
 
 public class GameController : MonoBehaviour {
+
+    public Blueprints blueprints;
 
     Systems _systems;
 
@@ -11,6 +14,7 @@ public class GameController : MonoBehaviour {
         var contexts = Contexts.sharedInstance;
         contexts.SetAllContexts();
         contexts.AddEntityIndices();
+        contexts.game.SetBlueprints(blueprints);
 
         // Suggested systems lifecycle:
         // systems.Initialize() on Start
@@ -35,19 +39,14 @@ public class GameController : MonoBehaviour {
         return new Feature("Systems")
 
             // Input
-            .Add(new EmitInputSystem(contexts))
-            .Add(new ProcessInputSystem(contexts))
+            .Add(new InputSystems(contexts))
 
             // Update
-            .Add(new GameBoardSystem(contexts))
-            .Add(new FallSystem(contexts))
-            .Add(new FillSystem(contexts))
-            .Add(new ScoreSystem(contexts))
+            .Add(new GameBoardSystems(contexts))
+            .Add(new GameStateSystems(contexts))
 
             // Render
-            .Add(new RemoveViewSystem(contexts))
-            .Add(new AddViewSystem(contexts))
-            .Add(new AnimatePositionSystem(contexts))
+            .Add(new ViewSystems(contexts))
 
             // Destroy
             .Add(new DestroySystem(contexts));
