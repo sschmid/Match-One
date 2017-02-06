@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using Entitas;
+using Entitas.Unity;
 using UnityEngine;
 
 public sealed class RemoveViewSystem : ReactiveSystem<GameEntity> {
