@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Entitas.CodeGenerator;
@@ -21,23 +22,50 @@ namespace Entitas.Unity.CodeGenerator {
         public void Initialize(EntitasPreferencesConfig config) {
             _availableDataProviderNames = UnityCodeGenerator
                 .GetTypes<ICodeGeneratorDataProvider>()
-                .Select(type => type.Name)
+				.Where(type => !type.IsAbstract)
+				.Select(type => type.Name)
                 .OrderBy(name => name)
                 .ToArray();
 
             _availableGeneratorNames = UnityCodeGenerator
                 .GetTypes<ICodeGenerator>()
+				.Where(type => !type.IsAbstract)
                 .Select(type => type.Name)
                 .OrderBy(name => name)
                 .ToArray();
 
             _availablePostProcessorNames = UnityCodeGenerator
                 .GetTypes<ICodeGenFilePostProcessor>()
+				.Where(type => !type.IsAbstract)
                 .Select(type => type.Name)
                 .OrderBy(name => name)
                 .ToArray();
 
-            _codeGeneratorConfig = new CodeGeneratorConfig(config, _availableDataProviderNames, _availableGeneratorNames, _availablePostProcessorNames);
+            var enabledDataProviderNames = UnityCodeGenerator
+                .GetTypes<ICodeGeneratorDataProvider>()
+				.Where(type => !type.IsAbstract)
+				.Where(type => ((ICodeGeneratorDataProvider)Activator.CreateInstance(type)).IsEnabledByDefault)
+				.Select(type => type.Name)
+                .OrderBy(name => name)
+                .ToArray();
+
+			var enabledGeneratorNames = UnityCodeGenerator
+                .GetTypes<ICodeGenerator>()
+				.Where(type => !type.IsAbstract)
+				.Where(type => ((ICodeGenerator)Activator.CreateInstance(type)).IsEnabledByDefault)
+                .Select(type => type.Name)
+                .OrderBy(name => name)
+                .ToArray();
+
+			var enabledPostProcessorNames = UnityCodeGenerator
+                .GetTypes<ICodeGenFilePostProcessor>()
+				.Where(type => !type.IsAbstract)
+				.Where(type => ((ICodeGenFilePostProcessor)Activator.CreateInstance(type)).IsEnabledByDefault)
+                .Select(type => type.Name)
+                .OrderBy(name => name)
+                .ToArray();
+
+			_codeGeneratorConfig = new CodeGeneratorConfig(config, enabledDataProviderNames, enabledGeneratorNames, enabledPostProcessorNames);
 
             _contexts = new List<string>(_codeGeneratorConfig.contexts);
 

@@ -19,6 +19,5 @@ obj
 test-results
 
 # Custom
-Match One-csharp.sln
-Match One.sln
+Match-One.sln
 ProjectVersion.txt
