@@ -14,6 +14,9 @@ public static class BlueprintsExtension {
     public static Blueprint Blocker(this Blueprints blueprints) {
         return blueprints.GetBlueprint("Blocker");
     }
+    public static Blueprint GameBoard(this Blueprints blueprints) {
+        return blueprints.GetBlueprint("GameBoard");
+    }
     public static Blueprint Piece(this Blueprints blueprints) {
         return blueprints.GetBlueprint("Piece");
     }

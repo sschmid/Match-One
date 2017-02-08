@@ -1,5 +1,4 @@
-﻿using Entitas;
-using UnityEngine;
+﻿using UnityEngine;
 using Entitas.Blueprints;
 
 public static class BlueprintsExtensions {
@@ -13,7 +12,14 @@ public static class BlueprintsExtensions {
         Res.Piece5
     };
 
-    public static Entity CreateRandomPiece(this GameContext context, int x, int y) {
+    public static GameEntity CreateGameBoard(this GameContext context) {
+		var entity = context.CreateEntity();
+		entity.ApplyBlueprint(context.blueprints.value.GameBoard());
+
+        return entity;
+    }
+
+	public static GameEntity CreateRandomPiece(this GameContext context, int x, int y) {
 		var entity = context.CreateEntity();
         entity.ApplyBlueprint(context.blueprints.value.Piece());
 
@@ -23,7 +29,7 @@ public static class BlueprintsExtensions {
         return entity;
     }
 
-    public static Entity CreateBlocker(this GameContext context, int x, int y) {
+	public static GameEntity CreateBlocker(this GameContext context, int x, int y) {
         var entity = context.CreateEntity();
         entity.ApplyBlueprint(context.blueprints.value.Blocker());
 
