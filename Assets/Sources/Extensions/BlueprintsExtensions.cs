@@ -13,14 +13,14 @@ public static class BlueprintsExtensions {
     };
 
     public static GameEntity CreateGameBoard(this GameContext context) {
-		var entity = context.CreateEntity();
-		entity.ApplyBlueprint(context.blueprints.value.GameBoard());
+        var entity = context.CreateEntity();
+        entity.ApplyBlueprint(context.blueprints.value.GameBoard());
 
         return entity;
     }
 
-	public static GameEntity CreateRandomPiece(this GameContext context, int x, int y) {
-		var entity = context.CreateEntity();
+    public static GameEntity CreateRandomPiece(this GameContext context, int x, int y) {
+        var entity = context.CreateEntity();
         entity.ApplyBlueprint(context.blueprints.value.Piece());
 
         entity.AddPosition(x, y);
@@ -29,7 +29,7 @@ public static class BlueprintsExtensions {
         return entity;
     }
 
-	public static GameEntity CreateBlocker(this GameContext context, int x, int y) {
+    public static GameEntity CreateBlocker(this GameContext context, int x, int y) {
         var entity = context.CreateEntity();
         entity.ApplyBlueprint(context.blueprints.value.Blocker());
 

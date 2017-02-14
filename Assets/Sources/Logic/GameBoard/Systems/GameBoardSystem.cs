@@ -21,7 +21,7 @@ public sealed class GameBoardSystem : ReactiveSystem<GameEntity>, IInitializeSys
     }
 
     public void Initialize() {
-		var gameBoard = _context.CreateGameBoard().gameBoard;
+        var gameBoard = _context.CreateGameBoard().gameBoard;
         for(int row = 0; row < gameBoard.rows; row++) {
             for(int column = 0; column < gameBoard.columns; column++) {
                 if(Random.value > 0.91f) {
