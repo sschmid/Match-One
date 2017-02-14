@@ -38,7 +38,7 @@ public partial class Contexts : IContexts {
 
     public IContext[] allContexts { get { return new IContext [] { game, gameState, input }; } }
 
-    public virtual void SetAllContexts() {
+    public void SetAllContexts() {
         game = new GameContext();
         gameState = new GameStateContext();
         input = new InputContext();

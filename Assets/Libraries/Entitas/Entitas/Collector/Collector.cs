@@ -15,14 +15,14 @@ namespace Entitas {
         readonly HashSet<TEntity> _collectedEntities;
         readonly IGroup<TEntity>[] _groups;
         readonly GroupEvent[] _groupEvents;
+
         GroupChanged<TEntity> _addEntityCache;
         string _toStringCache;
         StringBuilder _toStringBuilder;
 
         /// Creates a Collector and will collect changed entities
         /// based on the specified groupEvent.
-        public Collector(IGroup<TEntity> group, GroupEvent groupEvent)
-            : this(new[] { group }, new[] { groupEvent }) {
+        public Collector(IGroup<TEntity> group, GroupEvent groupEvent) : this(new[] { group }, new[] { groupEvent }) {
         }
 
         /// Creates a Collector and will collect changed entities
