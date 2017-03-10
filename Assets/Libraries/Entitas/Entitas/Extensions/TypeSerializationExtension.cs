@@ -54,6 +54,15 @@ namespace Entitas {
             return null;
         }
 
+        public static string ShortTypeName(this string fullTypeName) {
+            var split = fullTypeName.Split('.');
+            return split[split.Length - 1];
+        }
+
+        public static string RemoveDots(this string fullTypeName) {
+            return fullTypeName.Replace(".", string.Empty);
+        }
+
         static string generateTypeString(string typeString) {
             if(_builtInTypeStrings.ContainsKey(typeString)) {
                 typeString = _builtInTypeStrings[typeString];

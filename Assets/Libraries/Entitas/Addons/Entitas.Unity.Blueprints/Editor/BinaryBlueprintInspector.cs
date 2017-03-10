@@ -87,7 +87,6 @@ namespace Entitas.Unity.Blueprints {
 
             if(contextsType != null) {
                 var contexts = (IContexts)Activator.CreateInstance(contextsType);
-                contexts.SetAllContexts();
                 return contexts.allContexts;
             }
 
@@ -123,8 +122,6 @@ namespace Entitas.Unity.Blueprints {
             switchToContext();
 
             _entity.ApplyBlueprint(_blueprint);
-
-            EntityDrawer.Initialize();
         }
 
         void OnDisable() {
@@ -141,8 +138,8 @@ namespace Entitas.Unity.Blueprints {
                 EditorGUILayout.LabelField("Blueprint", EditorStyles.boldLabel);
                 binaryBlueprint.name = EditorGUILayout.TextField("Name", binaryBlueprint.name);
 
-				if(_context != null) {
-                    EntitasEditorLayout.BeginHorizontal();
+                if(_context != null) {
+                    EditorGUILayout.BeginHorizontal();
                     {
                         _contextIndex = EditorGUILayout.Popup(_contextIndex, _allContextNames);
 
@@ -150,9 +147,9 @@ namespace Entitas.Unity.Blueprints {
                             switchToContext();
                         }
                     }
-                    EntitasEditorLayout.EndHorizontal();
+                    EditorGUILayout.EndHorizontal();
 
-					EntityDrawer.DrawComponents(_context, _entity, true);
+                    EntityDrawer.DrawComponents(_context, _entity);
                 } else {
                     EditorGUILayout.LabelField("No contexts found!");
                 }

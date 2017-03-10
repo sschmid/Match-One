@@ -6,15 +6,13 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-using Entitas;
-
-public sealed partial class InputContext : Context<InputEntity> {
+public sealed partial class InputContext : Entitas.Context<InputEntity> {
 
     public InputContext()
         : base(
             InputComponentsLookup.TotalComponents,
             0,
-            new ContextInfo(
+            new Entitas.ContextInfo(
                 "Input",
                 InputComponentsLookup.componentNames,
                 InputComponentsLookup.componentTypes

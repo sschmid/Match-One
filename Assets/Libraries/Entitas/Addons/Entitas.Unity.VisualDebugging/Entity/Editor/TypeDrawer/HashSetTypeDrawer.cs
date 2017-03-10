@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
 
 namespace Entitas.Unity.VisualDebugging {
 
@@ -12,7 +11,7 @@ namespace Entitas.Unity.VisualDebugging {
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(HashSet<>);
         }
 
-        public object DrawAndGetNewValue(Type memberType, string memberName, object value, IEntity entity, int index, IComponent component) {
+        public object DrawAndGetNewValue(Type memberType, string memberName, object value, IComponent component) {
             var elementType = memberType.GetGenericArguments()[0];
             var itemsToRemove = new ArrayList();
             var itemsToAdd = new ArrayList();
@@ -26,7 +25,7 @@ namespace Entitas.Unity.VisualDebugging {
                     EditorGUILayout.LabelField(memberName);
                 }
 
-                if(GUILayout.Button("+", GUILayout.Width(19), GUILayout.Height(14))) {
+                if(EntitasEditorLayout.MiniButton("new " + elementType.ToCompilableString().ShortTypeName())) {
                     object defaultValue;
                     if(EntityDrawer.CreateDefault(elementType, out defaultValue)) {
                         itemsToAdd.Add(defaultValue);
@@ -42,13 +41,13 @@ namespace Entitas.Unity.VisualDebugging {
                 foreach(var item in (IEnumerable)value) {
                     EditorGUILayout.BeginHorizontal();
                     {
-                        var newItem = EntityDrawer.DrawAndGetNewValue(elementType, string.Empty, item, entity, index, component);
-                        if(EntityDrawer.DidValueChange(item, newItem)) {
+                        EntityDrawer.DrawComponentMember(elementType, string.Empty, item,
+                                                         component, (newComponent, newValue) => {
                             itemsToRemove.Add(item);
-                            itemsToAdd.Add(newItem);
-                        }
+                            itemsToAdd.Add(newValue);
+                        });
 
-                        if(GUILayout.Button("-", GUILayout.Width(19), GUILayout.Height(14))) {
+                        if(EntitasEditorLayout.MiniButton("-")) {
                             itemsToRemove.Add(item);
                         }
                     }

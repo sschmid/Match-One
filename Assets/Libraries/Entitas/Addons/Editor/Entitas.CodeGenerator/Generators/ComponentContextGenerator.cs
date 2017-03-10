@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -10,9 +9,7 @@ namespace Entitas.CodeGenerator {
         public bool isEnabledByDefault { get { return true; } }
 
         const string STANDARD_COMPONENT_TEMPLATE =
-@"using Entitas;
-
-public partial class ${Context}Context {
+@"public partial class ${Context}Context {
 
     public ${Context}Entity ${name}Entity { get { return GetGroup(${Context}Matcher.${Name}).GetSingleEntity(); } }
     public ${Type} ${name} { get { return ${name}Entity.${name}; } }
@@ -20,7 +17,7 @@ public partial class ${Context}Context {
 
     public ${Context}Entity Set${Name}(${memberArgs}) {
         if(has${Name}) {
-            throw new EntitasException(""Could not set ${name}!\n"" + this + "" already has an entity with ${FullName}!"",
+            throw new Entitas.EntitasException(""Could not set ${name}!\n"" + this + "" already has an entity with ${FullName}!"",
                 ""You should check if the context already has a ${name}Entity before setting it or use context.Replace${Name}()."");
         }
         var entity = CreateEntity();
@@ -86,8 +83,8 @@ public partial class ${Context}Context {
         }
 
         CodeGenFile generateExtension(string contextName, ComponentData data) {
-            var memberInfos = data.GetMemberInfos();
-            var template = memberInfos.Count == 0
+            var memberData = data.GetMemberData();
+            var template = memberData.Length == 0
                                       ? FLAG_COMPONENT_TEMPLATE
                                       : STANDARD_COMPONENT_TEMPLATE;
 
@@ -98,30 +95,30 @@ public partial class ${Context}Context {
                 .Replace("${FullName}", data.GetFullComponentName())
                 .Replace("${prefixedName}", data.GetUniqueComponentPrefix().LowercaseFirst() + data.GetComponentName())
                 .Replace("${Type}", data.GetFullTypeName())
-                .Replace("${memberArgs}", getMemberArgs(memberInfos))
-                .Replace("${methodArgs}", getMethodArgs(memberInfos));
+                .Replace("${memberArgs}", getMemberArgs(memberData))
+                .Replace("${methodArgs}", getMethodArgs(memberData));
 
             return new CodeGenFile(
                 contextName + Path.DirectorySeparatorChar +
                 "Components" + Path.DirectorySeparatorChar +
-                "Unique" + contextName + data.GetFullComponentName() + ".cs",
+                contextName + data.GetFullComponentName() + ".cs",
                 fileContent,
                 GetType().FullName
             );
         }
 
-        string getMemberArgs(List<PublicMemberInfo> memberInfos) {
-            var args = memberInfos
+        string getMemberArgs(MemberData[] memberData) {
+            var args = memberData
                 .Select(info => MEMBER_ARGS_TEMPLATE
-                        .Replace("${MemberType}", info.type.ToCompilableString())
+                        .Replace("${MemberType}", info.type)
                         .Replace("${MemberName}", info.name.UppercaseFirst()))
                 .ToArray();
 
             return string.Join(", ", args);
         }
 
-        string getMethodArgs(List<PublicMemberInfo> memberInfos) {
-            var args = memberInfos
+        string getMethodArgs(MemberData[] memberData) {
+            var args = memberData
                 .Select(info => METHOD_ARGS_TEMPLATE.Replace("${MemberName}", info.name.UppercaseFirst()))
                 .ToArray();
 

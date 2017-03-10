@@ -36,7 +36,7 @@ public sealed class GameBoardSystem : ReactiveSystem<GameEntity>, IInitializeSys
     protected override void Execute(List<GameEntity> entities) {
         var gameBoard = entities.SingleEntity().gameBoard;
         foreach(var e in _gameBoardElements.GetEntities()) {
-            if(e.position.x >= gameBoard.columns || e.position.y >= gameBoard.rows) {
+            if(e.position.value.x >= gameBoard.columns || e.position.value.y >= gameBoard.rows) {
                 e.isDestroyed = true;
             }
         }

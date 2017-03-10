@@ -16,7 +16,7 @@ namespace Entitas.CodeGenerator {
         }
     }
 
-    public static class ShouldGenerateMethodsComponentDataProviderExtension {
+    public static class ShouldGenerateMethodsComponentDataExtension {
 
         public const string COMPONENT_GENERATE_METHODS = "component_generateMethods";
 

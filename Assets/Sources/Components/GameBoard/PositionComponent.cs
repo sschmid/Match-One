@@ -1,8 +1,9 @@
 using Entitas;
+using Entitas.CodeGenerator.Api;
 
 [Game]
 public sealed class PositionComponent : IComponent {
 
-    public int x;
-    public int y;
+    [EntityIndex]
+    public IntVector2 value;
 }

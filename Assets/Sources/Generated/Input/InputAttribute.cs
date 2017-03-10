@@ -6,9 +6,7 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-using Entitas.CodeGenerator.Api;
-
-public sealed class InputAttribute : ContextAttribute {
+public sealed class InputAttribute : Entitas.CodeGenerator.Api.ContextAttribute {
 
     public InputAttribute() : base("Input") {
     }

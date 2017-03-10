@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Entitas;
+using UnityEngine;
 
 public sealed class FillSystem : ReactiveSystem<GameEntity> {
 
@@ -20,10 +21,11 @@ public sealed class FillSystem : ReactiveSystem<GameEntity> {
     protected override void Execute(List<GameEntity> entities) {
         var gameBoard = _context.gameBoard;
         for(int column = 0; column < gameBoard.columns; column++) {
-            var nextRowPos = GameBoardLogic.GetNextEmptyRow(_context, column, gameBoard.rows);
+            var position = new IntVector2(column, gameBoard.rows);
+            var nextRowPos = GameBoardLogic.GetNextEmptyRow(_context, position);
             while(nextRowPos != gameBoard.rows) {
                 _context.CreateRandomPiece(column, nextRowPos);
-                nextRowPos = GameBoardLogic.GetNextEmptyRow(_context, column, gameBoard.rows);
+                nextRowPos = GameBoardLogic.GetNextEmptyRow(_context, position);
             }
         }
     }

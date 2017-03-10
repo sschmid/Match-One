@@ -23,7 +23,7 @@ public static class BlueprintsExtensions {
         var entity = context.CreateEntity();
         entity.ApplyBlueprint(context.blueprints.value.Piece());
 
-        entity.AddPosition(x, y);
+        entity.AddPosition(new IntVector2(x, y));
         entity.AddAsset(_pieces[Random.Range(0, _pieces.Length)]);
 
         return entity;
@@ -33,7 +33,7 @@ public static class BlueprintsExtensions {
         var entity = context.CreateEntity();
         entity.ApplyBlueprint(context.blueprints.value.Blocker());
 
-        entity.AddPosition(x, y);
+        entity.AddPosition(new IntVector2(x, y));
         entity.AddAsset(Res.Blocker);
         return entity;
     }

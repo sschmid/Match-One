@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Entitas.CodeGenerator.Api;
-using System.Reflection;
 
 namespace Entitas.CodeGenerator {
 
@@ -13,9 +11,6 @@ namespace Entitas.CodeGenerator {
 
         readonly Type[] _types;
         readonly IComponentDataProvider[] _dataProviders;
-
-        protected AbstractComponentDataProvider(IComponentDataProvider[] dataProviders) : this(dataProviders, Assembly.GetAssembly(typeof(IEntity)).GetTypes()) {
-        }
 
         protected AbstractComponentDataProvider(IComponentDataProvider[] dataProviders, Type[] types) {
             _types = types;
@@ -57,8 +52,8 @@ namespace Entitas.CodeGenerator {
                 data.SetFullTypeName(componentName.AddComponentSuffix());
                 data.SetFullComponentName(componentName.AddComponentSuffix());
                 data.SetComponentName(componentName.RemoveComponentSuffix());
-                data.SetMemberInfos(new List<PublicMemberInfo> {
-                    new PublicMemberInfo(type, "value")
+                data.SetMemberData(new [] {
+                    new MemberData(type.ToCompilableString(), "value")
                 });
 
                 return data;
@@ -77,9 +72,7 @@ namespace Entitas.CodeGenerator {
                 .SingleOrDefault();
 
             if(attr == null) {
-                var nameSplit = type.ToCompilableString().Split('.');
-                var componentName = nameSplit[nameSplit.Length - 1].AddComponentSuffix();
-                return new[] { componentName };
+                return new[] { type.ToCompilableString().ShortTypeName().AddComponentSuffix() };
             }
 
             return attr.componentNames;

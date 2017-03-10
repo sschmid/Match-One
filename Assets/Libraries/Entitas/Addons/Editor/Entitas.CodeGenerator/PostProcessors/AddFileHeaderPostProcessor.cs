@@ -4,6 +4,7 @@ namespace Entitas.CodeGenerator {
 
         public string name { get { return "Add file header"; } }
         public bool isEnabledByDefault { get { return true; } }
+        public int priority { get { return 0; } }
 
         public const string AUTO_GENERATED_HEADER_FORMAT =
 @"//------------------------------------------------------------------------------
@@ -16,10 +17,12 @@ namespace Entitas.CodeGenerator {
 //------------------------------------------------------------------------------
 ";
 
-        public void PostProcess(CodeGenFile[] files) {
+        public CodeGenFile[] PostProcess(CodeGenFile[] files) {
             foreach(var file in files) {
                 file.fileContent = string.Format(AUTO_GENERATED_HEADER_FORMAT, file.generatorName) + file.fileContent;
             }
+
+            return files;
         }
     }
 }

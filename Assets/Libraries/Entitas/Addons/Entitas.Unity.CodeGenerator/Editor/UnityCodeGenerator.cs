@@ -15,7 +15,7 @@ namespace Entitas.Unity.CodeGenerator {
 
             Debug.Log("Generating...");
 
-			var config = new CodeGeneratorConfig(EntitasPreferences.LoadConfig());
+            var config = new CodeGeneratorConfig(EntitasPreferences.LoadConfig());
 
             var codeGenerator = new Entitas.CodeGenerator.CodeGenerator(
                 getEnabled<ICodeGeneratorDataProvider>(config.dataProviders),
@@ -23,20 +23,31 @@ namespace Entitas.Unity.CodeGenerator {
                 getEnabled<ICodeGenFilePostProcessor>(config.postProcessors)
             );
 
+            var progressOffset = 0f;
+
+            codeGenerator.OnProgress += (title, info, progress) => {
+                var cancel = EditorUtility.DisplayCancelableProgressBar(title, info, progressOffset + progress / 2);
+                if(cancel) {
+                    codeGenerator.Cancel();
+                }
+            };
+
             var dryFiles = codeGenerator.DryRun();
+
+            progressOffset = 0.5f;
+            var files = codeGenerator.Generate();
+
+            EditorUtility.ClearProgressBar();
+
+            var totalGeneratedFiles = files.Select(file => file.fileName).Distinct().Count();
+
             var sloc = dryFiles
                 .Select(file => file.fileContent.ToUnixLineEndings())
                 .Sum(content => content.Split(new [] { '\n' }, StringSplitOptions.RemoveEmptyEntries).Length);
 
-            var files = codeGenerator.Generate();
-            var totalGeneratedFiles = files.Select(file => file.fileName).Distinct().Count();
             var loc = files
                 .Select(file => file.fileContent.ToUnixLineEndings())
                 .Sum(content => content.Split(new [] { '\n' }).Length);
-
-            foreach(var file in files) {
-                Debug.Log(file.generatorName + ": " + file.fileName);
-            }
 
             Debug.Log("Generated " + totalGeneratedFiles + " files (" + sloc + " sloc, " + loc + " loc)");
 
@@ -45,7 +56,7 @@ namespace Entitas.Unity.CodeGenerator {
 
         static T[] getEnabled<T>(string[] types) {
             return GetTypes<T>()
-                    .Where(type => types.Contains(type.Name))
+                    .Where(type => types.Contains(type.FullName))
                     .Select(type => (T)Activator.CreateInstance(type))
                     .ToArray();
         }

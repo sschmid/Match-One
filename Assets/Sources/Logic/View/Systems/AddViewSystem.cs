@@ -23,12 +23,12 @@ public sealed class AddViewSystem : ReactiveSystem<GameEntity> {
 
     protected override void Execute(List<GameEntity> entities) {
         foreach(var e in entities) {
-            var res = Resources.Load<GameObject>(e.asset.name);
+            var asset = Resources.Load<GameObject>(e.asset.name);
             GameObject gameObject = null;
             try {
-                gameObject = UnityEngine.Object.Instantiate(res);
+                gameObject = UnityEngine.Object.Instantiate(asset);
             } catch(Exception) {
-                Debug.Log("Cannot instantiate " + res);
+                Debug.Log("Cannot instantiate " + e.asset.name);
             }
 
             if(gameObject != null) {

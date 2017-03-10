@@ -1,11 +1,11 @@
 public static class GameBoardLogic {
 
-    public static int GetNextEmptyRow(GameContext context, int column, int row) {
-        var rowBelow = row - 1;
-        while(rowBelow >= 0 && context.GetEntitiesWithPosition(column, rowBelow).Count == 0) {
-            rowBelow -= 1;
+    public static int GetNextEmptyRow(GameContext context, IntVector2 position) {
+        position.y -= 1;
+        while(position.y >= 0 && context.GetEntitiesWithPosition(position).Count == 0) {
+            position.y -= 1;
         }
 
-        return rowBelow + 1;
+        return position.y + 1;
     }
 }

@@ -12,8 +12,6 @@ public class GameController : MonoBehaviour {
         Random.InitState(42);
 
         var contexts = Contexts.sharedInstance;
-        contexts.SetAllContexts();
-        contexts.AddEntityIndices();
         contexts.game.SetBlueprints(blueprints);
 
         // Suggested systems lifecycle:

@@ -26,7 +26,7 @@ namespace Entitas.CodeGenerator {
         }
     }
 
-    public static class ContextCodeGeneratorDataExtension {
+    public static class ContextDataExtension {
 
         public const string CONTEXT_NAME = "context_name";
 

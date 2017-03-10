@@ -6,7 +6,5 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-using Entitas;
-
-public sealed partial class InputEntity : Entity {
+public sealed partial class InputEntity : Entitas.Entity {
 }

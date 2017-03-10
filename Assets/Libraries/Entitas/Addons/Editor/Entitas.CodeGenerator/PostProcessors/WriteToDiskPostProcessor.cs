@@ -7,6 +7,7 @@ namespace Entitas.CodeGenerator {
 
         public string name { get { return "Write to disk"; } }
         public bool isEnabledByDefault { get { return true; } }
+        public int priority { get { return 100; } }
 
         readonly string _directory;
 
@@ -17,7 +18,7 @@ namespace Entitas.CodeGenerator {
             _directory = getSafeDir(directory);
         }
 
-        public void PostProcess(CodeGenFile[] files) {
+        public CodeGenFile[] PostProcess(CodeGenFile[] files) {
             cleanDir();
 
             foreach(var file in files) {
@@ -28,6 +29,8 @@ namespace Entitas.CodeGenerator {
                 }
                 File.WriteAllText(fileName, file.fileContent);
             }
+
+            return files;
         }
 
         static string getSafeDir(string directory) {

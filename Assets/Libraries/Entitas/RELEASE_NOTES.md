@@ -1,3 +1,61 @@
+# 0.38.0
+
+See and discuss changes in [Milestone 0.38.0](https://github.com/sschmid/Entitas-CSharp/milestone/8)
+
+This seems to be the release of enhancements! Lots of useful improvments and features have been added to
+increase productivity and ease of use.
+
+#### Breaking changes
+- Removed HideInBlueprintsInspector (#270 #306)
+- Changed interface `ITypeDrawer`
+
+# Entitas
+- Using ToString on subclassed components, too (#290)
+- Fixed cached entity ToString() wasn’t updated when calling entity.Release()
+- Fixed typo `TEntitiy` to `TEntity`(#291)
+
+# Entitas.Unity
+- Simplified DrawTexture
+- Refactored EntitasLayout
+
+# Entitas.CodeGenerator
+- Generating Entity Indices (#75 #319)
+- Added priority to ICodeGenFilePostProcessor
+- Move logic to DebugLogPostProcessor to speed up code generation
+- Added MergeFilesPostProcessor (#301)
+- Added Contexts constructor (#286)
+- Added default context (#288)
+- Using MemberData instead of PublicMemberInfo in DataProviders (#280)
+- Added progess report to code generator
+
+# Entitas.Unity.CodeGenerator
+- Added cancellable progess bar when generating
+
+# Entitas.Unity.VisualDebugging
+- Redesigned Entitas Preferences Window
+- Redesigned DebugSystemsInspector
+- Redesigned Type Drawers
+- Added component member search (#298)
+- Added search field to DictionaryTypeDrawer (#299)
+- Better UX, better Buttons
+- Entitaslayout.SearchTextField won’t affect GUI.change
+- Fixed Hashset changes didn’t replace component
+- Added `context.FindContextObserver()` for getting ContextObserver (#295)
+- Added default constructor to Feature class (#293)
+- Added Entitas Stats Dialog
+- EntityDrawer will use pooled components
+- Simplified EntityDrawer and TypeDrawers
+- Removed TypeEqualityComparer (#289)
+- Drawing public fields of unsupported types
+- Updated code templates for TypeDrawer and DefaultInstanceCreators (#297)
+
+# Entitas.Unity.Migration
+- Redesigned Entitas Migration Window
+
+# General
+- Using HD header textures
+
+
 # 0.37.0
 
 See and discuss changes in [Milestone 0.37.0](https://github.com/sschmid/Entitas-CSharp/milestone/7)
@@ -1014,19 +1072,19 @@ pool.CreateEntity()
 
 ##### General
 - Split into multiple modules and seperate projects. Entitas now consists of
-	- Entitas
-	- Entitas.CodeGenerator
-	- Entitas.Unity
-	- Entitas.Unity.CodeGenerator
-	- Entitas.Unity.VisualDebugging
+  - Entitas
+  - Entitas.CodeGenerator
+  - Entitas.Unity
+  - Entitas.Unity.CodeGenerator
+  - Entitas.Unity.VisualDebugging
 
 ##### Entitas.Unity
 - Added IEntitasPreferencesDrawer to be able to extend the Entitas preferences panel
 
 ##### Entitas.Unity.CodeGenerator
 - Entitas preferences internal keys changed. Please check your settings in projectRoot/Entitas.properties and update keys
-	- Entitas.CodeGenerator.GeneratedFolderPath -> Entitas.Unity.CodeGenerator.GeneratedFolderPath
-	- Entitas.CodeGenerator.Pools 				-> Entitas.Unity.CodeGenerator.Pools
+  - Entitas.CodeGenerator.GeneratedFolderPath -> Entitas.Unity.CodeGenerator.GeneratedFolderPath
+  - Entitas.CodeGenerator.Pools               -> Entitas.Unity.CodeGenerator.Pools
 
 ##### Entitas.Unity.VisualDebugging
 - Added support to set fields to null
@@ -1069,8 +1127,8 @@ pool.CreateEntity()
 
 ##### Code Generator
 - Added Code Generator PreferenceItem
-	- set generated folder path
-	- define multiple pools
+  - set generated folder path
+  - define multiple pools
 
 ![Entitas.Unity.CodeGenerator-Preferences](https://cloud.githubusercontent.com/assets/233700/7296726/8d74bb5a-e9c2-11e4-8324-10a0db7191ff.png)
 - Added PoolAttributeGenerator
