@@ -12,7 +12,8 @@ public partial class Contexts {
 
     [Entitas.CodeGenerator.Api.PostConstructor]
     public void InitializeEntityIndices() {
-        game.AddEntityIndex(Position, new Entitas.EntityIndex<GameEntity, IntVector2>(
+        game.AddEntityIndex(new Entitas.EntityIndex<GameEntity, IntVector2>(
+            Position,
             game.GetGroup(GameMatcher.Position),
             (e, c) => { var component = c as PositionComponent; return component != null ? component.value : e.position.value; }));
     }

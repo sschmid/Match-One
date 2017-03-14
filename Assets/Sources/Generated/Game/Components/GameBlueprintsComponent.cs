@@ -14,7 +14,7 @@ public partial class GameContext {
 
     public GameEntity SetBlueprints(Entitas.Unity.Blueprints.Blueprints newValue) {
         if(hasBlueprints) {
-            throw new Entitas.EntitasException("Could not set blueprints!\n" + this + " already has an entity with BlueprintsComponent!",
+            throw new Entitas.EntitasException("Could not set Blueprints!\n" + this + " already has an entity with BlueprintsComponent!",
                 "You should check if the context already has a blueprintsEntity before setting it or use context.ReplaceBlueprints().");
         }
         var entity = CreateEntity();
@@ -50,15 +50,17 @@ public partial class GameEntity {
     public bool hasBlueprints { get { return HasComponent(GameComponentsLookup.Blueprints); } }
 
     public void AddBlueprints(Entitas.Unity.Blueprints.Blueprints newValue) {
-        var component = CreateComponent<BlueprintsComponent>(GameComponentsLookup.Blueprints);
+        var index = GameComponentsLookup.Blueprints;
+        var component = CreateComponent<BlueprintsComponent>(index);
         component.value = newValue;
-        AddComponent(GameComponentsLookup.Blueprints, component);
+        AddComponent(index, component);
     }
 
     public void ReplaceBlueprints(Entitas.Unity.Blueprints.Blueprints newValue) {
-        var component = CreateComponent<BlueprintsComponent>(GameComponentsLookup.Blueprints);
+        var index = GameComponentsLookup.Blueprints;
+        var component = CreateComponent<BlueprintsComponent>(index);
         component.value = newValue;
-        ReplaceComponent(GameComponentsLookup.Blueprints, component);
+        ReplaceComponent(index, component);
     }
 
     public void RemoveBlueprints() {

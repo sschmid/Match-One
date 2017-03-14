@@ -5,13 +5,13 @@ namespace Entitas.CodeGenerator {
 
     public class ContextAttributeGenerator : ICodeGenerator {
 
-        public string name { get { return "Context Attributes"; } }
+        public string name { get { return "Context Attribute"; } }
         public bool isEnabledByDefault { get { return true; } }
 
         const string ATTRIBUTE_TEMPLATE =
-@"public sealed class ${Context}Attribute : Entitas.CodeGenerator.Api.ContextAttribute {
+@"public sealed class ${ContextName}Attribute : Entitas.CodeGenerator.Api.ContextAttribute {
 
-    public ${Context}Attribute() : base(""${Context}"") {
+    public ${ContextName}Attribute() : base(""${ContextName}"") {
     }
 }
 ";
@@ -27,7 +27,7 @@ namespace Entitas.CodeGenerator {
             var contextName = data.GetContextName();
             return new CodeGenFile(
                 contextName + Path.DirectorySeparatorChar + contextName + "Attribute.cs",
-                ATTRIBUTE_TEMPLATE.Replace("${Context}", contextName),
+                ATTRIBUTE_TEMPLATE.Replace("${ContextName}", contextName),
                 GetType().FullName
             );
         }

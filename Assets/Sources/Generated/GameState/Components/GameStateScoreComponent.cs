@@ -14,7 +14,7 @@ public partial class GameStateContext {
 
     public GameStateEntity SetScore(int newValue) {
         if(hasScore) {
-            throw new Entitas.EntitasException("Could not set score!\n" + this + " already has an entity with ScoreComponent!",
+            throw new Entitas.EntitasException("Could not set Score!\n" + this + " already has an entity with ScoreComponent!",
                 "You should check if the context already has a scoreEntity before setting it or use context.ReplaceScore().");
         }
         var entity = CreateEntity();
@@ -50,15 +50,17 @@ public partial class GameStateEntity {
     public bool hasScore { get { return HasComponent(GameStateComponentsLookup.Score); } }
 
     public void AddScore(int newValue) {
-        var component = CreateComponent<ScoreComponent>(GameStateComponentsLookup.Score);
+        var index = GameStateComponentsLookup.Score;
+        var component = CreateComponent<ScoreComponent>(index);
         component.value = newValue;
-        AddComponent(GameStateComponentsLookup.Score, component);
+        AddComponent(index, component);
     }
 
     public void ReplaceScore(int newValue) {
-        var component = CreateComponent<ScoreComponent>(GameStateComponentsLookup.Score);
+        var index = GameStateComponentsLookup.Score;
+        var component = CreateComponent<ScoreComponent>(index);
         component.value = newValue;
-        ReplaceComponent(GameStateComponentsLookup.Score, component);
+        ReplaceComponent(index, component);
     }
 
     public void RemoveScore() {

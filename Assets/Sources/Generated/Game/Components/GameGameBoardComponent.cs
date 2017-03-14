@@ -14,7 +14,7 @@ public partial class GameContext {
 
     public GameEntity SetGameBoard(int newColumns, int newRows) {
         if(hasGameBoard) {
-            throw new Entitas.EntitasException("Could not set gameBoard!\n" + this + " already has an entity with GameBoardComponent!",
+            throw new Entitas.EntitasException("Could not set GameBoard!\n" + this + " already has an entity with GameBoardComponent!",
                 "You should check if the context already has a gameBoardEntity before setting it or use context.ReplaceGameBoard().");
         }
         var entity = CreateEntity();
@@ -50,17 +50,19 @@ public partial class GameEntity {
     public bool hasGameBoard { get { return HasComponent(GameComponentsLookup.GameBoard); } }
 
     public void AddGameBoard(int newColumns, int newRows) {
-        var component = CreateComponent<GameBoardComponent>(GameComponentsLookup.GameBoard);
+        var index = GameComponentsLookup.GameBoard;
+        var component = CreateComponent<GameBoardComponent>(index);
         component.columns = newColumns;
         component.rows = newRows;
-        AddComponent(GameComponentsLookup.GameBoard, component);
+        AddComponent(index, component);
     }
 
     public void ReplaceGameBoard(int newColumns, int newRows) {
-        var component = CreateComponent<GameBoardComponent>(GameComponentsLookup.GameBoard);
+        var index = GameComponentsLookup.GameBoard;
+        var component = CreateComponent<GameBoardComponent>(index);
         component.columns = newColumns;
         component.rows = newRows;
-        ReplaceComponent(GameComponentsLookup.GameBoard, component);
+        ReplaceComponent(index, component);
     }
 
     public void RemoveGameBoard() {

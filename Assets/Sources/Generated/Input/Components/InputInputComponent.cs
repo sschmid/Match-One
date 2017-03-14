@@ -12,17 +12,19 @@ public partial class InputEntity {
     public bool hasInput { get { return HasComponent(InputComponentsLookup.Input); } }
 
     public void AddInput(int newX, int newY) {
-        var component = CreateComponent<InputComponent>(InputComponentsLookup.Input);
+        var index = InputComponentsLookup.Input;
+        var component = CreateComponent<InputComponent>(index);
         component.x = newX;
         component.y = newY;
-        AddComponent(InputComponentsLookup.Input, component);
+        AddComponent(index, component);
     }
 
     public void ReplaceInput(int newX, int newY) {
-        var component = CreateComponent<InputComponent>(InputComponentsLookup.Input);
+        var index = InputComponentsLookup.Input;
+        var component = CreateComponent<InputComponent>(index);
         component.x = newX;
         component.y = newY;
-        ReplaceComponent(InputComponentsLookup.Input, component);
+        ReplaceComponent(index, component);
     }
 
     public void RemoveInput() {
