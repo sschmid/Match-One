@@ -2,33 +2,25 @@
     <img src="https://raw.githubusercontent.com/sschmid/Entitas-CSharp/master/Readme/Images/Entitas-Header.png" alt="Entitas">
 </p>
 
----
-
-<p align="center">
-    <a>🎉 Happy birthday Entitas! 🎉<br />3 years of clean code<br />Please support the development<br/></a>
-    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTMLSDQULZ852">
-        <img src="https://raw.githubusercontent.com/sschmid/Entitas-CSharp/master/Readme/Images/Donate-PayPal.gif" alt="Thank you!"></a>
-</p>
-
----
-
 <p align="center">
     <a href="https://gitter.im/sschmid/Entitas-CSharp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge">
         <img src="https://img.shields.io/badge/chat-on%20gitter-brightgreen.svg" alt="Join the chat at https://gitter.im/sschmid/Entitas-CSharp"></a>
-
     <a href="https://twitter.com/intent/follow?original_referer=https%3A%2F%2Fgithub.com%2Fsschmid%2FEntitas-CSharp&screen_name=s_schmid&tw_p=followbutton">
         <img src="https://img.shields.io/badge/twitter-follow%20%40s__schmid-blue.svg" alt="Twitter Follow Me"></a>
-
     <a href="https://twitter.com/intent/follow?original_referer=https%3A%2F%2Fgithub.com%2Fsschmid%2FEntitas-CSharp&screen_name=entitas_csharp&tw_p=followbutton">
         <img src="https://img.shields.io/badge/twitter-follow%20%40entitas__csharp-blue.svg" alt="Twitter Follow Me"></a>
-
     <a href="https://travis-ci.org/sschmid/Entitas-CSharp">
         <img src="https://travis-ci.org/sschmid/Entitas-CSharp.svg?branch=master" alt="Build Status"></a>
-
     <a href="https://github.com/sschmid/Entitas-CSharp/releases">
         <img src="https://img.shields.io/github/release/sschmid/Entitas-CSharp.svg" alt="Latest release"></a>
 </p>
 
+<p align="center">
+    <b>Entitas is free, but powered by</b>
+    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTMLSDQULZ852">
+        <b>your donations</b>
+    </a>
+</p>
 
 Entitas - The Entity Component System Framework for C# and Unity
 ================================================================
@@ -53,6 +45,7 @@ Entitas is a super fast Entity Component System Framework (ECS) specifically mad
 ---
 
 ### **[» Download](#download-entitas)**
+### **[» Documentation][documentation]**
 ### **[» Ask a question][issues-new]**
 ### **[» Wiki and example projects][wiki]**
 ### **[» #madeWithEntitas][wiki-games-and-examples]**
@@ -217,6 +210,7 @@ Entitas is available in
 
 [clean-coders]: https://cleancoders.com "Clean Coders"
 
+[documentation]: http://sschmid.github.io/Entitas-CSharp/ "Entitas Documentation"
 [wiki]: https://github.com/sschmid/Entitas-CSharp/wiki "Entitas Wiki"
 [wiki-code-generator]: https://github.com/sschmid/Entitas-CSharp/wiki/Code-Generator "Wiki - Code Generator"
 [wiki-overview]: https://github.com/sschmid/Entitas-CSharp/wiki/Overview "Wiki - Overview"

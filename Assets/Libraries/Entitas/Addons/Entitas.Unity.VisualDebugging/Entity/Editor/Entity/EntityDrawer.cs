@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -180,7 +179,7 @@ namespace Entitas.Unity.VisualDebugging {
                         } else {
                             foreach(var info in memberInfos) {
                                 if(EntitasEditorLayout.MatchesSearchString(info.name.ToLower(), componentMemberSearch[index].ToLower())) {
-                                    if(DrawComponentMember(info.type, info.name, info.GetValue(newComponent), newComponent, info.SetValue)) {
+                                    if(DrawObjectMember(info.type, info.name, info.GetValue(newComponent), newComponent, info.SetValue)) {
                                         changed = true;
                                     }
                                 }
@@ -198,7 +197,7 @@ namespace Entitas.Unity.VisualDebugging {
             }
         }
 
-        public static bool DrawComponentMember(Type memberType, string memberName, object value, IComponent component, Action<IComponent, object> setValue) {
+        public static bool DrawObjectMember(Type memberType, string memberName, object value, object target, Action<object, object> setValue) {
             if(value == null) {
                 EditorGUI.BeginChangeCheck();
                 {
@@ -206,7 +205,7 @@ namespace Entitas.Unity.VisualDebugging {
                     EditorGUILayout.BeginHorizontal();
                     {
                         if(isUnityObject) {
-                            setValue(component, EditorGUILayout.ObjectField(memberName, (UnityEngine.Object)value, memberType, true));
+                            setValue(target, EditorGUILayout.ObjectField(memberName, (UnityEngine.Object)value, memberType, true));
                         } else {
                             EditorGUILayout.LabelField(memberName, "null");
                         }
@@ -214,7 +213,7 @@ namespace Entitas.Unity.VisualDebugging {
                         if(EntitasEditorLayout.MiniButton("new " + memberType.ToCompilableString().ShortTypeName())) {
                             object defaultValue;
                             if(CreateDefault(memberType, out defaultValue)) {
-                                setValue(component, defaultValue);
+                                setValue(target, defaultValue);
                             }
                         }
                     }
@@ -233,25 +232,40 @@ namespace Entitas.Unity.VisualDebugging {
             {
                 var typeDrawer = getTypeDrawer(memberType);
                 if(typeDrawer != null) {
-                    setValue(component, typeDrawer.DrawAndGetNewValue(memberType, memberName, value, component));
+                    var newValue = typeDrawer.DrawAndGetNewValue(memberType, memberName, value, target);
+                    setValue(target, newValue);
                 } else {
-					drawUnsupportedType(memberType, memberName, value);
-					EditorGUILayout.BeginVertical();
-					{
-						EditorGUILayout.Space();
-						var infos = memberType.GetPublicMemberInfos();
-						for(int i = 0; i < infos.Count; i++) {
-							var info = infos[i];
-							EditorGUILayout.LabelField(info.name, info.GetValue(value).ToString());
-						}
-					}
-					EditorGUILayout.EndVertical();
+                    var targetType = target.GetType();
+                    var shouldDraw = !targetType.ImplementsInterface<IComponent>() || !Attribute.IsDefined(targetType, typeof(DontDrawComponentAttribute));
+                    if(shouldDraw) {
+                        EditorGUILayout.LabelField(memberName, value.ToString());
+
+                        var indent = EditorGUI.indentLevel;
+                        EditorGUI.indentLevel += 1;
+
+                        EditorGUILayout.BeginVertical();
+                        {
+                            var infos = memberType.GetPublicMemberInfos();
+                            for(int i = 0; i < infos.Count; i++) {
+                                var info = infos[i];
+                                DrawObjectMember(info.type, info.name, info.GetValue(value), value, info.SetValue);
+                                if(memberType.IsValueType) {
+                                    setValue(target, value);
+                                }
+                            }
+                        }
+                        EditorGUILayout.EndVertical();
+
+                        EditorGUI.indentLevel = indent;
+                    } else {
+                        drawUnsupportedType(memberType, memberName, value);
+                    }
                 }
 
                 if(!memberType.IsValueType) {
                     EditorGUILayout.EndVertical();
                     if(EntitasEditorLayout.MiniButton("×")) {
-                        setValue(component, null);
+                        setValue(target, null);
                     }
                     EditorGUILayout.EndHorizontal();
                 }
