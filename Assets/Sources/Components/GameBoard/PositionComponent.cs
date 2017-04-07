@@ -1,5 +1,5 @@
-using Entitas;
-using Entitas.CodeGenerator.Api;
+﻿using Entitas;
+using Entitas.CodeGeneration.Attributes;
 
 [Game]
 public sealed class PositionComponent : IComponent {

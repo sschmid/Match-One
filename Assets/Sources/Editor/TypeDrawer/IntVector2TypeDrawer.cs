@@ -1,5 +1,5 @@
-using System;
-using Entitas.Unity.VisualDebugging;
+﻿using System;
+using Entitas.VisualDebugging.Unity.Editor;
 using UnityEditor;
 
 public class IntVector2TypeDrawer : ITypeDrawer {

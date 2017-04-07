@@ -1,6 +1,6 @@
-using Entitas;
+﻿using Entitas;
 using UnityEngine;
-using Entitas.Unity.Blueprints;
+using Entitas.Blueprints.Unity;
 
 public class GameController : MonoBehaviour {
 

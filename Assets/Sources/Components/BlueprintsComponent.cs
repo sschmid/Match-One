@@ -1,6 +1,6 @@
 ﻿using Entitas;
-using Entitas.Unity.Blueprints;
-using Entitas.CodeGenerator.Api;
+using Entitas.Blueprints.Unity;
+using Entitas.CodeGeneration.Attributes;
 
 [Game, Unique]
 public sealed class BlueprintsComponent : IComponent {
