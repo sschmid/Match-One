@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
 
@@ -9,7 +9,7 @@ public sealed class GameBoardSystem : ReactiveSystem<GameEntity>, IInitializeSys
 
     public GameBoardSystem(Contexts contexts) : base(contexts.game) {
         _context = contexts.game;
-        _gameBoardElements = _context.GetGroup(Matcher<GameEntity>.AllOf(GameMatcher.GameBoardElement, GameMatcher.Position));
+        _gameBoardElements = _context.GetGroup(GameMatcher.AllOf(GameMatcher.GameBoardElement, GameMatcher.Position));
     }
 
     protected override Collector<GameEntity> GetTrigger(IContext<GameEntity> context) {
