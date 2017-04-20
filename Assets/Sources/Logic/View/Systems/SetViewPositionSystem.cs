@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
 
@@ -16,7 +16,7 @@ public sealed class SetViewPositionSystem : ReactiveSystem<GameEntity> {
     }
 
     protected override void Execute(List<GameEntity> entities) {
-        foreach(var e in entities) {
+        foreach (var e in entities) {
             var pos = e.position;
             e.view.gameObject.transform.position = new Vector3(pos.value.x, pos.value.y, 0f);
         }

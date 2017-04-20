@@ -22,7 +22,7 @@ public sealed class AddViewSystem : ReactiveSystem<GameEntity> {
     }
 
     protected override void Execute(List<GameEntity> entities) {
-        foreach(var e in entities) {
+        foreach (var e in entities) {
             var asset = Resources.Load<GameObject>(e.asset.name);
             GameObject gameObject = null;
             try {
@@ -31,7 +31,7 @@ public sealed class AddViewSystem : ReactiveSystem<GameEntity> {
                 Debug.Log("Cannot instantiate " + e.asset.name);
             }
 
-            if(gameObject != null) {
+            if (gameObject != null) {
                 gameObject.transform.SetParent(_viewContainer, false);
                 e.AddView(gameObject);
                 gameObject.Link(e, _context);

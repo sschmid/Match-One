@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
 
@@ -22,9 +22,9 @@ public sealed class GameBoardSystem : ReactiveSystem<GameEntity>, IInitializeSys
 
     public void Initialize() {
         var gameBoard = _context.CreateGameBoard().gameBoard;
-        for(int row = 0; row < gameBoard.rows; row++) {
-            for(int column = 0; column < gameBoard.columns; column++) {
-                if(Random.value > 0.91f) {
+        for (int row = 0; row < gameBoard.rows; row++) {
+            for (int column = 0; column < gameBoard.columns; column++) {
+                if (Random.value > 0.91f) {
                     _context.CreateBlocker(column, row);
                 } else {
                     _context.CreateRandomPiece(column, row);
@@ -35,8 +35,8 @@ public sealed class GameBoardSystem : ReactiveSystem<GameEntity>, IInitializeSys
 
     protected override void Execute(List<GameEntity> entities) {
         var gameBoard = entities.SingleEntity().gameBoard;
-        foreach(var e in _gameBoardElements.GetEntities()) {
-            if(e.position.value.x >= gameBoard.columns || e.position.value.y >= gameBoard.rows) {
+        foreach (var e in _gameBoardElements.GetEntities()) {
+            if (e.position.value.x >= gameBoard.columns || e.position.value.y >= gameBoard.rows) {
                 e.isDestroyed = true;
             }
         }

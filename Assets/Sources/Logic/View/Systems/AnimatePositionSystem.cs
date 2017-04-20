@@ -20,10 +20,10 @@ public sealed class AnimatePositionSystem : ReactiveSystem<GameEntity> {
     }
 
     protected override void Execute(List<GameEntity> entities) {
-        foreach(var e in entities) {
+        foreach (var e in entities) {
             var pos = e.position;
             var isTopRow = pos.value.y == _context.gameBoard.rows - 1;
-            if(isTopRow) {
+            if (isTopRow) {
                 e.view.gameObject.transform.localPosition = new Vector3(pos.value.x, pos.value.y + 1);
             }
             e.view.gameObject.transform.DOMove(new Vector3(pos.value.x, pos.value.y, 0f), 0.3f);

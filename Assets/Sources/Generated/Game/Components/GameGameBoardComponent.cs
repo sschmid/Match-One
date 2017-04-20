@@ -13,7 +13,7 @@ public partial class GameContext {
     public bool hasGameBoard { get { return gameBoardEntity != null; } }
 
     public GameEntity SetGameBoard(int newColumns, int newRows) {
-        if(hasGameBoard) {
+        if (hasGameBoard) {
             throw new Entitas.EntitasException("Could not set GameBoard!\n" + this + " already has an entity with GameBoardComponent!",
                 "You should check if the context already has a gameBoardEntity before setting it or use context.ReplaceGameBoard().");
         }
@@ -24,7 +24,7 @@ public partial class GameContext {
 
     public void ReplaceGameBoard(int newColumns, int newRows) {
         var entity = gameBoardEntity;
-        if(entity == null) {
+        if (entity == null) {
             entity = SetGameBoard(newColumns, newRows);
         } else {
             entity.ReplaceGameBoard(newColumns, newRows);
@@ -84,7 +84,7 @@ public sealed partial class GameMatcher {
 
     public static Entitas.IMatcher<GameEntity> GameBoard {
         get {
-            if(_matcherGameBoard == null) {
+            if (_matcherGameBoard == null) {
                 var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.GameBoard);
                 matcher.componentNames = GameComponentsLookup.componentNames;
                 _matcherGameBoard = matcher;

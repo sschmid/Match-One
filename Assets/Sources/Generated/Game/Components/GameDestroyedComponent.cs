@@ -13,8 +13,8 @@ public partial class GameEntity {
     public bool isDestroyed {
         get { return HasComponent(GameComponentsLookup.Destroyed); }
         set {
-            if(value != isDestroyed) {
-                if(value) {
+            if (value != isDestroyed) {
+                if (value) {
                     AddComponent(GameComponentsLookup.Destroyed, destroyedComponent);
                 } else {
                     RemoveComponent(GameComponentsLookup.Destroyed);
@@ -38,7 +38,7 @@ public sealed partial class GameMatcher {
 
     public static Entitas.IMatcher<GameEntity> Destroyed {
         get {
-            if(_matcherDestroyed == null) {
+            if (_matcherDestroyed == null) {
                 var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.Destroyed);
                 matcher.componentNames = GameComponentsLookup.componentNames;
                 _matcherDestroyed = matcher;

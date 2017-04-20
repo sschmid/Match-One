@@ -1,8 +1,8 @@
-﻿using Entitas;
+using Entitas;
 
 public sealed class GameStateSystems : Feature {
 
-    public GameStateSystems(Contexts contexts) : base("GameState Systems") {
+    public GameStateSystems(Contexts contexts) : base() {
         Add(new ScoreSystem(contexts));
     }
 }

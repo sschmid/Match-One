@@ -1,4 +1,4 @@
-﻿using Entitas;
+using Entitas;
 using Entitas.Blueprints.Unity;
 using Entitas.CodeGeneration.Attributes;
 

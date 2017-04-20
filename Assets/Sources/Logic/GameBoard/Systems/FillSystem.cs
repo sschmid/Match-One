@@ -20,7 +20,7 @@ public sealed class FillSystem : ReactiveSystem<GameEntity> {
 
     protected override void Execute(List<GameEntity> entities) {
         var gameBoard = _context.gameBoard;
-        for(int column = 0; column < gameBoard.columns; column++) {
+        for (int column = 0; column < gameBoard.columns; column++) {
             var position = new IntVector2(column, gameBoard.rows);
             var nextRowPos = GameBoardLogic.GetNextEmptyRow(_context, position);
             while(nextRowPos != gameBoard.rows) {

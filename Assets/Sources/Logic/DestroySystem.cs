@@ -18,7 +18,7 @@ public sealed class DestroySystem : ReactiveSystem<GameEntity> {
     }
 
     protected override void Execute(List<GameEntity> entities) {
-        foreach(var e in entities) {
+        foreach (var e in entities) {
             _context.DestroyEntity(e);
         }
     }

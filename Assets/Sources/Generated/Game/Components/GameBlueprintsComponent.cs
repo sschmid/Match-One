@@ -13,7 +13,7 @@ public partial class GameContext {
     public bool hasBlueprints { get { return blueprintsEntity != null; } }
 
     public GameEntity SetBlueprints(Entitas.Blueprints.Unity.Blueprints newValue) {
-        if(hasBlueprints) {
+        if (hasBlueprints) {
             throw new Entitas.EntitasException("Could not set Blueprints!\n" + this + " already has an entity with BlueprintsComponent!",
                 "You should check if the context already has a blueprintsEntity before setting it or use context.ReplaceBlueprints().");
         }
@@ -24,7 +24,7 @@ public partial class GameContext {
 
     public void ReplaceBlueprints(Entitas.Blueprints.Unity.Blueprints newValue) {
         var entity = blueprintsEntity;
-        if(entity == null) {
+        if (entity == null) {
             entity = SetBlueprints(newValue);
         } else {
             entity.ReplaceBlueprints(newValue);
@@ -82,7 +82,7 @@ public sealed partial class GameMatcher {
 
     public static Entitas.IMatcher<GameEntity> Blueprints {
         get {
-            if(_matcherBlueprints == null) {
+            if (_matcherBlueprints == null) {
                 var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.Blueprints);
                 matcher.componentNames = GameComponentsLookup.componentNames;
                 _matcherBlueprints = matcher;

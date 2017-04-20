@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 public struct IntVector2 : IEquatable<IntVector2> {
 
@@ -15,7 +15,7 @@ public struct IntVector2 : IEquatable<IntVector2> {
     }
 
     public override bool Equals(object obj) {
-        if(obj == null || obj.GetType() != GetType() || obj.GetHashCode() != GetHashCode()) {
+        if (obj == null || obj.GetType() != GetType() || obj.GetHashCode() != GetHashCode()) {
             return false;
         }
 
