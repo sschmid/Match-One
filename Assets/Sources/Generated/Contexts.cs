@@ -91,18 +91,18 @@ public partial class Contexts {
 
     [Entitas.CodeGeneration.Attributes.PostConstructor]
     public void InitializeContexObservers() {
-        CreateContextObserver(game);
-        CreateContextObserver(gameState);
-        CreateContextObserver(input);
+        try {
+            CreateContextObserver(game);
+            CreateContextObserver(gameState);
+            CreateContextObserver(input);
+        } catch(System.Exception) {
+        }
     }
 
     public void CreateContextObserver(Entitas.IContext context) {
-        try {
-            if (UnityEngine.Application.isPlaying) {
-                var observer = new Entitas.VisualDebugging.Unity.ContextObserver(context);
-                UnityEngine.Object.DontDestroyOnLoad(observer.gameObject);
-            }
-        } catch(System.Exception) {
+        if (UnityEngine.Application.isPlaying) {
+            var observer = new Entitas.VisualDebugging.Unity.ContextObserver(context);
+            UnityEngine.Object.DontDestroyOnLoad(observer.gameObject);
         }
     }
 

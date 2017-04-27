@@ -1,7 +1,6 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Entitas;
-using UnityEngine;
 
 public sealed class ProcessInputSystem : ReactiveSystem<InputEntity> {
 
@@ -11,7 +10,7 @@ public sealed class ProcessInputSystem : ReactiveSystem<InputEntity> {
         _contexts = contexts;
     }
 
-    protected override Collector<InputEntity> GetTrigger(IContext<InputEntity> context) {
+    protected override ICollector<InputEntity> GetTrigger(IContext<InputEntity> context) {
         return context.CreateCollector(InputMatcher.Input);
     }
 

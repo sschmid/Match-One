@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using Entitas.Blueprints;
 
-public static class BlueprintsExtensions {
+public static class ContextExtensions {
 
     static readonly string[] _pieces = {
         Res.Piece0,
@@ -14,15 +13,16 @@ public static class BlueprintsExtensions {
 
     public static GameEntity CreateGameBoard(this GameContext context) {
         var entity = context.CreateEntity();
-        entity.ApplyBlueprint(context.blueprints.value.GameBoard());
+        entity.AddGameBoard(8, 9);
 
         return entity;
     }
 
     public static GameEntity CreateRandomPiece(this GameContext context, int x, int y) {
         var entity = context.CreateEntity();
-        entity.ApplyBlueprint(context.blueprints.value.Piece());
-
+        entity.isGameBoardElement = true;
+        entity.isMovable = true;
+        entity.isInteractive = true;
         entity.AddPosition(new IntVector2(x, y));
         entity.AddAsset(_pieces[Random.Range(0, _pieces.Length)]);
 
@@ -31,8 +31,7 @@ public static class BlueprintsExtensions {
 
     public static GameEntity CreateBlocker(this GameContext context, int x, int y) {
         var entity = context.CreateEntity();
-        entity.ApplyBlueprint(context.blueprints.value.Blocker());
-
+        entity.isGameBoardElement = true;
         entity.AddPosition(new IntVector2(x, y));
         entity.AddAsset(Res.Blocker);
         return entity;

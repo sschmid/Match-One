@@ -1,6 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Entitas;
-using UnityEngine;
 
 public sealed class FillSystem : ReactiveSystem<GameEntity> {
 
@@ -10,8 +9,8 @@ public sealed class FillSystem : ReactiveSystem<GameEntity> {
         _context = contexts.game;
     }
 
-    protected override Collector<GameEntity> GetTrigger(IContext<GameEntity> context) {
-        return context.CreateCollector(GameMatcher.GameBoardElement, GroupEvent.Removed);
+    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) {
+        return context.CreateCollector(GameMatcher.GameBoardElement.Removed());
     }
 
     protected override bool Filter(GameEntity entity) {

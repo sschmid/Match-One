@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DG.Tweening;
 using Entitas;
 using Entitas.Unity;
@@ -9,16 +9,10 @@ public sealed class RemoveViewSystem : ReactiveSystem<GameEntity> {
     public RemoveViewSystem(Contexts contexts) : base(contexts.game) {
     }
 
-    protected override Collector<GameEntity> GetTrigger(IContext<GameEntity> context) {
-        return new Collector<GameEntity>(
-            new [] {
-                context.GetGroup(GameMatcher.Asset),
-                context.GetGroup(GameMatcher.Destroyed)
-            },
-            new [] {
-                GroupEvent.Removed,
-                GroupEvent.Added
-            }
+    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) {
+        return context.CreateCollector(
+            GameMatcher.Asset.Removed(),
+            GameMatcher.Destroyed.Added()
         );
     }
 

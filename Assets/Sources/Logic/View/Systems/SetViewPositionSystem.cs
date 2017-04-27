@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
 
@@ -7,7 +7,7 @@ public sealed class SetViewPositionSystem : ReactiveSystem<GameEntity> {
     public SetViewPositionSystem(Contexts contexts) : base(contexts.game) {
     }
 
-    protected override Collector<GameEntity> GetTrigger(IContext<GameEntity> context) {
+    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) {
         return context.CreateCollector(GameMatcher.View);
     }
 

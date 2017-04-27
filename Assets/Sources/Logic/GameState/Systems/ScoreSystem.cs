@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Entitas;
 
 public sealed class ScoreSystem : ReactiveSystem<GameEntity>, IInitializeSystem {
@@ -9,8 +9,8 @@ public sealed class ScoreSystem : ReactiveSystem<GameEntity>, IInitializeSystem 
         _contexts = contexts;
     }
 
-    protected override Collector<GameEntity> GetTrigger(IContext<GameEntity> context) {
-        return context.CreateCollector(GameMatcher.GameBoardElement, GroupEvent.Removed);
+    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) {
+        return context.CreateCollector(GameMatcher.GameBoardElement.Removed());
     }
 
     protected override bool Filter(GameEntity entity) {

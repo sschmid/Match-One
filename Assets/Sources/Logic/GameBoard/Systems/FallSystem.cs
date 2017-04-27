@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Entitas;
 
@@ -10,8 +10,8 @@ public sealed class FallSystem : ReactiveSystem<GameEntity> {
         _context = contexts.game;
     }
 
-    protected override Collector<GameEntity> GetTrigger(IContext<GameEntity> context) {
-        return context.CreateCollector(GameMatcher.GameBoardElement, GroupEvent.Removed);
+    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) {
+        return context.CreateCollector(GameMatcher.GameBoardElement.Removed());
     }
 
     protected override bool Filter(GameEntity entity) {

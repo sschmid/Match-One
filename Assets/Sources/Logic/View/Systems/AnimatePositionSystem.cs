@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DG.Tweening;
 using Entitas;
 using UnityEngine;
@@ -11,7 +11,7 @@ public sealed class AnimatePositionSystem : ReactiveSystem<GameEntity> {
         _context = contexts.game;
     }
 
-    protected override Collector<GameEntity> GetTrigger(IContext<GameEntity> context) {
+    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) {
         return context.CreateCollector(GameMatcher.Position);
     }
 

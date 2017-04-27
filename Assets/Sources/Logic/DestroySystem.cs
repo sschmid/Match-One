@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Entitas;
 
 public sealed class DestroySystem : ReactiveSystem<GameEntity> {
@@ -9,7 +9,7 @@ public sealed class DestroySystem : ReactiveSystem<GameEntity> {
         _context = contexts.game;
     }
 
-    protected override Collector<GameEntity> GetTrigger(IContext<GameEntity> context) {
+    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) {
         return context.CreateCollector(GameMatcher.Destroyed);
     }
 
