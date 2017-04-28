@@ -18,7 +18,7 @@ public partial class InputContext {
                 if (value) {
                     CreateEntity().isBurstMode = true;
                 } else {
-                    DestroyEntity(entity);
+                    entity.Destroy();
                 }
             }
         }

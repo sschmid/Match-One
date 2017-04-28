@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour {
         var contexts = Contexts.sharedInstance;
 
         _systems = new MatchOneSystems(contexts);
+
         _systems.Initialize();
     }
 

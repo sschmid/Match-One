@@ -33,7 +33,7 @@ public sealed class EmitInputSystem : IExecuteSystem, ICleanupSystem {
 
     public void Cleanup() {
         foreach (var e in _inputs.GetEntities()) {
-            _context.DestroyEntity(e);
+            e.Destroy();
         }
     }
 }

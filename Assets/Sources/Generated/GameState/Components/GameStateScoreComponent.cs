@@ -32,7 +32,7 @@ public partial class GameStateContext {
     }
 
     public void RemoveScore() {
-        DestroyEntity(scoreEntity);
+        scoreEntity.Destroy();
     }
 }
 
