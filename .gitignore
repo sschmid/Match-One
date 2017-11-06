@@ -28,3 +28,4 @@ ProjectVersion.txt
 Assets/Plugins
 Assets/Plugins.meta
 Assembly-CSharp-Editor-firstpass.csproj
+CodeGenerator/Plugins/Entitas.Roslyn
