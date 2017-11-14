@@ -41,10 +41,16 @@ public partial class InputEntity {
         get { return HasComponent(InputComponentsLookup.BurstMode); }
         set {
             if (value != isBurstMode) {
+                var index = InputComponentsLookup.BurstMode;
                 if (value) {
-                    AddComponent(InputComponentsLookup.BurstMode, burstModeComponent);
+                    var componentPool = GetComponentPool(index);
+                    var component = componentPool.Count > 0
+                            ? componentPool.Pop()
+                            : burstModeComponent;
+
+                    AddComponent(index, component);
                 } else {
-                    RemoveComponent(InputComponentsLookup.BurstMode);
+                    RemoveComponent(index);
                 }
             }
         }

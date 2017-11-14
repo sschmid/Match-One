@@ -14,10 +14,16 @@ public partial class GameEntity {
         get { return HasComponent(GameComponentsLookup.Destroyed); }
         set {
             if (value != isDestroyed) {
+                var index = GameComponentsLookup.Destroyed;
                 if (value) {
-                    AddComponent(GameComponentsLookup.Destroyed, destroyedComponent);
+                    var componentPool = GetComponentPool(index);
+                    var component = componentPool.Count > 0
+                            ? componentPool.Pop()
+                            : destroyedComponent;
+
+                    AddComponent(index, component);
                 } else {
-                    RemoveComponent(GameComponentsLookup.Destroyed);
+                    RemoveComponent(index);
                 }
             }
         }
