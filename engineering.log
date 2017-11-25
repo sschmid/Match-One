@@ -1,0 +1,12 @@
+
+Sat, Nov 25, 2017  3:30:29 PM
+Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs(10,21): error CS0101: The namespace `global::' already contains a definition for `FallSystem'
+
+
+Sat, Nov 25, 2017  3:31:20 PM
+Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs(14,12): error CS1520: Class, struct, or interface method must have a return type
+public sealed class InfectSystem : ReactiveSystem<GameEntity> {
+
+    readonly GameContext _context;
+
+    public FallSystem(Contexts contexts) : base(contexts.game) {
