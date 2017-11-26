@@ -3,11 +3,14 @@ using System.Linq;
 using Entitas;
 
 // Ethan:
-// TODO: As in an auto-linker game like Collapse:
+// As in an auto-linker game like Collapse:
 // Optionally destroy all contiguous colors that match the color.
 // Reacts after a cell is destroyed but before any cell has fallen.
 //
 // This new feature tests how quickly I can edit gameplay in an entity-component-system.
+// Which was about an hour and half, according to git log timestamps.
+//
+// I followed the coding style that I read in the sibling classes.
 public sealed class InfectSystem : ReactiveSystem<GameEntity> {
 
     readonly GameContext _context;
@@ -24,7 +27,9 @@ public sealed class InfectSystem : ReactiveSystem<GameEntity> {
     }
 
     protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) {
-        return context.CreateCollector(GameMatcher.GameBoardElement.Removed());
+        return context.CreateCollector(
+            GameMatcher.Destroyed.Added()
+        );
     }
 
     protected override bool Filter(GameEntity entity) {
@@ -43,8 +48,7 @@ public sealed class InfectSystem : ReactiveSystem<GameEntity> {
         }
     }
 
-    // TODO
-    // Depth-first search orthogonal neighbors with an equal asset.
+    // Depth-first searches cardinal neighbors that have an equal asset.
     private void findLikeNeighbors(GameEntity source, List<GameEntity> groupMates)
     {
         if (!source.hasAsset) {
