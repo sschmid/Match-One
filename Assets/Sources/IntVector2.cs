@@ -26,4 +26,12 @@ public struct IntVector2 : IEquatable<IntVector2> {
     public override int GetHashCode() {
         return (x << 8) + y;
     }
+
+    public static IntVector2 operator +(IntVector2 a, IntVector2 b) {
+        return new IntVector2(a.x + b.x, a.y + b.y);
+    }
+
+    public static IntVector2 operator -(IntVector2 a, IntVector2 b) {
+        return new IntVector2(a.x - b.x, a.y - b.y);
+    }
 }

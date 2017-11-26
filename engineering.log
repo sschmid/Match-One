@@ -10,3 +10,102 @@ public sealed class InfectSystem : ReactiveSystem<GameEntity> {
     readonly GameContext _context;
 
     public FallSystem(Contexts contexts) : base(contexts.game) {
+
+
+Sat, Nov 25, 2017  4:30:41 PM
+Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs(50,47): error CS1061: Type `string' does not contain a definition for `value' and no extension method `value' of type `string' could be found. Are you missing an assembly reference?
+ 
+(Filename: Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs Line: 50)
+        string sourceName = source.asset.name.value;
+
+Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs(51,9): error CS0305: Using the generic type `System.Collections.Generic.Stack<T>' requires `1' type argument(s)
+ 
+(Filename: Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs Line: 51)
+        Stack frontiers = new Stack<GameEntity>();
+
+Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs(52,9): error CS0841: A local variable `frontiers' cannot be used before it is declared
+ 
+(Filename: Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs Line: 52)
+
+Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs(54,17): error CS0103: The name `frontier' does not exist in the current context
+ 
+(Filename: Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs Line: 54)
+        while (!frontier.Empty()) {
+            GameEntity frontier = frontiers.Pop();
+
+Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs(55,35): error CS0841: A local variable `frontiers' cannot be used before it is declared
+ 
+(Filename: Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs Line: 55)
+
+Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs(64,41): error CS1061: Type `string' does not contain a definition for `value' and no extension method `value' of type `string' could be found. Are you missing an assembly reference?
+ 
+(Filename: Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs Line: 64)
+                        && e.asset.name.value == sourceName
+
+Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs(71,21): error CS0841: A local variable `frontiers' cannot be used before it is declared
+ 
+(Filename: Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs Line: 71)
+
+
+
+Sat, Nov 25, 2017  4:36:03 PM
+Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs(52,19): error CS1061: Type `System.Collections.Generic.Stack<GameEntity>' does not contain a definition for `Add' and no extension method `Add' of type `System.Collections.Generic.Stack<GameEntity>' could be found. Are you missing an assembly reference?
+ 
+(Filename: Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs Line: 52)
+        Stack<GameEntity> frontiers = new Stack<GameEntity>();
+        frontiers.Add(source);
+
+Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs(54,27): error CS1061: Type `System.Collections.Generic.Stack<GameEntity>' does not contain a definition for `Empty' and no extension method `Empty' of type `System.Collections.Generic.Stack<GameEntity>' could be found. Are you missing an assembly reference?
+ 
+(Filename: Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs Line: 54)
+        while (!frontiers.Empty()) {
+
+Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs(63,22): error CS0266: Cannot implicitly convert type `System.Collections.Generic.IEnumerable<GameEntity>' to `System.Collections.Generic.HashSet<GameEntity>'. An explicit conversion exists (are you missing a cast?)
+ 
+(Filename: Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs Line: 63)
+                HashSet<GameEntity> likeNeighbors = _context.GetEntitiesWithPosition(adjacent)
+                    .Where(e => e.isMovable
+                        && e.asset.name == sourceName
+                    );
+
+
+
+Sat, Nov 25, 2017  4:40:29 PM
+Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs(48,30): error CS0161: `InfectSystem.findLikeNeighbors(GameEntity, System.Collections.Generic.List<GameEntity>)': not all code paths return a value
+ 
+(Filename: Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs Line: 48)
+    private List<GameEntity> findLikeNeighbors(GameEntity source, List<GameEntity> groupMates)
+
+
+Sat, Nov 25, 2017  4:43:25 PM
+EntityDoesNotHaveComponentException: Cannot get component 'Asset' from Entity_29(*6)()!
+Entity does not have a component at index 0!
+You should check if an entity has the component before getting it.
+Entitas.Entity.GetComponent (Int32 index)
+GameEntity.get_asset () (at Assets/Sources/Generated/Game/Components/GameAssetComponent.cs:11)
+InfectSystem.findLikeNeighbors (.GameEntity source, System.Collections.Generic.List`1 groupMates) (at Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs:50)
+InfectSystem.Execute (System.Collections.Generic.List`1 entities) (at Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs:41)
+Entitas.ReactiveSystem`1[TEntity].Execute ()
+Entitas.VisualDebugging.Unity.DebugSystems.StepExecute ()
+Entitas.VisualDebugging.Unity.DebugSystems.Execute ()
+Entitas.VisualDebugging.Unity.DebugSystems.StepExecute ()
+Entitas.VisualDebugging.Unity.DebugSystems.Execute ()
+GameController.Update () (at Assets/Scripts/GameController.cs:19)
+                        && e.asset.name == sourceName
+
+Sat, Nov 25, 2017  4:47:11 PM
+EntityDoesNotHaveComponentException: Cannot get component 'Asset' from Entity_37(*6)()!
+Entity does not have a component at index 0!
+You should check if an entity has the component before getting it.
+Entitas.Entity.GetComponent (Int32 index)
+GameEntity.get_asset () (at Assets/Sources/Generated/Game/Components/GameAssetComponent.cs:11)
+InfectSystem.findLikeNeighbors (.GameEntity source, System.Collections.Generic.List`1 groupMates) (at Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs:50)
+InfectSystem.Execute (System.Collections.Generic.List`1 entities) (at Assets/Sources/Logic/GameBoard/Systems/InfectSystem.cs:41)
+Entitas.ReactiveSystem`1[TEntity].Execute ()
+Entitas.VisualDebugging.Unity.DebugSystems.StepExecute ()
+Entitas.VisualDebugging.Unity.DebugSystems.Execute ()
+Entitas.VisualDebugging.Unity.DebugSystems.StepExecute ()
+Entitas.VisualDebugging.Unity.DebugSystems.Execute ()
+GameController.Update () (at Assets/Scripts/GameController.cs:19)
+
+        string sourceName = source.asset.name;
