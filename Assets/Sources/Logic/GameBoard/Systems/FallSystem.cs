@@ -11,17 +11,24 @@ public sealed class FallSystem : ReactiveSystem<GameEntity> {
     }
 
     protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) {
-        return context.CreateCollector(GameMatcher.GameBoardElement.Removed());
+        return context.CreateCollector(
+            GameMatcher.GameBoardElement.Removed(),
+            GameMatcher.GameBoardElement.Added()
+        );
     }
 
     protected override bool Filter(GameEntity entity) {
         return true;
     }
 
+    // Scans up to twice board height.
+    // This is in case more entities had spawned after a large group removed.
+    // Another solution would be to schedule spawns at the speed of falling.
     protected override void Execute(List<GameEntity> entities) {
         var gameBoard = _context.gameBoard;
+        int twiceHeight = 2 * gameBoard.rows;
         for (int column = 0; column < gameBoard.columns; column++) {
-            for (int row = 1; row < gameBoard.rows; row++) {
+            for (int row = 1; row < twiceHeight; row++) {
                 var position = new IntVector2(column, row);
                 var movables = _context.GetEntitiesWithPosition(position)
                                     .Where(e => e.isMovable)

@@ -19,12 +19,15 @@ public sealed class FillSystem : ReactiveSystem<GameEntity> {
 
     protected override void Execute(List<GameEntity> entities) {
         var gameBoard = _context.gameBoard;
+        int rows = gameBoard.rows;
+        var position = new IntVector2(0, rows);
         for (int column = 0; column < gameBoard.columns; column++) {
-            var position = new IntVector2(column, gameBoard.rows);
-            var nextRowPos = GameBoardLogic.GetNextEmptyRow(_context, position);
-            while(nextRowPos != gameBoard.rows) {
-                _context.CreateRandomPiece(column, nextRowPos);
-                nextRowPos = GameBoardLogic.GetNextEmptyRow(_context, position);
+            position.x = column;
+            int nextRowPos = GameBoardLogic.GetNextEmptyRow(_context, position);
+            int numSpawns = rows - nextRowPos;
+            for (int spawnRow = rows, spawnEnd = rows + numSpawns;
+                    spawnRow < spawnEnd; ++spawnRow) {
+                _context.CreateRandomPiece(column, spawnRow);
             }
         }
     }

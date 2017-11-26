@@ -5,7 +5,7 @@ using Entitas;
 // Ethan:
 // As in an auto-linker game like Collapse:
 // Optionally destroy all contiguous colors that match the color.
-// Reacts after a cell is destroyed but before any cell has fallen.
+// Reacts just before a cell is destroyed but before any cell has fallen.
 //
 // This new feature tests how quickly I can edit gameplay in an entity-component-system.
 // Which was about an hour and half, according to git log timestamps.
@@ -33,7 +33,7 @@ public sealed class InfectSystem : ReactiveSystem<GameEntity> {
     }
 
     protected override bool Filter(GameEntity entity) {
-        return true;
+        return entity.hasAsset && entity.isMovable;
     }
 
     protected override void Execute(List<GameEntity> entities) {
