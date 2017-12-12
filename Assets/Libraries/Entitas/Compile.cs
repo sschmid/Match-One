@@ -1,4 +1,5 @@
-namespace Entitas.CodeGeneration.Unity.Editor {
+﻿namespace DesperateDevs.CodeGeneration.CodeGenerator.Unity.Editor {
 
-    class Compile {}
+    class Compile {
+    }
 }
