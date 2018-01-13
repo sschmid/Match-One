@@ -8,10 +8,7 @@ Thumbs.db
 Library
 Temp
 *.unitypackage
-*-CSharp-vs.csproj
-*-CSharp.csproj
-*-CSharp-Editor.csproj
-*-CSharp-Editor-vs.csproj
+*-CSharp*.csproj
 
 # Xamarin
 obj
@@ -23,9 +20,5 @@ test-results
 
 # Custom
 Match-One.sln
-ProjectVersion.txt
-
 Assets/Plugins
 Assets/Plugins.meta
-Assembly-CSharp-Editor-firstpass.csproj
-CodeGenerator/Plugins/Entitas.Roslyn
