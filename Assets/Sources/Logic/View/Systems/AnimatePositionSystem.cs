@@ -21,12 +21,16 @@ public sealed class AnimatePositionSystem : ReactiveSystem<GameEntity> {
 
     protected override void Execute(List<GameEntity> entities) {
         foreach (var e in entities) {
+            Transform transform = e.view.gameObject.transform;
             var pos = e.position;
-            var isTopRow = pos.value.y == _context.gameBoard.rows - 1;
-            if (isTopRow) {
-                e.view.gameObject.transform.localPosition = new Vector3(pos.value.x, pos.value.y + 1);
+            float distance = Mathf.Abs(pos.value.y - transform.localPosition.y);
+            if (distance <= 0.0f) {
+                continue;
             }
-            e.view.gameObject.transform.DOMove(new Vector3(pos.value.x, pos.value.y, 0f), 0.3f);
+            float duration = 0.3f * distance;
+            Vector3 destination = new Vector3(pos.value.x, pos.value.y, 0f);
+            transform.DOMove(destination, duration)
+                .SetEase(Ease.Linear);
         }
     }
 }
