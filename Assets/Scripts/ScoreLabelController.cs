@@ -1,24 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ScoreLabelController : MonoBehaviour {
+public class ScoreLabelController : MonoBehaviour, IScoreListener {
 
-    Text _label;
-
-    void Awake() {
-        _label = GetComponent<Text>();
-    }
+    public Text label;
 
     void Start() {
-        var context = Contexts.sharedInstance.gameState;
-
-        context.GetGroup(GameStateMatcher.Score).OnEntityAdded +=
-            (group, entity, index, component) => updateScore(entity.score.value);
-
-        updateScore(context.score.value);
+        Contexts.sharedInstance.gameState.CreateEntity().AddScoreListener(this);
     }
 
-    void updateScore(int score) {
-        _label.text = "Score " + score;
+    public void OnScore(int value) {
+        label.text = "Score " + value;
     }
 }

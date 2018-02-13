@@ -8,25 +8,25 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public ViewComponent view { get { return (ViewComponent)GetComponent(GameComponentsLookup.View); } }
-    public bool hasView { get { return HasComponent(GameComponentsLookup.View); } }
+    public PositionListenerComponent positionListener { get { return (PositionListenerComponent)GetComponent(GameComponentsLookup.PositionListener); } }
+    public bool hasPositionListener { get { return HasComponent(GameComponentsLookup.PositionListener); } }
 
-    public void AddView(IView newValue) {
-        var index = GameComponentsLookup.View;
-        var component = CreateComponent<ViewComponent>(index);
+    public void AddPositionListener(IPositionListener newValue) {
+        var index = GameComponentsLookup.PositionListener;
+        var component = CreateComponent<PositionListenerComponent>(index);
         component.value = newValue;
         AddComponent(index, component);
     }
 
-    public void ReplaceView(IView newValue) {
-        var index = GameComponentsLookup.View;
-        var component = CreateComponent<ViewComponent>(index);
+    public void ReplacePositionListener(IPositionListener newValue) {
+        var index = GameComponentsLookup.PositionListener;
+        var component = CreateComponent<PositionListenerComponent>(index);
         component.value = newValue;
         ReplaceComponent(index, component);
     }
 
-    public void RemoveView() {
-        RemoveComponent(GameComponentsLookup.View);
+    public void RemovePositionListener() {
+        RemoveComponent(GameComponentsLookup.PositionListener);
     }
 }
 
@@ -40,17 +40,17 @@ public partial class GameEntity {
 //------------------------------------------------------------------------------
 public sealed partial class GameMatcher {
 
-    static Entitas.IMatcher<GameEntity> _matcherView;
+    static Entitas.IMatcher<GameEntity> _matcherPositionListener;
 
-    public static Entitas.IMatcher<GameEntity> View {
+    public static Entitas.IMatcher<GameEntity> PositionListener {
         get {
-            if (_matcherView == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.View);
+            if (_matcherPositionListener == null) {
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.PositionListener);
                 matcher.componentNames = GameComponentsLookup.componentNames;
-                _matcherView = matcher;
+                _matcherPositionListener = matcher;
             }
 
-            return _matcherView;
+            return _matcherPositionListener;
         }
     }
 }

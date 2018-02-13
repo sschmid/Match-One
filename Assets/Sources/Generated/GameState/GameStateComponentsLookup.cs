@@ -9,14 +9,17 @@
 public static class GameStateComponentsLookup {
 
     public const int Score = 0;
+    public const int ScoreListener = 1;
 
-    public const int TotalComponents = 1;
+    public const int TotalComponents = 2;
 
     public static readonly string[] componentNames = {
-        "Score"
+        "Score",
+        "ScoreListener"
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(ScoreComponent)
+        typeof(ScoreComponent),
+        typeof(ScoreListenerComponent)
     };
 }

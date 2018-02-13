@@ -9,6 +9,7 @@
 public sealed class EventSystems : Feature {
 
     public EventSystems(Contexts contexts) {
-
+        Add(new GamePositionEventSystem(contexts)); // priority: 0
+        Add(new GameStateScoreEventSystem(contexts)); // priority: 0
     }
 }

@@ -6,12 +6,8 @@ public class GameController : MonoBehaviour {
     Systems _systems;
 
     void Start() {
-        Random.InitState(42);
-
-        var contexts = Contexts.sharedInstance;
-
-        _systems = new MatchOneSystems(contexts);
-
+        Services.singleton.Initialize(this);
+        _systems = new GameSystems(Contexts.sharedInstance);
         _systems.Initialize();
     }
 
