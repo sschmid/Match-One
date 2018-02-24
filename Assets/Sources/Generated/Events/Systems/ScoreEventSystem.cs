@@ -6,18 +6,17 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public sealed class GameStateScoreEventSystem : Entitas.ReactiveSystem<GameStateEntity> {
+public sealed class ScoreEventSystem : Entitas.ReactiveSystem<GameStateEntity> {
 
-    readonly Entitas.IGroup<GameStateEntity> _listsners;
+    readonly Entitas.IGroup<GameStateEntity> _listeners;
 
-    public GameStateScoreEventSystem(Contexts contexts) : base(contexts.gameState) {
-        _listsners = contexts.gameState.GetGroup(GameStateMatcher.ScoreListener);
+    public ScoreEventSystem(Contexts contexts) : base(contexts.gameState) {
+        _listeners = contexts.gameState.GetGroup(GameStateMatcher.ScoreListener);
     }
 
     protected override Entitas.ICollector<GameStateEntity> GetTrigger(Entitas.IContext<GameStateEntity> context) {
         return Entitas.CollectorContextExtension.CreateCollector(
-            context,
-            Entitas.TriggerOnEventMatcherExtension.Added(GameStateMatcher.Score)
+            context, Entitas.TriggerOnEventMatcherExtension.Added(GameStateMatcher.Score)
         );
     }
 
@@ -28,8 +27,10 @@ public sealed class GameStateScoreEventSystem : Entitas.ReactiveSystem<GameState
     protected override void Execute(System.Collections.Generic.List<GameStateEntity> entities) {
         foreach (var e in entities) {
             var component = e.score;
-            foreach (var listener in _listsners) {
-                listener.scoreListener.value.OnScore(component.value);
+            foreach (var listenerEntity in _listeners) {
+                foreach (var listener in listenerEntity.scoreListener.value) {
+                    listener.OnScore(e, component.value);
+                }
             }
         }
     }

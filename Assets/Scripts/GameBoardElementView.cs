@@ -14,7 +14,7 @@ public class GameBoardElementView : View {
             .OnComplete(onHidden);
     }
 
-    public override void OnPosition(IntVector2 value) {
+    public override void OnPosition(GameEntity entity, IntVector2 value) {
         var isTopRow = value.y == Contexts.sharedInstance.game.gameBoard.rows - 1;
         if (isTopRow) {
             transform.localPosition = new Vector3(value.x, value.y + 1);

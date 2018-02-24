@@ -9,7 +9,7 @@ public class ScoreLabelController : MonoBehaviour, IScoreListener {
         Contexts.sharedInstance.gameState.CreateEntity().AddScoreListener(this);
     }
 
-    public void OnScore(int value) {
+    public void OnScore(GameStateEntity entity, int value) {
         label.text = "Score " + value;
     }
 }

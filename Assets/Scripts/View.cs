@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class View : MonoBehaviour, IView, IPositionListener {
 
+    protected GameEntity _linkedEntity;
+
     public virtual void Show() {
         onShown();
     }
@@ -14,9 +16,10 @@ public class View : MonoBehaviour, IView, IPositionListener {
 
     public virtual void Link(IEntity entity, IContext context) {
         gameObject.Link(entity, context);
-        var e = (GameEntity)entity;
-        e.AddPositionListener(this);
-        var pos = e.position.value;
+        _linkedEntity = (GameEntity)entity;
+        _linkedEntity.AddPositionListener(this);
+
+        var pos = _linkedEntity.position.value;
         transform.localPosition = new Vector3(pos.x, pos.y);
     }
 
@@ -31,7 +34,7 @@ public class View : MonoBehaviour, IView, IPositionListener {
         Destroy(gameObject);
     }
 
-    public virtual void OnPosition(IntVector2 value) {
+    public virtual void OnPosition(GameEntity entity, IntVector2 value) {
         transform.localPosition = new Vector3(value.x, value.y);
     }
 }
