@@ -13,14 +13,20 @@
         Res.Piece5
     };
 
-    public GameEntity CreateGameBoard(GameContext context) {
-        var entity = context.CreateEntity();
+    Contexts _contexts;
+
+    public void Initialize(Contexts contexts) {
+        _contexts = contexts;
+    }
+
+    public GameEntity CreateGameBoard() {
+        var entity = _contexts.game.CreateEntity();
         entity.AddGameBoard(8, 9);
         return entity;
     }
 
-    public GameEntity CreateRandomPiece(GameContext context, int x, int y) {
-        var entity = context.CreateEntity();
+    public GameEntity CreateRandomPiece(int x, int y) {
+        var entity = _contexts.game.CreateEntity();
         entity.isGameBoardElement = true;
         entity.isMovable = true;
         entity.isInteractive = true;
@@ -29,8 +35,8 @@
         return entity;
     }
 
-    public GameEntity CreateBlocker(GameContext context, int x, int y) {
-        var entity = context.CreateEntity();
+    public GameEntity CreateBlocker(int x, int y) {
+        var entity = _contexts.game.CreateEntity();
         entity.isGameBoardElement = true;
         entity.AddPosition(new IntVector2(x, y));
         entity.AddAsset(Res.Blocker);

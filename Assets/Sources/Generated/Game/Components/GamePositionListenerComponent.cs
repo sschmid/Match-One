@@ -8,25 +8,25 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public PositionListenerComponent positionListener { get { return (PositionListenerComponent)GetComponent(GameComponentLookup.PositionListener); } }
-    public bool hasPositionListener { get { return HasComponent(GameComponentLookup.PositionListener); } }
+    public PositionListenerComponent positionListener { get { return (PositionListenerComponent)GetComponent(GameComponentsLookup.PositionListener); } }
+    public bool hasPositionListener { get { return HasComponent(GameComponentsLookup.PositionListener); } }
 
     public void AddPositionListener(System.Collections.Generic.List<IPositionListener> newValue) {
-        var index = GameComponentLookup.PositionListener;
+        var index = GameComponentsLookup.PositionListener;
         var component = CreateComponent<PositionListenerComponent>(index);
         component.value = newValue;
         AddComponent(index, component);
     }
 
     public void ReplacePositionListener(System.Collections.Generic.List<IPositionListener> newValue) {
-        var index = GameComponentLookup.PositionListener;
+        var index = GameComponentsLookup.PositionListener;
         var component = CreateComponent<PositionListenerComponent>(index);
         component.value = newValue;
         ReplaceComponent(index, component);
     }
 
     public void RemovePositionListener() {
-        RemoveComponent(GameComponentLookup.PositionListener);
+        RemoveComponent(GameComponentsLookup.PositionListener);
     }
 }
 
@@ -45,8 +45,8 @@ public sealed partial class GameMatcher {
     public static Entitas.IMatcher<GameEntity> PositionListener {
         get {
             if (_matcherPositionListener == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentLookup.PositionListener);
-                matcher.componentNames = GameComponentLookup.componentNames;
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.PositionListener);
+                matcher.componentNames = GameComponentsLookup.componentNames;
                 _matcherPositionListener = matcher;
             }
 
@@ -73,10 +73,10 @@ public partial class GameEntity {
         ReplacePositionListener(listeners);
     }
 
-    public void RemovePositionListener(IPositionListener value) {
+    public void RemovePositionListener(IPositionListener value, bool removeComponentWhenEmpty = true) {
         var listeners = positionListener.value;
         listeners.Remove(value);
-        if (listeners.Count == 0) {
+        if (removeComponentWhenEmpty && listeners.Count == 0) {
             RemovePositionListener();
         } else {
             ReplacePositionListener(listeners);

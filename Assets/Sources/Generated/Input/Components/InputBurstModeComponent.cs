@@ -38,10 +38,10 @@ public partial class InputEntity {
     static readonly BurstModeComponent burstModeComponent = new BurstModeComponent();
 
     public bool isBurstMode {
-        get { return HasComponent(InputComponentLookup.BurstMode); }
+        get { return HasComponent(InputComponentsLookup.BurstMode); }
         set {
             if (value != isBurstMode) {
-                var index = InputComponentLookup.BurstMode;
+                var index = InputComponentsLookup.BurstMode;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
@@ -72,8 +72,8 @@ public sealed partial class InputMatcher {
     public static Entitas.IMatcher<InputEntity> BurstMode {
         get {
             if (_matcherBurstMode == null) {
-                var matcher = (Entitas.Matcher<InputEntity>)Entitas.Matcher<InputEntity>.AllOf(InputComponentLookup.BurstMode);
-                matcher.componentNames = InputComponentLookup.componentNames;
+                var matcher = (Entitas.Matcher<InputEntity>)Entitas.Matcher<InputEntity>.AllOf(InputComponentsLookup.BurstMode);
+                matcher.componentNames = InputComponentsLookup.componentNames;
                 _matcherBurstMode = matcher;
             }
 

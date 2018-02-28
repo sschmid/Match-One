@@ -11,10 +11,10 @@ public partial class GameEntity {
     static readonly MovableComponent movableComponent = new MovableComponent();
 
     public bool isMovable {
-        get { return HasComponent(GameComponentLookup.Movable); }
+        get { return HasComponent(GameComponentsLookup.Movable); }
         set {
             if (value != isMovable) {
-                var index = GameComponentLookup.Movable;
+                var index = GameComponentsLookup.Movable;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
@@ -45,8 +45,8 @@ public sealed partial class GameMatcher {
     public static Entitas.IMatcher<GameEntity> Movable {
         get {
             if (_matcherMovable == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentLookup.Movable);
-                matcher.componentNames = GameComponentLookup.componentNames;
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.Movable);
+                matcher.componentNames = GameComponentsLookup.componentNames;
                 _matcherMovable = matcher;
             }
 

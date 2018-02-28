@@ -46,25 +46,25 @@ public partial class GameStateContext {
 //------------------------------------------------------------------------------
 public partial class GameStateEntity {
 
-    public ScoreComponent score { get { return (ScoreComponent)GetComponent(GameStateComponentLookup.Score); } }
-    public bool hasScore { get { return HasComponent(GameStateComponentLookup.Score); } }
+    public ScoreComponent score { get { return (ScoreComponent)GetComponent(GameStateComponentsLookup.Score); } }
+    public bool hasScore { get { return HasComponent(GameStateComponentsLookup.Score); } }
 
     public void AddScore(int newValue) {
-        var index = GameStateComponentLookup.Score;
+        var index = GameStateComponentsLookup.Score;
         var component = CreateComponent<ScoreComponent>(index);
         component.value = newValue;
         AddComponent(index, component);
     }
 
     public void ReplaceScore(int newValue) {
-        var index = GameStateComponentLookup.Score;
+        var index = GameStateComponentsLookup.Score;
         var component = CreateComponent<ScoreComponent>(index);
         component.value = newValue;
         ReplaceComponent(index, component);
     }
 
     public void RemoveScore() {
-        RemoveComponent(GameStateComponentLookup.Score);
+        RemoveComponent(GameStateComponentsLookup.Score);
     }
 }
 
@@ -83,8 +83,8 @@ public sealed partial class GameStateMatcher {
     public static Entitas.IMatcher<GameStateEntity> Score {
         get {
             if (_matcherScore == null) {
-                var matcher = (Entitas.Matcher<GameStateEntity>)Entitas.Matcher<GameStateEntity>.AllOf(GameStateComponentLookup.Score);
-                matcher.componentNames = GameStateComponentLookup.componentNames;
+                var matcher = (Entitas.Matcher<GameStateEntity>)Entitas.Matcher<GameStateEntity>.AllOf(GameStateComponentsLookup.Score);
+                matcher.componentNames = GameStateComponentsLookup.componentNames;
                 _matcherScore = matcher;
             }
 

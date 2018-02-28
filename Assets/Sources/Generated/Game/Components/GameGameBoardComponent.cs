@@ -46,11 +46,11 @@ public partial class GameContext {
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public GameBoardComponent gameBoard { get { return (GameBoardComponent)GetComponent(GameComponentLookup.GameBoard); } }
-    public bool hasGameBoard { get { return HasComponent(GameComponentLookup.GameBoard); } }
+    public GameBoardComponent gameBoard { get { return (GameBoardComponent)GetComponent(GameComponentsLookup.GameBoard); } }
+    public bool hasGameBoard { get { return HasComponent(GameComponentsLookup.GameBoard); } }
 
     public void AddGameBoard(int newColumns, int newRows) {
-        var index = GameComponentLookup.GameBoard;
+        var index = GameComponentsLookup.GameBoard;
         var component = CreateComponent<GameBoardComponent>(index);
         component.columns = newColumns;
         component.rows = newRows;
@@ -58,7 +58,7 @@ public partial class GameEntity {
     }
 
     public void ReplaceGameBoard(int newColumns, int newRows) {
-        var index = GameComponentLookup.GameBoard;
+        var index = GameComponentsLookup.GameBoard;
         var component = CreateComponent<GameBoardComponent>(index);
         component.columns = newColumns;
         component.rows = newRows;
@@ -66,7 +66,7 @@ public partial class GameEntity {
     }
 
     public void RemoveGameBoard() {
-        RemoveComponent(GameComponentLookup.GameBoard);
+        RemoveComponent(GameComponentsLookup.GameBoard);
     }
 }
 
@@ -85,8 +85,8 @@ public sealed partial class GameMatcher {
     public static Entitas.IMatcher<GameEntity> GameBoard {
         get {
             if (_matcherGameBoard == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentLookup.GameBoard);
-                matcher.componentNames = GameComponentLookup.componentNames;
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.GameBoard);
+                matcher.componentNames = GameComponentsLookup.componentNames;
                 _matcherGameBoard = matcher;
             }
 

@@ -10,12 +10,12 @@ public sealed partial class InputContext : Entitas.Context<InputEntity> {
 
     public InputContext()
         : base(
-            InputComponentLookup.TotalComponents,
+            InputComponentsLookup.TotalComponents,
             0,
             new Entitas.ContextInfo(
                 "Input",
-                InputComponentLookup.componentNames,
-                InputComponentLookup.componentTypes
+                InputComponentsLookup.componentNames,
+                InputComponentsLookup.componentTypes
             ),
             (entity) =>
 

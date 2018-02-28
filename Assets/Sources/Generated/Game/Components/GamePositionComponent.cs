@@ -8,25 +8,25 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    public PositionComponent position { get { return (PositionComponent)GetComponent(GameComponentLookup.Position); } }
-    public bool hasPosition { get { return HasComponent(GameComponentLookup.Position); } }
+    public PositionComponent position { get { return (PositionComponent)GetComponent(GameComponentsLookup.Position); } }
+    public bool hasPosition { get { return HasComponent(GameComponentsLookup.Position); } }
 
     public void AddPosition(IntVector2 newValue) {
-        var index = GameComponentLookup.Position;
+        var index = GameComponentsLookup.Position;
         var component = CreateComponent<PositionComponent>(index);
         component.value = newValue;
         AddComponent(index, component);
     }
 
     public void ReplacePosition(IntVector2 newValue) {
-        var index = GameComponentLookup.Position;
+        var index = GameComponentsLookup.Position;
         var component = CreateComponent<PositionComponent>(index);
         component.value = newValue;
         ReplaceComponent(index, component);
     }
 
     public void RemovePosition() {
-        RemoveComponent(GameComponentLookup.Position);
+        RemoveComponent(GameComponentsLookup.Position);
     }
 }
 
@@ -45,8 +45,8 @@ public sealed partial class GameMatcher {
     public static Entitas.IMatcher<GameEntity> Position {
         get {
             if (_matcherPosition == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentLookup.Position);
-                matcher.componentNames = GameComponentLookup.componentNames;
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.Position);
+                matcher.componentNames = GameComponentsLookup.componentNames;
                 _matcherPosition = matcher;
             }
 

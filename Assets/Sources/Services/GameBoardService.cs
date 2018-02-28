@@ -2,9 +2,15 @@ public class GameBoardService {
 
     public static GameBoardService singleton = new GameBoardService();
 
-    public int GetNextEmptyRow(GameContext context, IntVector2 position) {
+    Contexts _contexts;
+
+    public void Initialize(Contexts contexts) {
+        _contexts = contexts;
+    }
+
+    public int GetNextEmptyRow(IntVector2 position) {
         position.y -= 1;
-        while (position.y >= 0 && context.GetEntitiesWithPosition(position).Count == 0) {
+        while (position.y >= 0 && _contexts.game.GetEntitiesWithPosition(position).Count == 0) {
             position.y -= 1;
         }
 

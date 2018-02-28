@@ -11,10 +11,10 @@ public partial class GameEntity {
     static readonly DestroyedComponent destroyedComponent = new DestroyedComponent();
 
     public bool isDestroyed {
-        get { return HasComponent(GameComponentLookup.Destroyed); }
+        get { return HasComponent(GameComponentsLookup.Destroyed); }
         set {
             if (value != isDestroyed) {
-                var index = GameComponentLookup.Destroyed;
+                var index = GameComponentsLookup.Destroyed;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
@@ -45,8 +45,8 @@ public sealed partial class GameMatcher {
     public static Entitas.IMatcher<GameEntity> Destroyed {
         get {
             if (_matcherDestroyed == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentLookup.Destroyed);
-                matcher.componentNames = GameComponentLookup.componentNames;
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.Destroyed);
+                matcher.componentNames = GameComponentsLookup.componentNames;
                 _matcherDestroyed = matcher;
             }
 

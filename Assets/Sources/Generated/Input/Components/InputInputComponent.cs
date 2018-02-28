@@ -8,11 +8,11 @@
 //------------------------------------------------------------------------------
 public partial class InputEntity {
 
-    public InputComponent input { get { return (InputComponent)GetComponent(InputComponentLookup.Input); } }
-    public bool hasInput { get { return HasComponent(InputComponentLookup.Input); } }
+    public InputComponent input { get { return (InputComponent)GetComponent(InputComponentsLookup.Input); } }
+    public bool hasInput { get { return HasComponent(InputComponentsLookup.Input); } }
 
     public void AddInput(int newX, int newY) {
-        var index = InputComponentLookup.Input;
+        var index = InputComponentsLookup.Input;
         var component = CreateComponent<InputComponent>(index);
         component.x = newX;
         component.y = newY;
@@ -20,7 +20,7 @@ public partial class InputEntity {
     }
 
     public void ReplaceInput(int newX, int newY) {
-        var index = InputComponentLookup.Input;
+        var index = InputComponentsLookup.Input;
         var component = CreateComponent<InputComponent>(index);
         component.x = newX;
         component.y = newY;
@@ -28,7 +28,7 @@ public partial class InputEntity {
     }
 
     public void RemoveInput() {
-        RemoveComponent(InputComponentLookup.Input);
+        RemoveComponent(InputComponentsLookup.Input);
     }
 }
 
@@ -47,8 +47,8 @@ public sealed partial class InputMatcher {
     public static Entitas.IMatcher<InputEntity> Input {
         get {
             if (_matcherInput == null) {
-                var matcher = (Entitas.Matcher<InputEntity>)Entitas.Matcher<InputEntity>.AllOf(InputComponentLookup.Input);
-                matcher.componentNames = InputComponentLookup.componentNames;
+                var matcher = (Entitas.Matcher<InputEntity>)Entitas.Matcher<InputEntity>.AllOf(InputComponentsLookup.Input);
+                matcher.componentNames = InputComponentsLookup.componentNames;
                 _matcherInput = matcher;
             }
 

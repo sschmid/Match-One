@@ -11,10 +11,10 @@ public partial class GameEntity {
     static readonly InteractiveComponent interactiveComponent = new InteractiveComponent();
 
     public bool isInteractive {
-        get { return HasComponent(GameComponentLookup.Interactive); }
+        get { return HasComponent(GameComponentsLookup.Interactive); }
         set {
             if (value != isInteractive) {
-                var index = GameComponentLookup.Interactive;
+                var index = GameComponentsLookup.Interactive;
                 if (value) {
                     var componentPool = GetComponentPool(index);
                     var component = componentPool.Count > 0
@@ -45,8 +45,8 @@ public sealed partial class GameMatcher {
     public static Entitas.IMatcher<GameEntity> Interactive {
         get {
             if (_matcherInteractive == null) {
-                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentLookup.Interactive);
-                matcher.componentNames = GameComponentLookup.componentNames;
+                var matcher = (Entitas.Matcher<GameEntity>)Entitas.Matcher<GameEntity>.AllOf(GameComponentsLookup.Interactive);
+                matcher.componentNames = GameComponentsLookup.componentNames;
                 _matcherInteractive = matcher;
             }
 
