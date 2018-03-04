@@ -9,7 +9,7 @@
         Add(new GameBoardSystems(contexts));
         Add(new ScoreSystem(contexts));
 
-        // Render
+        // Events
         Add(new EventSystems(contexts));
 
         // Cleanup
