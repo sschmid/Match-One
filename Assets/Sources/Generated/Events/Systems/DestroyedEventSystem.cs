@@ -8,7 +8,10 @@
 //------------------------------------------------------------------------------
 public sealed class DestroyedEventSystem : Entitas.ReactiveSystem<GameEntity> {
 
+    readonly System.Collections.Generic.List<IDestroyedListener> _listenerBuffer;
+
     public DestroyedEventSystem(Contexts contexts) : base(contexts.game) {
+        _listenerBuffer = new System.Collections.Generic.List<IDestroyedListener>();
     }
 
     protected override Entitas.ICollector<GameEntity> GetTrigger(Entitas.IContext<GameEntity> context) {
@@ -24,7 +27,9 @@ public sealed class DestroyedEventSystem : Entitas.ReactiveSystem<GameEntity> {
     protected override void Execute(System.Collections.Generic.List<GameEntity> entities) {
         foreach (var e in entities) {
             
-            foreach (var listener in e.destroyedListener.value) {
+            _listenerBuffer.Clear();
+            _listenerBuffer.AddRange(e.destroyedListener.value);
+            foreach (var listener in _listenerBuffer) {
                 listener.OnDestroyed(e);
             }
         }

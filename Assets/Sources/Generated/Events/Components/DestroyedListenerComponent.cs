@@ -6,6 +6,7 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+[Entitas.CodeGeneration.Attributes.DontGenerate(false)]
 public sealed class DestroyedListenerComponent : Entitas.IComponent {
     public System.Collections.Generic.List<IDestroyedListener> value;
 }

@@ -8,7 +8,10 @@
 //------------------------------------------------------------------------------
 public sealed class PositionEventSystem : Entitas.ReactiveSystem<GameEntity> {
 
+    readonly System.Collections.Generic.List<IPositionListener> _listenerBuffer;
+
     public PositionEventSystem(Contexts contexts) : base(contexts.game) {
+        _listenerBuffer = new System.Collections.Generic.List<IPositionListener>();
     }
 
     protected override Entitas.ICollector<GameEntity> GetTrigger(Entitas.IContext<GameEntity> context) {
@@ -24,7 +27,9 @@ public sealed class PositionEventSystem : Entitas.ReactiveSystem<GameEntity> {
     protected override void Execute(System.Collections.Generic.List<GameEntity> entities) {
         foreach (var e in entities) {
             var component = e.position;
-            foreach (var listener in e.positionListener.value) {
+            _listenerBuffer.Clear();
+            _listenerBuffer.AddRange(e.positionListener.value);
+            foreach (var listener in _listenerBuffer) {
                 listener.OnPosition(e, component.value);
             }
         }

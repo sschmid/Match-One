@@ -10,7 +10,9 @@
         Add(new ScoreSystem(contexts));
 
         // Events
-        Add(new EventSystems(contexts));
+        Add(new InputEventSystems(contexts));
+        Add(new GameEventSystems(contexts));
+        Add(new GameStateEventSystems(contexts));
 
         // Cleanup
         Add(new DestroyEntitySystem(contexts));

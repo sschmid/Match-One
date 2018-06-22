@@ -9,9 +9,13 @@
 public sealed class AssetEventSystem : Entitas.ReactiveSystem<GameEntity> {
 
     readonly Entitas.IGroup<GameEntity> _listeners;
+    readonly System.Collections.Generic.List<GameEntity> _entityBuffer;
+    readonly System.Collections.Generic.List<IAssetListener> _listenerBuffer;
 
     public AssetEventSystem(Contexts contexts) : base(contexts.game) {
         _listeners = contexts.game.GetGroup(GameMatcher.AssetListener);
+        _entityBuffer = new System.Collections.Generic.List<GameEntity>();
+        _listenerBuffer = new System.Collections.Generic.List<IAssetListener>();
     }
 
     protected override Entitas.ICollector<GameEntity> GetTrigger(Entitas.IContext<GameEntity> context) {
@@ -27,8 +31,10 @@ public sealed class AssetEventSystem : Entitas.ReactiveSystem<GameEntity> {
     protected override void Execute(System.Collections.Generic.List<GameEntity> entities) {
         foreach (var e in entities) {
             var component = e.asset;
-            foreach (var listenerEntity in _listeners) {
-                foreach (var listener in listenerEntity.assetListener.value) {
+            foreach (var listenerEntity in _listeners.GetEntities(_entityBuffer)) {
+                _listenerBuffer.Clear();
+                _listenerBuffer.AddRange(listenerEntity.assetListener.value);
+                foreach (var listener in _listenerBuffer) {
                     listener.OnAsset(e, component.value);
                 }
             }

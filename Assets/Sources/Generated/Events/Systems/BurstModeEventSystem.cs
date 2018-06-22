@@ -9,9 +9,13 @@
 public sealed class BurstModeEventSystem : Entitas.ReactiveSystem<InputEntity> {
 
     readonly Entitas.IGroup<InputEntity> _listeners;
+    readonly System.Collections.Generic.List<InputEntity> _entityBuffer;
+    readonly System.Collections.Generic.List<IBurstModeListener> _listenerBuffer;
 
     public BurstModeEventSystem(Contexts contexts) : base(contexts.input) {
         _listeners = contexts.input.GetGroup(InputMatcher.BurstModeListener);
+        _entityBuffer = new System.Collections.Generic.List<InputEntity>();
+        _listenerBuffer = new System.Collections.Generic.List<IBurstModeListener>();
     }
 
     protected override Entitas.ICollector<InputEntity> GetTrigger(Entitas.IContext<InputEntity> context) {
@@ -27,8 +31,10 @@ public sealed class BurstModeEventSystem : Entitas.ReactiveSystem<InputEntity> {
     protected override void Execute(System.Collections.Generic.List<InputEntity> entities) {
         foreach (var e in entities) {
             
-            foreach (var listenerEntity in _listeners) {
-                foreach (var listener in listenerEntity.burstModeListener.value) {
+            foreach (var listenerEntity in _listeners.GetEntities(_entityBuffer)) {
+                _listenerBuffer.Clear();
+                _listenerBuffer.AddRange(listenerEntity.burstModeListener.value);
+                foreach (var listener in _listenerBuffer) {
                     listener.OnBurstMode(e);
                 }
             }

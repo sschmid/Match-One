@@ -9,9 +9,13 @@
 public sealed class ScoreEventSystem : Entitas.ReactiveSystem<GameStateEntity> {
 
     readonly Entitas.IGroup<GameStateEntity> _listeners;
+    readonly System.Collections.Generic.List<GameStateEntity> _entityBuffer;
+    readonly System.Collections.Generic.List<IScoreListener> _listenerBuffer;
 
     public ScoreEventSystem(Contexts contexts) : base(contexts.gameState) {
         _listeners = contexts.gameState.GetGroup(GameStateMatcher.ScoreListener);
+        _entityBuffer = new System.Collections.Generic.List<GameStateEntity>();
+        _listenerBuffer = new System.Collections.Generic.List<IScoreListener>();
     }
 
     protected override Entitas.ICollector<GameStateEntity> GetTrigger(Entitas.IContext<GameStateEntity> context) {
@@ -27,8 +31,10 @@ public sealed class ScoreEventSystem : Entitas.ReactiveSystem<GameStateEntity> {
     protected override void Execute(System.Collections.Generic.List<GameStateEntity> entities) {
         foreach (var e in entities) {
             var component = e.score;
-            foreach (var listenerEntity in _listeners) {
-                foreach (var listener in listenerEntity.scoreListener.value) {
+            foreach (var listenerEntity in _listeners.GetEntities(_entityBuffer)) {
+                _listenerBuffer.Clear();
+                _listenerBuffer.AddRange(listenerEntity.scoreListener.value);
+                foreach (var listener in _listenerBuffer) {
                     listener.OnScore(e, component.value);
                 }
             }
