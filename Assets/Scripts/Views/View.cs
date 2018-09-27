@@ -22,7 +22,7 @@ public class View : MonoBehaviour, IView, IPositionListener, IDestroyedListener 
         destroy();
     }
 
-    protected void destroy() {
+    protected virtual void destroy() {
         gameObject.Unlink();
         Destroy(gameObject);
     }
