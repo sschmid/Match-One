@@ -13,7 +13,7 @@ public partial class InputEntity {
 
     public void AddInput(int newX, int newY) {
         var index = InputComponentsLookup.Input;
-        var component = CreateComponent<InputComponent>(index);
+        var component = (InputComponent)CreateComponent(index, typeof(InputComponent));
         component.x = newX;
         component.y = newY;
         AddComponent(index, component);
@@ -21,7 +21,7 @@ public partial class InputEntity {
 
     public void ReplaceInput(int newX, int newY) {
         var index = InputComponentsLookup.Input;
-        var component = CreateComponent<InputComponent>(index);
+        var component = (InputComponent)CreateComponent(index, typeof(InputComponent));
         component.x = newX;
         component.y = newY;
         ReplaceComponent(index, component);

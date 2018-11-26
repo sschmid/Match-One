@@ -13,14 +13,14 @@ public partial class GameEntity {
 
     public void AddDestroyedListener(System.Collections.Generic.List<IDestroyedListener> newValue) {
         var index = GameComponentsLookup.DestroyedListener;
-        var component = CreateComponent<DestroyedListenerComponent>(index);
+        var component = (DestroyedListenerComponent)CreateComponent(index, typeof(DestroyedListenerComponent));
         component.value = newValue;
         AddComponent(index, component);
     }
 
     public void ReplaceDestroyedListener(System.Collections.Generic.List<IDestroyedListener> newValue) {
         var index = GameComponentsLookup.DestroyedListener;
-        var component = CreateComponent<DestroyedListenerComponent>(index);
+        var component = (DestroyedListenerComponent)CreateComponent(index, typeof(DestroyedListenerComponent));
         component.value = newValue;
         ReplaceComponent(index, component);
     }

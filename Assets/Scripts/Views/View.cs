@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class View : MonoBehaviour, IView, IPositionListener, IDestroyedListener {
 
-    public virtual void Link(IEntity entity, IContext context) {
-        gameObject.Link(entity, context);
+    public virtual void Link(IEntity entity) {
+        gameObject.Link(entity);
         var e = (GameEntity)entity;
         e.AddPositionListener(this);
         e.AddDestroyedListener(this);

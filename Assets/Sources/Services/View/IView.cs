@@ -1,5 +1,5 @@
 ﻿using Entitas;
 
 public interface IView {
-    void Link(IEntity entity, IContext context);
+    void Link(IEntity entity);
 }

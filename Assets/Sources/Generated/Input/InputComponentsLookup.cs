@@ -8,24 +8,24 @@
 //------------------------------------------------------------------------------
 public static class InputComponentsLookup {
 
-    public const int BurstMode = 0;
-    public const int BurstModeListener = 1;
-    public const int BurstModeRemovedListener = 2;
+    public const int AnyBurstModeListener = 0;
+    public const int AnyBurstModeRemovedListener = 1;
+    public const int BurstMode = 2;
     public const int Input = 3;
 
     public const int TotalComponents = 4;
 
     public static readonly string[] componentNames = {
+        "AnyBurstModeListener",
+        "AnyBurstModeRemovedListener",
         "BurstMode",
-        "BurstModeListener",
-        "BurstModeRemovedListener",
         "Input"
     };
 
     public static readonly System.Type[] componentTypes = {
+        typeof(AnyBurstModeListenerComponent),
+        typeof(AnyBurstModeRemovedListenerComponent),
         typeof(BurstModeComponent),
-        typeof(BurstModeListenerComponent),
-        typeof(BurstModeRemovedListenerComponent),
         typeof(InputComponent)
     };
 }

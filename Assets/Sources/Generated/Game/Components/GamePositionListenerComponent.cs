@@ -13,14 +13,14 @@ public partial class GameEntity {
 
     public void AddPositionListener(System.Collections.Generic.List<IPositionListener> newValue) {
         var index = GameComponentsLookup.PositionListener;
-        var component = CreateComponent<PositionListenerComponent>(index);
+        var component = (PositionListenerComponent)CreateComponent(index, typeof(PositionListenerComponent));
         component.value = newValue;
         AddComponent(index, component);
     }
 
     public void ReplacePositionListener(System.Collections.Generic.List<IPositionListener> newValue) {
         var index = GameComponentsLookup.PositionListener;
-        var component = CreateComponent<PositionListenerComponent>(index);
+        var component = (PositionListenerComponent)CreateComponent(index, typeof(PositionListenerComponent));
         component.value = newValue;
         ReplaceComponent(index, component);
     }

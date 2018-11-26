@@ -8,8 +8,8 @@
 //------------------------------------------------------------------------------
 public static class GameComponentsLookup {
 
-    public const int Asset = 0;
-    public const int AssetListener = 1;
+    public const int AnyAssetListener = 0;
+    public const int Asset = 1;
     public const int Destroyed = 2;
     public const int DestroyedListener = 3;
     public const int GameBoard = 4;
@@ -18,12 +18,13 @@ public static class GameComponentsLookup {
     public const int Movable = 7;
     public const int Position = 8;
     public const int PositionListener = 9;
+    public const int Tick = 10;
 
-    public const int TotalComponents = 10;
+    public const int TotalComponents = 11;
 
     public static readonly string[] componentNames = {
+        "AnyAssetListener",
         "Asset",
-        "AssetListener",
         "Destroyed",
         "DestroyedListener",
         "GameBoard",
@@ -31,12 +32,13 @@ public static class GameComponentsLookup {
         "Interactive",
         "Movable",
         "Position",
-        "PositionListener"
+        "PositionListener",
+        "Tick"
     };
 
     public static readonly System.Type[] componentTypes = {
+        typeof(AnyAssetListenerComponent),
         typeof(AssetComponent),
-        typeof(AssetListenerComponent),
         typeof(DestroyedComponent),
         typeof(DestroyedListenerComponent),
         typeof(GameBoardComponent),
@@ -44,6 +46,7 @@ public static class GameComponentsLookup {
         typeof(InteractiveComponent),
         typeof(MovableComponent),
         typeof(PositionComponent),
-        typeof(PositionListenerComponent)
+        typeof(PositionListenerComponent),
+        typeof(TickComponent)
     };
 }

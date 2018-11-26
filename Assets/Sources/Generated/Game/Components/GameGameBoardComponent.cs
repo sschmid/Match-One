@@ -51,7 +51,7 @@ public partial class GameEntity {
 
     public void AddGameBoard(int newColumns, int newRows) {
         var index = GameComponentsLookup.GameBoard;
-        var component = CreateComponent<GameBoardComponent>(index);
+        var component = (GameBoardComponent)CreateComponent(index, typeof(GameBoardComponent));
         component.columns = newColumns;
         component.rows = newRows;
         AddComponent(index, component);
@@ -59,7 +59,7 @@ public partial class GameEntity {
 
     public void ReplaceGameBoard(int newColumns, int newRows) {
         var index = GameComponentsLookup.GameBoard;
-        var component = CreateComponent<GameBoardComponent>(index);
+        var component = (GameBoardComponent)CreateComponent(index, typeof(GameBoardComponent));
         component.columns = newColumns;
         component.rows = newRows;
         ReplaceComponent(index, component);

@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ScoreLabelController : MonoBehaviour, IScoreListener {
+public class ScoreLabelController : MonoBehaviour, IAnyScoreListener {
 
     public Text label;
 
     void Start() {
-        Contexts.sharedInstance.gameState.CreateEntity().AddScoreListener(this);
+        Contexts.sharedInstance.gameState.CreateEntity().AddAnyScoreListener(this);
     }
 
-    public void OnScore(GameStateEntity entity, int value) {
+    public void OnAnyScore(GameStateEntity entity, int value) {
         label.text = "Score " + value;
     }
 }
