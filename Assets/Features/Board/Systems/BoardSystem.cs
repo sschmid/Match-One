@@ -16,14 +16,15 @@ public sealed class BoardSystem : ReactiveSystem<GameEntity>, IInitializeSystem
     public void Initialize()
     {
         var entity = _contexts.game.CreateEntity();
-        var boardSize = new Vector2Int(8, 9);
+        var boardSize = _contexts.config.gameConfig.value.boardSize;
+        var blockerProbability = _contexts.config.gameConfig.value.blockerProbability;
         entity.AddBoard(boardSize);
 
         for (int y = 0; y < boardSize.y; y++)
         {
             for (int x = 0; x < boardSize.x; x++)
             {
-                if (Rand.game.Bool(0.1f))
+                if (Rand.game.Bool(blockerProbability))
                 {
                     _contexts.game.CreateBlocker(x, y);
                 }

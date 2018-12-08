@@ -11,11 +11,13 @@ public class GameController
 {
     readonly Systems _systems;
 
-    public GameController(Contexts contexts)
+    public GameController(Contexts contexts, IGameConfig gameConfig)
     {
         var random = new Random(DateTime.UtcNow.Millisecond);
         UnityEngine.Random.InitState(random.Next());
         Rand.game = new Rand(random.Next());
+
+        contexts.config.SetGameConfig(gameConfig);
 
         // This is the heart of Match One:
         // All logic is contained in all the sub systems of GameSystems

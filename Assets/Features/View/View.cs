@@ -10,6 +10,9 @@ public class View : MonoBehaviour, IView, IPositionListener, IDestroyedListener
         var e = (GameEntity)entity;
         e.AddPositionListener(this);
         e.AddDestroyedListener(this);
+
+        var pos = e.position.value;
+        transform.localPosition = new Vector3(pos.x, pos.y);
     }
 
     public virtual void OnPosition(GameEntity entity, Vector2Int value)
