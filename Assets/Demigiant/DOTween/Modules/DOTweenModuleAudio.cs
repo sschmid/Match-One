@@ -1,7 +1,7 @@
 // Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2018/07/13
 
-#if false // MODULE_MARKER
+#if true // MODULE_MARKER
 using System;
 using UnityEngine;
 #if UNITY_5 || UNITY_2017_1_OR_NEWER

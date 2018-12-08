@@ -153,7 +153,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.sschmid.MatchOne
-    Standalone: unity.sschmid.Match One
+    Standalone: unity.sschmid.MatchOne
     Tizen: com.sschmid.MatchOne
     iOS: com.sschmid.MatchOne
     tvOS: com.sschmid.MatchOne
@@ -591,7 +591,7 @@ PlayerSettings:
     iOS: 1
   allowUnsafeCode: 0
   additionalIl2CppArgs: 
-  scriptingRuntimeVersion: 0
+  scriptingRuntimeVersion: 1
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
@@ -661,7 +661,7 @@ PlayerSettings:
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled: {}
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 
   projectName: 
   organizationId: 
