@@ -1,27 +1,26 @@
-# Windows
+# OS
+.DS_Store
 Thumbs.db
 
-# Mac
-.DS_Store
+# Solution
+obj
+bin
+
+# IDEs
+packages
+.vs
+.vscode
+.idea
+**/Assets/Plugins/Editor/JetBrains
+**/Assets/Plugins/Editor/JetBrains.meta
 
 # Unity
+!Packages
 Library
 Temp
+Logs
+UserSettings
+*.sln
 *.unitypackage
-*-CSharp*.csproj
-
-# Xamarin
-obj
-*.userprefs
-test-results
-
-# Rider
-.idea/
-
-# Custom
-Match-One.sln
-Assets/Plugins
-Assets/Plugins.meta
-Jenny.zip
-Jenny.zip.meta
-Jenny
+Assembly-CSharp*.csproj
+RiderScriptEditorPersistedState.asset
