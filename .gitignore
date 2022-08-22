@@ -7,7 +7,6 @@ obj
 bin
 
 # IDEs
-packages
 .vs
 .vscode
 .idea
@@ -15,12 +14,10 @@ packages
 **/Assets/Plugins/Editor/JetBrains.meta
 
 # Unity
-!Packages
 Library
 Temp
 Logs
 UserSettings
 *.sln
-*.unitypackage
-Assembly-CSharp*.csproj
-RiderScriptEditorPersistedState.asset
+*.csproj
+*.userproperties
