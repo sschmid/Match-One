@@ -13,14 +13,7 @@ public sealed class InputSystem : IExecuteSystem
 
     public void Execute()
     {
-        SetBurstMode();
         EmitInput();
-    }
-
-    void SetBurstMode()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
-            _contexts.input.isBurstMode = !_contexts.input.isBurstMode;
     }
 
     void EmitInput()

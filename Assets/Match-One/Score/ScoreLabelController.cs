@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using TMPro;
+using UnityEngine;
 
 public class ScoreLabelController : MonoBehaviour, IAnyScoreListener
 {
-    public Text label;
+    public TMP_Text Label;
 
     void Start()
     {
@@ -12,5 +12,5 @@ public class ScoreLabelController : MonoBehaviour, IAnyScoreListener
     }
 
     public void OnAnyScore(GameStateEntity entity, int value) =>
-        label.text = "Score " + value;
+        Label.text = "Score " + value;
 }
