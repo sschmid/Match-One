@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
-public class CameraBehaviour : MonoBehaviour, IAnyBoardListener
+public class CameraView : MonoBehaviour, IAnyBoardListener
 {
     Camera _cam;
 
@@ -18,7 +18,8 @@ public class CameraBehaviour : MonoBehaviour, IAnyBoardListener
         _cam.orthographicSize = Math.Max(size.x, size.y) * 0.7f;
         transform.localPosition = new Vector3(
             size.x * 0.5f - 0.5f,
-            size.y * 0.6f
+            size.y * 0.6f,
+            -10
         );
     }
 }
