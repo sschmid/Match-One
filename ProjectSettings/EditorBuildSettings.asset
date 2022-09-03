@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Features/Game/Game Scene.unity
+    path: Assets/Match-One/Game/Game Scene.unity
     guid: 8f56d8392aeb346ce9ebf7b5d2865513
   m_configObjects: {}
