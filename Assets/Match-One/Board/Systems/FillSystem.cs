@@ -12,10 +12,12 @@ public sealed class FillSystem : ReactiveSystem<GameEntity>
         _contexts = contexts;
     }
 
-    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) =>
-        context.CreateCollector(Destroyed);
+    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) => context.CreateCollector(
+        Destroyed.Added(),
+        Board.Added()
+    );
 
-    protected override bool Filter(GameEntity entity) => entity.isDestroyed && entity.isPiece;
+    protected override bool Filter(GameEntity entity) => true;
 
     protected override void Execute(List<GameEntity> entities)
     {
