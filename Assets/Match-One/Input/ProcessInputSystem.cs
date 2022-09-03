@@ -18,10 +18,7 @@ public sealed class ProcessInputSystem : ReactiveSystem<InputEntity>
 
     protected override void Execute(List<InputEntity> entities)
     {
-        var inputEntity = entities.SingleEntity();
-        var input = inputEntity.input;
-
-        var e = _contexts.game.GetPieceWithPosition(input.Value);
+        var e = _contexts.game.GetPieceWithPosition(_contexts.input.input.Value);
         if (e != null && e.isInteractive)
             e.isDestroyed = true;
     }
