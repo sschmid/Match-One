@@ -9,7 +9,7 @@ public class PieceView : View
     public override void OnPosition(GameEntity entity, Vector2Int value)
     {
         transform.DOKill();
-        var isTopRow = value.y == Contexts.sharedInstance.game.board.Value.y - 1;
+        var isTopRow = value.y == Contexts.sharedInstance.game.board.Size.y - 1;
         if (isTopRow)
             transform.localPosition = new Vector3(value.x, value.y + 1);
 

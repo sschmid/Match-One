@@ -19,7 +19,7 @@ public sealed class FallSystem : ReactiveSystem<GameEntity>
 
     protected override void Execute(List<GameEntity> entities)
     {
-        var board = _contexts.game.board.Value;
+        var board = _contexts.game.board.Size;
         for (var x = 0; x < board.x; x++)
         {
             for (var y = 1; y < board.y; y++)

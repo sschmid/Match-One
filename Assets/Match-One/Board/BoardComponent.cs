@@ -5,5 +5,5 @@ using UnityEngine;
 [Unique]
 public sealed class BoardComponent : IComponent
 {
-    public Vector2Int Value;
+    public Vector2Int Size;
 }

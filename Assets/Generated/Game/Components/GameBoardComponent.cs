@@ -12,22 +12,22 @@ public partial class GameContext {
     public BoardComponent board { get { return boardEntity.board; } }
     public bool hasBoard { get { return boardEntity != null; } }
 
-    public GameEntity SetBoard(UnityEngine.Vector2Int newValue) {
+    public GameEntity SetBoard(UnityEngine.Vector2Int newSize) {
         if (hasBoard) {
             throw new Entitas.EntitasException("Could not set Board!\n" + this + " already has an entity with BoardComponent!",
                 "You should check if the context already has a boardEntity before setting it or use context.ReplaceBoard().");
         }
         var entity = CreateEntity();
-        entity.AddBoard(newValue);
+        entity.AddBoard(newSize);
         return entity;
     }
 
-    public void ReplaceBoard(UnityEngine.Vector2Int newValue) {
+    public void ReplaceBoard(UnityEngine.Vector2Int newSize) {
         var entity = boardEntity;
         if (entity == null) {
-            entity = SetBoard(newValue);
+            entity = SetBoard(newSize);
         } else {
-            entity.ReplaceBoard(newValue);
+            entity.ReplaceBoard(newSize);
         }
     }
 
@@ -49,17 +49,17 @@ public partial class GameEntity {
     public BoardComponent board { get { return (BoardComponent)GetComponent(GameComponentsLookup.Board); } }
     public bool hasBoard { get { return HasComponent(GameComponentsLookup.Board); } }
 
-    public void AddBoard(UnityEngine.Vector2Int newValue) {
+    public void AddBoard(UnityEngine.Vector2Int newSize) {
         var index = GameComponentsLookup.Board;
         var component = (BoardComponent)CreateComponent(index, typeof(BoardComponent));
-        component.Value = newValue;
+        component.Size = newSize;
         AddComponent(index, component);
     }
 
-    public void ReplaceBoard(UnityEngine.Vector2Int newValue) {
+    public void ReplaceBoard(UnityEngine.Vector2Int newSize) {
         var index = GameComponentsLookup.Board;
         var component = (BoardComponent)CreateComponent(index, typeof(BoardComponent));
-        component.Value = newValue;
+        component.Size = newSize;
         ReplaceComponent(index, component);
     }
 
