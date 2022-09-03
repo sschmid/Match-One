@@ -8,7 +8,6 @@ using UnityEngine;
  * the Unity lifecycle events to the GameController
  *
  */
-
 public class GameControllerBehaviour : MonoBehaviour
 {
     public ScriptableGameConfig gameConfig;

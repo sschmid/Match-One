@@ -6,7 +6,6 @@ using Entitas;
  * The GameController creates and manages all systems in Match One
  *
  */
-
 public class GameController
 {
     readonly Systems _systems;
