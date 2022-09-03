@@ -13,7 +13,8 @@ Match One is a very simple CandyCrush-like Match 3 example, except it's Match On
 Match One shows
 - systems list in `GameController`
 - how you can use reactive systems to only process changed entities
-- the usage of `EntityIndex` for super fast entity access
+- the usage of `EntityIndex` to conveniently access entities with a specific position
 - how you can use multiple `contexts` to reduce the memory footprint of each entity (Game, Input, GameState, Config)
+- how to decouple views from the game logic and use listeners to update themselves
 
 ![Match One](https://raw.githubusercontent.com/sschmid/Entitas/main/Readme/Images/Match-One.png)
