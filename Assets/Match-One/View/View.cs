@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class View : MonoBehaviour, IView, IPositionListener, IDestroyedListener
 {
+    protected GameEntity _linkedEntity;
+
     public virtual void Link(IEntity entity)
     {
         gameObject.Link(entity);
-        var e = (GameEntity)entity;
-        e.AddPositionListener(this);
-        e.AddDestroyedListener(this);
+        _linkedEntity = (GameEntity)entity;
+        _linkedEntity.AddPositionListener(this);
+        _linkedEntity.AddDestroyedListener(this);
 
-        var pos = e.position.Value;
+        var pos = _linkedEntity.position.Value;
         transform.localPosition = new Vector3(pos.x, pos.y);
     }
 
