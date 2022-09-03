@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 /**
@@ -10,11 +11,17 @@ using UnityEngine;
  */
 public class GameControllerBehaviour : MonoBehaviour
 {
-    public ScriptableGameConfig gameConfig;
+    public ScriptableGameConfig GameConfig;
+    public ScriptablePieceColorsConfig PieceColorsConfig;
 
     GameController _gameController;
 
-    void Awake() => _gameController = new GameController(Contexts.sharedInstance, gameConfig);
+    void Awake()
+    {
+        DOTween.SetTweensCapacity(500, 50);
+        _gameController = new GameController(Contexts.sharedInstance, GameConfig, PieceColorsConfig);
+    }
+
     void Start() => _gameController.Initialize();
     void Update() => _gameController.Execute();
 }

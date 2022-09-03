@@ -19,7 +19,7 @@ public sealed class ScoreSystem : ReactiveSystem<GameEntity>, IInitializeSystem
     protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) =>
         context.CreateCollector(Destroyed);
 
-    protected override bool Filter(GameEntity entity) => entity.isDestroyed && entity.isPiece;
+    protected override bool Filter(GameEntity entity) => entity.isDestroyed && entity.hasPiece;
 
     protected override void Execute(List<GameEntity> entities)
     {

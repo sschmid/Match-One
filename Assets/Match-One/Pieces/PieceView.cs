@@ -1,10 +1,22 @@
 ﻿using DG.Tweening;
+using Entitas;
 using UnityEngine;
 
 public class PieceView : View
 {
-    public SpriteRenderer sprite;
-    public float destroyDuration;
+    public SpriteRenderer Sprite;
+    public float DestroyDuration;
+
+    public override void Link(IEntity entity)
+    {
+        base.Link(entity);
+
+        if (_linkedEntity.piece.Type >= 0)
+        {
+            var config = Contexts.sharedInstance.config.pieceColorsConfig.value;
+            Sprite.color = config.Colors[_linkedEntity.piece.Type];
+        }
+    }
 
     public override void OnPosition(GameEntity entity, Vector2Int value)
     {
@@ -18,11 +30,11 @@ public class PieceView : View
 
     protected override void OnDestroy()
     {
-        var color = sprite.color;
+        var color = Sprite.color;
         color.a = 0f;
-        sprite.material.DOColor(color, destroyDuration);
+        Sprite.material.DOColor(color, DestroyDuration);
         gameObject.transform
-            .DOScale(Vector3.one * 1.5f, destroyDuration)
+            .DOScale(Vector3.one * 1.5f, DestroyDuration)
             .OnComplete(base.OnDestroy);
     }
 }
