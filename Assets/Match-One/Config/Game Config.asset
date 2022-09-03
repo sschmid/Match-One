@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89df5d7d42414bce92718fe6f742690c, type: 3}
   m_Name: Game Config
   m_EditorClassIdentifier: 
-  _boardSize: {x: 8, y: 9}
+  _boardSize: {x: 9, y: 9}
   _blockerProbability: 0.1
