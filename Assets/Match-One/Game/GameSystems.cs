@@ -20,7 +20,7 @@
         Add(new GameEventSystems(contexts));
         Add(new GameStateEventSystems(contexts));
 
-        // Cleanup (Generated, only with Entitas Asset Store version)
+        // Cleanup (Generated)
         Add(new InputCleanupSystems(contexts));
         Add(new GameCleanupSystems(contexts));
     }
