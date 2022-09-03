@@ -35,7 +35,7 @@ public sealed class AnyScoreEventSystem : Entitas.ReactiveSystem<GameStateEntity
                 _listenerBuffer.Clear();
                 _listenerBuffer.AddRange(listenerEntity.anyScoreListener.value);
                 foreach (var listener in _listenerBuffer) {
-                    listener.OnAnyScore(e, component.value);
+                    listener.OnAnyScore(e, component.Value);
                 }
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
+using static GameMatcher;
 
 public sealed class FillSystem : ReactiveSystem<GameEntity>
 {
@@ -11,15 +12,15 @@ public sealed class FillSystem : ReactiveSystem<GameEntity>
         _contexts = contexts;
     }
 
-    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
-        => context.CreateCollector(GameMatcher.Destroyed);
+    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) =>
+        context.CreateCollector(Destroyed);
 
     protected override bool Filter(GameEntity entity) => entity.isDestroyed && entity.isPiece;
 
     protected override void Execute(List<GameEntity> entities)
     {
-        var board = _contexts.game.board.value;
-        for (int x = 0; x < board.x; x++)
+        var board = _contexts.game.board.Value;
+        for (var x = 0; x < board.x; x++)
         {
             var position = new Vector2Int(x, board.y);
             var nextRowPos = BoardLogic.GetNextEmptyRow(_contexts, position);

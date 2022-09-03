@@ -11,7 +11,7 @@ public class View : MonoBehaviour, IView, IPositionListener, IDestroyedListener
         e.AddPositionListener(this);
         e.AddDestroyedListener(this);
 
-        var pos = e.position.value;
+        var pos = e.position.Value;
         transform.localPosition = new Vector3(pos.x, pos.y);
     }
 
@@ -20,12 +20,9 @@ public class View : MonoBehaviour, IView, IPositionListener, IDestroyedListener
         transform.localPosition = new Vector3(value.x, value.y);
     }
 
-    public virtual void OnDestroyed(GameEntity entity)
-    {
-        destroy();
-    }
+    public virtual void OnDestroyed(GameEntity entity) => Destroy();
 
-    protected virtual void destroy()
+    protected virtual void Destroy()
     {
         gameObject.Unlink();
         Destroy(gameObject);

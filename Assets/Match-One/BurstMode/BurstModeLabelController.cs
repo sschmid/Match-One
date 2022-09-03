@@ -3,14 +3,11 @@ using UnityEngine.UI;
 
 public class BurstModeLabelController : MonoBehaviour, IAnyBurstModeListener, IAnyBurstModeRemovedListener
 {
-    public Text label;
+    public Text Label;
 
     string _text;
 
-    void Awake()
-    {
-        _text = label.text;
-    }
+    void Awake() => _text = Label.text;
 
     void Start()
     {
@@ -20,22 +17,11 @@ public class BurstModeLabelController : MonoBehaviour, IAnyBurstModeListener, IA
         listener.AddAnyBurstModeRemovedListener(this);
 
         if (contexts.input.isBurstMode)
-        {
             OnAnyBurstMode(contexts.input.burstModeEntity);
-        }
         else
-        {
             OnAnyBurstModeRemoved(contexts.input.burstModeEntity);
-        }
     }
 
-    public void OnAnyBurstMode(InputEntity entity)
-    {
-        label.text = _text + ": on";
-    }
-
-    public void OnAnyBurstModeRemoved(InputEntity entity)
-    {
-        label.text = _text + ": off";
-    }
+    public void OnAnyBurstMode(InputEntity entity) => Label.text = _text + ": on";
+    public void OnAnyBurstModeRemoved(InputEntity entity) => Label.text = _text + ": off";
 }

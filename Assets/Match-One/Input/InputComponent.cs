@@ -5,5 +5,5 @@ using UnityEngine;
 [Input, Cleanup(CleanupMode.DestroyEntity)]
 public sealed class InputComponent : IComponent
 {
-    public Vector2Int value;
+    public Vector2Int Value;
 }

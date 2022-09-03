@@ -12,16 +12,13 @@ public partial class Contexts
             Piece,
             game.GetGroup(GameMatcher
                 .AllOf(GameMatcher.Piece, GameMatcher.Position)
-                .NoneOf(GameMatcher.Destroyed)
-            ),
-            (e, c) => (c as PositionComponent)?.value ?? e.position.value));
+                .NoneOf(GameMatcher.Destroyed)),
+            (e, c) => (c as PositionComponent)?.Value ?? e.position.Value));
     }
 }
 
 public static class ContextsExtensions
 {
-    public static GameEntity GetPieceWithPosition(this GameContext context, Vector2Int value)
-    {
-        return ((PrimaryEntityIndex<GameEntity, Vector2Int>)context.GetEntityIndex(Contexts.Piece)).GetEntity(value);
-    }
+    public static GameEntity GetPieceWithPosition(this GameContext context, Vector2Int value) =>
+        ((PrimaryEntityIndex<GameEntity, Vector2Int>)context.GetEntityIndex(Contexts.Piece)).GetEntity(value);
 }

@@ -52,14 +52,14 @@ public partial class GameEntity {
     public void AddBoard(UnityEngine.Vector2Int newValue) {
         var index = GameComponentsLookup.Board;
         var component = (BoardComponent)CreateComponent(index, typeof(BoardComponent));
-        component.value = newValue;
+        component.Value = newValue;
         AddComponent(index, component);
     }
 
     public void ReplaceBoard(UnityEngine.Vector2Int newValue) {
         var index = GameComponentsLookup.Board;
         var component = (BoardComponent)CreateComponent(index, typeof(BoardComponent));
-        component.value = newValue;
+        component.Value = newValue;
         ReplaceComponent(index, component);
     }
 

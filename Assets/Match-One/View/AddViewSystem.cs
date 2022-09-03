@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
+using static GameMatcher;
 
 public sealed class AddViewSystem : ReactiveSystem<GameEntity>
 {
@@ -11,22 +12,20 @@ public sealed class AddViewSystem : ReactiveSystem<GameEntity>
         _parent = new GameObject("Views").transform;
     }
 
-    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
-        => context.CreateCollector(GameMatcher.Asset);
+    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) =>
+        context.CreateCollector(Asset);
 
     protected override bool Filter(GameEntity entity) => entity.hasAsset && !entity.hasView;
 
     protected override void Execute(List<GameEntity> entities)
     {
         foreach (var e in entities)
-        {
-            e.AddView(instantiateView(e));
-        }
+            e.AddView(InstantiateView(e));
     }
 
-    IView instantiateView(GameEntity entity)
+    IView InstantiateView(GameEntity entity)
     {
-        var prefab = Resources.Load<GameObject>(entity.asset.value);
+        var prefab = Resources.Load<GameObject>(entity.asset.Value);
         var view = Object.Instantiate(prefab, _parent).GetComponent<IView>();
         view.Link(entity);
         return view;

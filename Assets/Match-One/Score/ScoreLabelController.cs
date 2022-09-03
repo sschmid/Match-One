@@ -11,8 +11,6 @@ public class ScoreLabelController : MonoBehaviour, IAnyScoreListener
         listener.AddAnyScoreListener(this);
     }
 
-    public void OnAnyScore(GameStateEntity entity, int value)
-    {
+    public void OnAnyScore(GameStateEntity entity, int value) =>
         label.text = "Score " + value;
-    }
 }

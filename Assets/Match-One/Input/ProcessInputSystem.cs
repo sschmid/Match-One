@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Entitas;
+using static InputMatcher;
 
 public sealed class ProcessInputSystem : ReactiveSystem<InputEntity>
 {
@@ -10,8 +11,8 @@ public sealed class ProcessInputSystem : ReactiveSystem<InputEntity>
         _contexts = contexts;
     }
 
-    protected override ICollector<InputEntity> GetTrigger(IContext<InputEntity> context)
-        => context.CreateCollector(InputMatcher.Input);
+    protected override ICollector<InputEntity> GetTrigger(IContext<InputEntity> context) =>
+        context.CreateCollector(Input);
 
     protected override bool Filter(InputEntity entity) => entity.hasInput;
 
@@ -20,10 +21,8 @@ public sealed class ProcessInputSystem : ReactiveSystem<InputEntity>
         var inputEntity = entities.SingleEntity();
         var input = inputEntity.input;
 
-        var e = _contexts.game.GetPieceWithPosition(input.value);
+        var e = _contexts.game.GetPieceWithPosition(input.Value);
         if (e != null && e.isInteractive)
-        {
             e.isDestroyed = true;
-        }
     }
 }

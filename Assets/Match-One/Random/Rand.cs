@@ -7,10 +7,7 @@ public class Rand
 
     readonly Random _random;
 
-    public Rand(int seed)
-    {
-        _random = new Random(seed);
-    }
+    public Rand(int seed) => _random = new Random(seed);
 
     public bool Bool(float chance) => Float() < chance;
     public int Int() => _random.Next();

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Entitas;
+using static GameMatcher;
 
 public sealed class ScoreSystem : ReactiveSystem<GameEntity>, IInitializeSystem
 {
@@ -15,13 +16,13 @@ public sealed class ScoreSystem : ReactiveSystem<GameEntity>, IInitializeSystem
         _contexts.gameState.SetScore(0);
     }
 
-    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
-        => context.CreateCollector(GameMatcher.Destroyed);
+    protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context) =>
+        context.CreateCollector(Destroyed);
 
     protected override bool Filter(GameEntity entity) => entity.isDestroyed && entity.isPiece;
 
     protected override void Execute(List<GameEntity> entities)
     {
-        _contexts.gameState.ReplaceScore(_contexts.gameState.score.value + entities.Count);
+        _contexts.gameState.ReplaceScore(_contexts.gameState.score.Value + entities.Count);
     }
 }
