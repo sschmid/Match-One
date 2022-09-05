@@ -17,4 +17,14 @@ Match One shows
 - how you can use multiple `contexts` to reduce the memory footprint of each entity (Game, Input, GameState, Config)
 - how to decouple views from the game logic and use listeners to update themselves
 
+---
+
+Play around, add some features and ideas, and when you need to regenerate code, e.g. after adding new components, run
+
+```
+dotnet Jenny/Jenny.Generator.Cli.dll gen
+```
+
+Happy coding :)
+
 ![Match One](https://raw.githubusercontent.com/sschmid/Entitas/main/Readme/Images/Match-One.png)
