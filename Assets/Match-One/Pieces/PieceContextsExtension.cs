@@ -17,7 +17,7 @@ public partial class Contexts
     }
 }
 
-public static class ContextsExtensions
+public static class PieceContextsExtension
 {
     public static GameEntity GetPieceWithPosition(this GameContext context, Vector2Int value) =>
         ((PrimaryEntityIndex<GameEntity, Vector2Int>)context.GetEntityIndex(Contexts.Piece)).GetEntity(value);
