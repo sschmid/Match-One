@@ -27,4 +27,4 @@ dotnet Jenny/Jenny.Generator.Cli.dll gen
 
 Happy coding :)
 
-![Match One](https://raw.githubusercontent.com/sschmid/Entitas/main/Readme/Images/Match-One.png)
+![Match One](https://raw.githubusercontent.com/sschmid/Entitas/main/readme/Images/Match-One.png)
