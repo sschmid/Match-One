@@ -1,8 +1,8 @@
 # Match One
-This is a simple and interactive Unity3d example project to show how to use Entitas.
-Entitas is a super fast Entity Component System (ECS) Framework specifically made for C# and Unity
+This is a simple and interactive Unity example project to show how to use Entitas.
+Entitas is a super fast Entity Component System (ECS) Framework specifically made for C# and Unity.
 
-Get Entitas here: https://github.com/sschmid/Entitas
+See https://github.com/sschmid/Entitas
 
 ---
 
@@ -27,4 +27,4 @@ dotnet Jenny/Jenny.Generator.Cli.dll gen
 
 Happy coding :)
 
-![Match One](https://raw.githubusercontent.com/sschmid/Entitas/main/readme/Images/Match-One.png)
+![Match One](readme/images/Match-One.png)
