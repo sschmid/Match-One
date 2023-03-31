@@ -10,6 +10,8 @@ Match One is a very simple CandyCrush-like Match 3 example, except it's Match On
 
 [Watch the talk from Unite Europe 2015](https://www.youtube.com/watch?v=Re5kGtxTW6E) to get an in-depth tutorial.
 
+![Match One](readme/images/Match-One.png)
+
 Match One shows
 - systems list in `GameController`
 - how you can use reactive systems to only process changed entities
@@ -26,5 +28,3 @@ dotnet Jenny/Jenny.Generator.Cli.dll gen
 ```
 
 Happy coding :)
-
-![Match One](readme/images/Match-One.png)
