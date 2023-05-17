@@ -1,3 +1,3 @@
 pushd %~dp0
-.\Jenny\Jenny server
+dotnet Jenny/Jenny.Generator.Cli.dll server
 popd
