@@ -1,0 +1,23 @@
+{
+  "name": "com.sschmid.entitas.generators.attributes",
+  "version": "2.0.0",
+  "displayName": "Entitas.Generators.Attributes",
+  "description": "Entitas is a super fast Entity Component System (ECS) Framework specifically made for C# and Unity",
+  "unity": "2021.3",
+  "documentationUrl": "https://github.com/sschmid/Entitas",
+  "changelogUrl": "https://github.com/sschmid/Entitas/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/sschmid/Entitas/blob/main/LICENSE.md",
+  "dependencies": { },
+  "keywords": [
+    "ecs",
+    "unity",
+    "dotnet",
+    "entity",
+    "component",
+    "system",
+    "entity-component-system"
+  ],
+  "author": {
+    "name": "sschmid"
+  }
+}

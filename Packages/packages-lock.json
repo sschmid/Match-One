@@ -1,10 +1,94 @@
 {
   "dependencies": {
+    "com.sschmid.desperatedevs.extensions": {
+      "version": "2.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
+    "com.sschmid.desperatedevs.reflection": {
+      "version": "1.0.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.sschmid.desperatedevs.extensions": "2.0.0",
+        "com.sschmid.sherlog": "1.0.0"
+      },
+      "url": "https://package.openupm.com"
+    },
+    "com.sschmid.desperatedevs.serialization": {
+      "version": "2.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.sschmid.desperatedevs.extensions": "1.0.0"
+      },
+      "url": "https://package.openupm.com"
+    },
+    "com.sschmid.desperatedevs.unity.editor": {
+      "version": "2.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.sschmid.desperatedevs.extensions": "1.0.0",
+        "com.sschmid.desperatedevs.serialization": "2.0.0"
+      },
+      "url": "https://package.openupm.com"
+    },
+    "com.sschmid.entitas": {
+      "version": "file:com.sschmid.entitas",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.sschmid.entitas.generators.attributes": {
+      "version": "file:com.sschmid.entitas.generators.attributes",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.sschmid.entitas.unity": {
+      "version": "file:com.sschmid.entitas.unity",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.sschmid.entitas": "2.0.0"
+      }
+    },
+    "com.sschmid.entitas.unity.editor": {
+      "version": "file:com.sschmid.entitas.unity.editor",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.sschmid.desperatedevs.reflection": "1.0.2",
+        "com.sschmid.desperatedevs.unity.editor": "2.0.0",
+        "com.sschmid.entitas": "2.0.0",
+        "com.sschmid.entitas.generators.attributes": "2.0.0",
+        "com.sschmid.entitas.unity": "2.0.0"
+      }
+    },
+    "com.sschmid.sherlog": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
       "dependencies": {}
+    },
+    "com.unity.ai.navigation": {
+      "version": "1.1.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.ai": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
@@ -14,7 +98,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.14",
+      "version": "3.0.21",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -23,7 +107,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.15",
+      "version": "2.0.18",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -39,7 +123,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.31",
+      "version": "1.1.33",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -198,17 +282,6 @@
     "com.unity.modules.uielements": {
       "version": "1.0.0",
       "depth": 0,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.modules.ui": "1.0.0",
-        "com.unity.modules.imgui": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0",
-        "com.unity.modules.uielementsnative": "1.0.0"
-      }
-    },
-    "com.unity.modules.uielementsnative": {
-      "version": "1.0.0",
-      "depth": 1,
       "source": "builtin",
       "dependencies": {
         "com.unity.modules.ui": "1.0.0",

@@ -1,0 +1,16 @@
+{
+  "name": "Entitas.Unity",
+  "rootNamespace": "Entitas.Unity",
+  "references": [ 
+    "Entitas"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

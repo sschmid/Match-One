@@ -1,0 +1,29 @@
+{
+  "name": "com.sschmid.entitas.unity.editor",
+  "version": "2.0.0",
+  "displayName": "Entitas.Unity.Editor",
+  "description": "Entitas is a super fast Entity Component System (ECS) Framework specifically made for C# and Unity",
+  "unity": "2021.3",
+  "documentationUrl": "https://github.com/sschmid/Entitas",
+  "changelogUrl": "https://github.com/sschmid/Entitas/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/sschmid/Entitas/blob/main/LICENSE.md",
+  "dependencies": {
+    "com.sschmid.desperatedevs.reflection": "1.0.2",
+    "com.sschmid.desperatedevs.unity.editor": "2.0.0",
+    "com.sschmid.entitas": "2.0.0",
+    "com.sschmid.entitas.generators.attributes": "2.0.0",
+    "com.sschmid.entitas.unity": "2.0.0"
+  },
+  "keywords": [
+    "ecs",
+    "unity",
+    "dotnet",
+    "entity",
+    "component",
+    "system",
+    "entity-component-system"
+  ],
+  "author": {
+    "name": "sschmid"
+  }
+}

@@ -1,0 +1,21 @@
+{
+    "name": "Game",
+    "rootNamespace": "MatchOne",
+    "references": [
+        "Contexts",
+        "Config",
+        "Unity.TextMeshPro",
+        "Entitas",
+        "Entitas.Generators.Attributes",
+        "Entitas.Unity"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

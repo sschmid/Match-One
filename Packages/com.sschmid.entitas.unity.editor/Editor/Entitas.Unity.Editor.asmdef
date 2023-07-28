@@ -1,0 +1,23 @@
+{
+  "name": "Entitas.Unity.Editor",
+  "rootNamespace": "Entitas.Unity.Editor",
+  "references": [ 
+    "DesperateDevs.Extensions",
+    "DesperateDevs.Reflection",
+    "DesperateDevs.Serialization",
+    "DesperateDevs.Unity.Editor",
+    "Entitas",
+    "Entitas.Generators.Attributes",
+    "Entitas.Unity",
+    "Sherlog"
+  ],
+  "includePlatforms": ["Editor"],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
